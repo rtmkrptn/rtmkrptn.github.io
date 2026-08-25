@@ -119,8 +119,9 @@ a.list-row:active {
   background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.55) 50%, transparent);
   filter: blur(6px);
   transform: translateX(-320%) skewX(-20deg);
-  transition: transform var(--duration-shine) var(--ease-standard);
   pointer-events: none;
+  /* No transition here: leaving hover snaps the glint back instantly.
+     The sweep-in transition is applied only by the :hover rule below. */
 }
 
 .btn:hover {
@@ -130,6 +131,7 @@ a.list-row:active {
 
 .btn:hover::after {
   transform: translateX(450%) skewX(-20deg);
+  transition: transform var(--duration-shine) var(--ease-standard);
 }
 
 .btn:active {
