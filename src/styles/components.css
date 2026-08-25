@@ -2,7 +2,7 @@
 
 /* ---- Surface: generic card/panel ---- */
 .surface {
-  background: var(--color-surface);
+  background: var(--gradient-surface);
   border: var(--border-hairline-width) solid var(--color-hairline);
   border-radius: var(--radius-surface);
   box-shadow: var(--shadow-surface);
@@ -15,7 +15,7 @@
 
 /* ---- Grouped list (iOS table view) ---- */
 .list {
-  background: var(--color-surface);
+  background: var(--gradient-surface);
   border: var(--border-hairline-width) solid var(--color-hairline);
   border-radius: var(--radius-surface);
   box-shadow: var(--shadow-surface);
@@ -43,20 +43,27 @@
 }
 
 a.list-row {
-  transition: background var(--duration-press) var(--ease-standard);
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    background var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
 }
 
 a.list-row:hover {
   background: var(--color-paper);
+  transform: translateX(2px);
   text-decoration: none;
 }
 
 a.list-row:active {
   background: var(--color-hairline);
+  transform: translateX(2px) scale(0.995);
+  transition-duration: var(--duration-press);
 }
 
 /* ---- Glossy button (chrome only — never body text) ---- */
 .btn {
+  position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -72,31 +79,53 @@ a.list-row:active {
   text-shadow: var(--text-shadow-on-accent);
   font-family: inherit;
   font-size: var(--font-size-body-mobile);
-  font-weight: var(--font-weight-heading);
-  letter-spacing: var(--letter-spacing-heading);
+  font-weight: var(--font-weight-control);
   cursor: pointer;
+  overflow: hidden;
   -webkit-tap-highlight-color: transparent;
   transition:
-    transform var(--duration-press) var(--ease-standard),
-    box-shadow var(--duration-press) var(--ease-standard),
-    background var(--duration-press) var(--ease-standard);
+    transform var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    background var(--duration-fast) var(--ease-standard);
+}
+
+/* Glossy highlight arc — the glass-button sheen */
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-button-gloss);
+  pointer-events: none;
+}
+
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-inset-highlight), var(--shadow-surface-raised);
 }
 
 .btn:active {
   transform: translateY(1px);
   background: linear-gradient(var(--color-accent-bottom), var(--color-accent-top));
   box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+  transition-duration: var(--duration-press);
 }
 
 /* ---- Plain pressable: nav links, tab bar items, icon buttons ---- */
 .pressable {
   -webkit-tap-highlight-color: transparent;
-  transition: transform var(--duration-press) var(--ease-standard), opacity var(--duration-press) var(--ease-standard);
+  transition:
+    transform var(--duration-fast) var(--ease-standard),
+    opacity var(--duration-fast) var(--ease-standard);
+}
+
+.pressable:hover {
+  opacity: 0.8;
 }
 
 .pressable:active {
   transform: translateY(1px);
   opacity: 0.6;
+  transition-duration: var(--duration-press);
 }
 
 /* ---- Input field: subtle inset shadow ---- */

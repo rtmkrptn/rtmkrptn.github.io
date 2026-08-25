@@ -12,7 +12,8 @@ html {
 
 body {
   margin: 0;
-  background: var(--color-paper);
+  background-color: var(--color-paper);
+  background-image: var(--pattern-pinstripe);
   color: var(--color-text);
   font-family: var(--font-system);
   font-size: var(--font-size-body-mobile);

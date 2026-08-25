@@ -27,10 +27,26 @@
   --border-hairline-width: 1px;
 
   --shadow-surface: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-surface-raised: 0 2px 6px rgba(0, 0, 0, 0.1);
   --shadow-inset-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.45);
   --shadow-inset-field: inset 0 1px 2px rgba(0, 0, 0, 0.12);
   --text-shadow-letterpress: 0 1px 0 rgba(255, 255, 255, 0.9);
   --text-shadow-on-accent: 0 -1px 0 rgba(0, 0, 0, 0.25);
+
+  /* Grouped-table pinstripe: period-accurate iOS 6 texture, not a hardcoded image */
+  --pattern-pinstripe: repeating-linear-gradient(
+    45deg,
+    rgba(0, 0, 0, 0.025) 0px,
+    rgba(0, 0, 0, 0.025) 1px,
+    transparent 1px,
+    transparent 7px
+  );
+
+  /* Subtle top-lit surface gradient, instead of flat white */
+  --gradient-surface: linear-gradient(to bottom, #ffffff, #fbfbfd);
+
+  /* Glossy highlight arc across the top half of a pressable control */
+  --gradient-button-gloss: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 55%);
 
   /* ---- Type ---- */
   --font-system: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -42,8 +58,11 @@
   --measure-min: 64ch;
   --measure-max: 70ch;
 
-  --font-weight-heading: 500;
-  --letter-spacing-heading: -0.01em;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-heading: var(--font-weight-light);
+  --font-weight-control: var(--font-weight-regular);
+  --letter-spacing-heading: -0.02em;
 
   --font-size-h1-mobile: 30px;
   --font-size-h1-desktop: 40px;
