@@ -32,6 +32,20 @@
   color: inherit;
 }
 
+/*
+  Round the end rows directly instead of relying on the list's overflow:hidden
+  to clip them — Chromium doesn't reliably clip a transformed/painted child's
+  corners to an ancestor's border-radius, which left a square notch visible
+  at the top corners when the first row was hovered/active.
+*/
+.list-row:first-child {
+  border-radius: var(--radius-surface) var(--radius-surface) 0 0;
+}
+
+.list-row:last-child {
+  border-radius: 0 0 var(--radius-surface) var(--radius-surface);
+}
+
 .list-row:not(:last-child)::after {
   content: "";
   position: absolute;
@@ -44,20 +58,16 @@
 
 a.list-row {
   -webkit-tap-highlight-color: transparent;
-  transition:
-    background var(--duration-fast) var(--ease-standard),
-    transform var(--duration-fast) var(--ease-standard);
+  transition: background var(--duration-fast) var(--ease-standard);
 }
 
 a.list-row:hover {
   background: var(--color-paper);
-  transform: translateX(2px);
   text-decoration: none;
 }
 
 a.list-row:active {
   background: var(--color-hairline);
-  transform: translateX(2px) scale(0.995);
   transition-duration: var(--duration-press);
 }
 
@@ -98,9 +108,27 @@ a.list-row:active {
   pointer-events: none;
 }
 
+/* Traveling glint — sweeps once across the button on hover, "sun catching glass" */
+.btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 30%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.7) 50%, transparent);
+  transform: translateX(-350%) skewX(-20deg);
+  transition: transform var(--duration-shine) var(--ease-standard);
+  pointer-events: none;
+}
+
 .btn:hover {
-  transform: translateY(-1px);
+  transform: scale(1.045);
   box-shadow: var(--shadow-inset-highlight), var(--shadow-surface-raised);
+}
+
+.btn:hover::after {
+  transform: translateX(450%) skewX(-20deg);
 }
 
 .btn:active {

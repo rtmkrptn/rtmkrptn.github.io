@@ -48,8 +48,11 @@ h4 {
   line-height: 1.2;
 }
 
+/* h1 is the one big hero-style headline per page — thin, Apple-hero-headline weight */
 h1 {
   font-size: var(--font-size-h1-mobile);
+  font-weight: var(--font-weight-display);
+  letter-spacing: var(--letter-spacing-display);
 }
 h2 {
   font-size: var(--font-size-h2-mobile);

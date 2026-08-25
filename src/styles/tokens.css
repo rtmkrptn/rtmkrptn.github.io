@@ -58,11 +58,16 @@
   --measure-min: 64ch;
   --measure-max: 70ch;
 
+  --font-weight-thin: 200;
   --font-weight-light: 300;
   --font-weight-regular: 400;
-  --font-weight-heading: var(--font-weight-light);
+  /* Display: the one big hero-style headline (front-page name, post h1) — thin, like an Apple hero headline */
+  --font-weight-display: var(--font-weight-thin);
+  /* Heading: smaller functional headers (h2/h3, section titles) — need more heft to stay legible at small sizes */
+  --font-weight-heading: var(--font-weight-regular);
   --font-weight-control: var(--font-weight-regular);
-  --letter-spacing-heading: -0.02em;
+  --letter-spacing-display: -0.02em;
+  --letter-spacing-heading: -0.01em;
 
   --font-size-h1-mobile: 30px;
   --font-size-h1-desktop: 40px;
@@ -97,6 +102,9 @@
   /* ---- Motion ---- */
   --duration-press: 120ms;
   --duration-fast: 200ms;
+  /* Button hover glint sweep only — a deliberate one-off accent, longer than the
+     200ms interaction cap because a glint needs room to read as a sweep, not a flicker. */
+  --duration-shine: 420ms;
   --ease-standard: ease;
 }
 
@@ -104,5 +112,6 @@
   :root {
     --duration-press: 0ms;
     --duration-fast: 0ms;
+    --duration-shine: 0ms;
   }
 }
