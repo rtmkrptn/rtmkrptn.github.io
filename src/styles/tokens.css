@@ -48,6 +48,16 @@
   /* Glossy highlight arc across the top half of a pressable control */
   --gradient-button-gloss: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 55%);
 
+  /* ---- Chrome (dark segmented desktop nav bar — classic apple.com globalnav) ---- */
+  --gradient-chrome: linear-gradient(to bottom, #6e6e73, #3a3a3d);
+  --gradient-chrome-active: linear-gradient(to bottom, #000000, #1c1c1e);
+  --color-chrome-border: #222224;
+  --color-chrome-divider: rgba(0, 0, 0, 0.4);
+  --color-chrome-divider-highlight: rgba(255, 255, 255, 0.08);
+  --color-chrome-text: #f5f5f7;
+  --shadow-chrome-active-inset: inset 0 2px 4px rgba(0, 0, 0, 0.7);
+  --text-shadow-on-chrome: 0 1px 1px rgba(0, 0, 0, 0.5);
+
   /* ---- Type ---- */
   --font-system: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
 

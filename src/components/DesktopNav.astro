@@ -1,5 +1,4 @@
 ---
-import Icon from "./Icon.astro";
 import { withBase } from "../lib/base";
 import { navItems } from "../lib/nav";
 
@@ -12,27 +11,19 @@ function isActive(href: string): boolean {
 ---
 
 <header class="desktop-nav">
-  <div class="desktop-nav-inner reading-column">
-    <a class="desktop-nav-brand pressable" href={withBase("/")}>Artemii Karapetian</a>
-    <nav aria-label="Primary">
-      <ul class="desktop-nav-list">
-        {
-          navItems.map((item) => (
-            <li>
-              <a
-                class="desktop-nav-link pressable"
-                href={withBase(item.href)}
-                aria-current={isActive(item.href) ? "page" : undefined}
-              >
-                <Icon name={item.icon} size={18} />
-                <span>{item.label}</span>
-              </a>
-            </li>
-          ))
-        }
-      </ul>
-    </nav>
-  </div>
+  <nav class="desktop-nav-bar" aria-label="Primary">
+    {
+      navItems.map((item) => (
+        <a
+          class="desktop-nav-segment"
+          href={withBase(item.href)}
+          aria-current={isActive(item.href) ? "page" : undefined}
+        >
+          {item.label}
+        </a>
+      ))
+    }
+  </nav>
 </header>
 
 <style>
@@ -42,52 +33,63 @@ function isActive(href: string): boolean {
 
   @media (min-width: 768px) {
     .desktop-nav {
-      display: block;
+      display: flex;
+      justify-content: center;
       position: sticky;
       top: 0;
       z-index: 10;
-      background: var(--gradient-surface);
-      border-bottom: var(--border-hairline-width) solid var(--color-hairline);
-      box-shadow: var(--shadow-surface);
+      padding: var(--space-2) var(--space-3);
+      background-color: var(--color-paper);
+      background-image: var(--pattern-pinstripe);
     }
 
-    .desktop-nav-inner {
+    .desktop-nav-bar {
+      display: flex;
+      width: 100%;
+      max-width: 760px;
+      border-radius: var(--radius-surface);
+      overflow: hidden;
+      background: var(--gradient-chrome);
+      border: var(--border-hairline-width) solid var(--color-chrome-border);
+      box-shadow: var(--shadow-surface-raised), var(--shadow-inset-highlight);
+    }
+
+    .desktop-nav-segment {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: var(--space-3);
-      height: 64px;
-    }
-
-    .desktop-nav-brand {
-      font-weight: var(--font-weight-control);
-      color: var(--color-text);
+      justify-content: center;
+      flex: 1;
+      height: 44px;
+      padding-inline: var(--space-3);
+      color: var(--color-chrome-text);
+      text-shadow: var(--text-shadow-on-chrome);
+      font-size: var(--font-size-small);
       white-space: nowrap;
+      text-decoration: none;
+      box-shadow: inset -1px 0 0 var(--color-chrome-divider), inset -2px 0 0 var(--color-chrome-divider-highlight);
+      transition: background var(--duration-fast) var(--ease-standard);
     }
 
-    .desktop-nav-list {
-      display: flex;
-      gap: var(--space-4);
+    .desktop-nav-segment:last-child {
+      box-shadow: none;
     }
 
-    .desktop-nav-link {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      color: var(--color-text-secondary);
-      min-height: var(--tap-target-min);
+    .desktop-nav-segment:hover {
+      background: rgba(255, 255, 255, 0.08);
+      text-decoration: none;
     }
 
-    .desktop-nav-link[aria-current="page"] {
-      color: var(--color-accent-solid);
+    .desktop-nav-segment:active {
+      background: rgba(0, 0, 0, 0.25);
     }
 
-    .desktop-nav-link:hover {
-      color: var(--color-text);
+    .desktop-nav-segment[aria-current="page"] {
+      background: var(--gradient-chrome-active);
+      box-shadow: var(--shadow-chrome-active-inset);
     }
 
-    .desktop-nav-link[aria-current="page"]:hover {
-      color: var(--color-accent-solid);
+    .desktop-nav-segment[aria-current="page"]:hover {
+      background: var(--gradient-chrome-active);
     }
   }
 </style>
