@@ -124,14 +124,6 @@
   color: var(--color-text-secondary);
 }
 
-.prose sup > a,
-.prose [data-footnote-backref] {
+.prose sup > a {
   scroll-margin-top: var(--space-6);
-}
-
-@media (min-width: 768px) {
-  .prose sup > a,
-  .prose [data-footnote-backref] {
-    scroll-margin-top: var(--scroll-offset-desktop);
-  }
 }

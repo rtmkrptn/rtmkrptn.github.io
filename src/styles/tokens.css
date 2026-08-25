@@ -108,9 +108,6 @@
   --space-section-mobile: var(--space-5); /* >=40px */
   --space-section-desktop: var(--space-8); /* >=64px */
 
-  /* Clearance under the sticky desktop nav bar, for anchor/fragment scroll targets */
-  --scroll-offset-desktop: 96px;
-
   --list-row-padding-y: 15px; /* 14-16px */
 
   /* ---- Interaction ---- */

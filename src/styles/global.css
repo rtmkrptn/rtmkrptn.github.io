@@ -71,14 +71,6 @@ h3 {
   h3 {
     font-size: var(--font-size-h3-desktop);
   }
-
-  /* Clear the sticky desktop nav when a heading is scrolled to as an anchor target */
-  h1,
-  h2,
-  h3,
-  h4 {
-    scroll-margin-top: var(--scroll-offset-desktop);
-  }
 }
 
 p {
