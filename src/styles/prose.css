@@ -1,0 +1,120 @@
+@import "./tokens.css";
+
+.prose {
+  margin-top: var(--space-4);
+}
+
+.prose > * + * {
+  margin-top: var(--space-3);
+}
+
+.prose h2,
+.prose h3 {
+  margin-top: var(--space-6);
+}
+
+.prose ul,
+.prose ol {
+  list-style: disc;
+  padding-left: 1.4em;
+}
+
+.prose ol {
+  list-style: decimal;
+}
+
+.prose li + li {
+  margin-top: var(--space-1);
+}
+
+.prose strong {
+  font-weight: 600;
+}
+
+/* Inline code */
+.prose :not(pre) > code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--color-paper);
+  border: var(--border-hairline-width) solid var(--color-hairline);
+  border-radius: 4px;
+  padding: 0.1em 0.4em;
+}
+
+/* Code blocks — scroll inside their own container, never the page */
+.prose pre {
+  background: var(--color-text);
+  color: var(--color-paper);
+  border-radius: var(--radius-control);
+  padding: var(--space-2);
+  overflow-x: auto;
+  contain: layout;
+  box-shadow: var(--shadow-surface);
+}
+
+.prose pre code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+  line-height: 1.6;
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* Editorial TODO callouts — a blockquote, kept inside the locked palette */
+.prose blockquote {
+  border-left: 3px solid var(--color-accent-solid);
+  background: var(--color-paper);
+  color: var(--color-text-secondary);
+  padding: var(--space-2) var(--space-3);
+  border-radius: 0 var(--radius-control) var(--radius-control) 0;
+  font-style: italic;
+}
+
+.prose blockquote p {
+  margin: 0;
+}
+
+.prose blockquote strong {
+  font-style: normal;
+  color: var(--color-text);
+}
+
+.prose hr {
+  border: none;
+  border-top: var(--border-hairline-width) solid var(--color-hairline);
+  margin-block: var(--space-5);
+}
+
+.prose img {
+  border-radius: var(--radius-control);
+  width: 100%;
+}
+
+.prose table {
+  display: block;
+  overflow-x: auto;
+  contain: layout;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+.prose th,
+.prose td {
+  border: var(--border-hairline-width) solid var(--color-hairline);
+  padding: var(--space-1) var(--space-2);
+  text-align: left;
+}
+
+/* Footnotes (remark-gfm) */
+.prose .footnotes {
+  margin-top: var(--space-6);
+  padding-top: var(--space-3);
+  border-top: var(--border-hairline-width) solid var(--color-hairline);
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+}
+
+.prose sup > a {
+  scroll-margin-top: var(--space-6);
+}

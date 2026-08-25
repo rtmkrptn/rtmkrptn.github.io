@@ -1,0 +1,105 @@
+---
+title: "I Turned a Graphing Calculator Into a Number Theory Engine"
+description: "Building an integer detector, a divisibility test, and the divisor-sum function in Desmos — with no loops, no modulo, and no boolean logic."
+date: 2026-08-25
+---
+
+> **TODO (hook):** what were you actually doing right before this? Bored in a lesson,
+> avoiding a different problem set, trying to solve something else entirely? One or two
+> sentences, specific and true, land better than anything invented here.
+
+Desmos is built to draw parabolas. Type in a function, watch a curve. That's the whole
+contract. So the fact that you can also use it to compute how many divisors a five-digit
+number has — with no loops, no `if` statements, nothing that looks like code — is not
+something the software is trying to let you do. It's something you can force it to do if
+you're willing to abuse continuous functions until they behave like discrete logic.
+
+Here's the build, one layer at a time.
+
+## Step one: turning a curve into a switch
+
+Everything starts with one line:
+
+```
+Z(x) = floor(cos²(πx))
+```
+
+`cos(πx)` only ever hits exactly ±1 when `x` is an integer — everywhere else it's
+strictly between −1 and 1. Square it, and integers give you exactly 1, everything else
+gives you something strictly less than 1. Floor that, and integers collapse to 1,
+everything else collapses to 0.
+
+`Z(x)` is an "is this an integer" detector, built entirely out of trigonometry and a
+floor function. That's the whole trick. Everything downstream is just this idea, reused.
+
+## Step two: from "is it an integer" to "does it divide"
+
+```
+d(x,y) = Z(y)·Z(x/y)
+```
+
+This says: `y` is an integer, *and* `x/y` is an integer. If both hold, `y` divides `x`
+cleanly. You've just built a divisibility test without a single modulo operator, because
+Desmos doesn't give you one to abuse in the first place — you have to derive it from
+scratch.
+
+## Step three: the divisor-sum function, for free
+
+```
+σ(x,k) = Σ (n=1 to x) d(x,n)·n^k
+```
+
+Run `d(x,n)` across every `n` from 1 to `x`, and it's 1 exactly at the divisors of `x`
+and 0 everywhere else — so the sum only ever picks up the divisors, each raised to the
+`k`-th power. That's not a Desmos party trick, that's literally the generalized
+divisor-sum function that shows up in real number theory: σ₀(n) counts the divisors,
+σ₁(n) adds them up. Set k = 0 and check it against small numbers — σ(4,0) = 3 (divisors
+1, 2, 4), σ(6,0) = 4 (1, 2, 3, 6), σ(9,0) = 3 (1, 3, 9). It matches, every time, out to
+N = 5000 in my case.
+
+## Step four: averaging it, and running into an actual open-ish problem
+
+```
+E(x,k) = (1/x)·Σ (n=1 to x) σ(n,k)
+```
+
+This tracks the *running average* of σ as x grows — and this is where it stops being a
+party trick and starts brushing up against real analytic number theory. For k = 0, this
+average — the mean number of divisors of the integers up to x — doesn't hover around a
+constant. It grows, and grows specifically like ln(x). More precisely, mathematicians
+have known since Dirichlet that:
+
+```
+average of d(n) for n ≤ x  ≈  ln(x) + 2γ − 1
+```
+
+where γ ≈ 0.5772 is the Euler–Mascheroni constant. The error term in that
+approximation — how tight you can make it — is called the Dirichlet divisor problem,
+and it's still not fully resolved. You built the exact function whose average behavior
+is the subject of an unsolved problem, using a calculator most people use to plot
+`y = x²`.
+
+## Where it actually breaks
+
+`Z(x)` depends on Desmos evaluating `cos(πx)` to enough precision that the result lands
+on *exactly* 1.0 at integers, not 0.999999999something. That's fine for small x, but
+floating-point cosine evaluation gets less trustworthy as x grows, and at N = 5000 with
+nested sums, you're asking Desmos to do on the order of tens of millions of
+floating-point divisions and comparisons. If it silently drops or miscounts a divisor
+somewhere past x = 3000, `E(x,0)` would still *look* smooth on the graph — logarithmic
+growth is forgiving that way — and you might never notice. Worth spot-checking σ(x,0)
+against known divisor counts at a few large x, not just the first twelve.
+
+## The actual point
+
+None of the individual pieces here are hard — floor, cosine, a sum. What's worth
+sitting with is that a tool with no integer type, no modulo, no loops, and no boolean
+logic still contains all of that, if you're willing to build it out of continuous
+functions. The constraint is what made it interesting. Give yourself `%` and a `for`
+loop and this becomes a five-minute Python script nobody remembers. Take those away and
+you end up rediscovering, by necessity, why the divisor function and cos(πx) are related
+at all.
+
+> **TODO (closing):** what's next here? Push k = 1 and check whether E(x,1)/x settles
+> toward π²/12, chase the divisor problem's error term, or was this a one-off detour? A
+> real next step is a stronger ending than anything generic here.

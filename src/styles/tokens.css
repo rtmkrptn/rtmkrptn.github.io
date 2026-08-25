@@ -60,6 +60,7 @@
 
   /* ---- Type ---- */
   --font-system: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, monospace;
 
   --font-size-body-mobile: 17px;
   --font-size-body-desktop: 19px;

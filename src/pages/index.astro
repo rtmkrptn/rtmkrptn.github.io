@@ -1,7 +1,13 @@
 ---
+import { getCollection } from "astro:content";
 import SiteLayout from "../layouts/SiteLayout.astro";
 import BrandIcon from "../components/BrandIcon.astro";
+import { withBase } from "../lib/base";
 import { socialLinks } from "../data/social";
+
+const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
+);
 ---
 
 <SiteLayout title="Artemii Karapetian">
@@ -32,7 +38,22 @@ import { socialLinks } from "../data/social";
   </header>
 
   <section class="posts-section">
-    <p class="sg-sub">Post index arrives in the next step.</p>
+    <div class="list">
+      {
+        posts.map((post) => (
+          <a class="list-row" href={withBase(`/posts/${post.id}`)}>
+            <span class="post-date tabular-nums">
+              {post.data.date.toLocaleDateString("en-US", {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })}
+            </span>
+            <span class="post-title">{post.data.title}</span>
+          </a>
+        ))
+      }
+    </div>
   </section>
 </SiteLayout>
 
@@ -77,8 +98,19 @@ import { socialLinks } from "../data/social";
     color: var(--color-accent-solid);
   }
 
-  .sg-sub {
+  .posts-section .list-row {
+    align-items: flex-start;
+  }
+
+  .post-date {
+    flex-shrink: 0;
+    width: 6.5em;
+    padding-top: 0.15em;
     color: var(--color-text-secondary);
     font-size: var(--font-size-small);
+  }
+
+  .post-title {
+    color: var(--color-text);
   }
 </style>
