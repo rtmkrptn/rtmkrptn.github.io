@@ -114,10 +114,11 @@ a.list-row:active {
   position: absolute;
   top: 0;
   left: 0;
-  width: 30%;
+  width: 45%;
   height: 100%;
-  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.7) 50%, transparent);
-  transform: translateX(-350%) skewX(-20deg);
+  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.55) 50%, transparent);
+  filter: blur(6px);
+  transform: translateX(-320%) skewX(-20deg);
   transition: transform var(--duration-shine) var(--ease-standard);
   pointer-events: none;
 }
