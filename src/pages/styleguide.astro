@@ -1,0 +1,197 @@
+---
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const swatches = [
+  { name: "--color-paper", value: "#f2f2f7" },
+  { name: "--color-surface", value: "#ffffff" },
+  { name: "--color-text", value: "#1c1c1e" },
+  { name: "--color-text-secondary", value: "#8e8e93" },
+  { name: "--color-hairline", value: "#c8c7cc" },
+];
+---
+
+<BaseLayout title="Styleguide — internal">
+  <main class="reading-column styleguide">
+    <header class="sg-block">
+      <h1>Styleguide</h1>
+      <p class="sg-sub">Every token, control state, and list pattern in one place. Not linked from navigation.</p>
+    </header>
+
+    <section class="sg-block">
+      <h2>Color</h2>
+      <div class="swatch-row">
+        {swatches.map((s) => (
+          <div class="swatch">
+            <div class="swatch-chip" style={`background:${s.value}`}></div>
+            <code>{s.name}</code>
+            <span class="sg-sub">{s.value}</span>
+          </div>
+        ))}
+        <div class="swatch">
+          <div class="swatch-chip" style="background: linear-gradient(#4a9bfb, #1272e8); border: 1px solid #0d5fc0;"></div>
+          <code>--gradient-accent</code>
+          <span class="sg-sub">accent gradient</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="sg-block">
+      <h2>Type</h2>
+      <h1>Heading 1 — the quick fox</h1>
+      <h2>Heading 2 — the quick fox</h2>
+      <h3>Heading 3 — the quick fox</h3>
+      <p>
+        Body copy at reading size, 1.55 line-height, measured to a 64–70ch column. The quick
+        brown fox jumps over the lazy dog. Numerals in body text: 0123456789.
+      </p>
+      <p class="sg-sub">Secondary text — dates, captions, metadata.</p>
+      <p class="tabular-nums">Tabular numerals: 1,024.50 vs 88.02 — columns align.</p>
+    </section>
+
+    <section class="sg-block">
+      <h2>Buttons</h2>
+      <p class="sg-sub">Focus a button and press it (mouse, touch, or keyboard) to see the depress state.</p>
+      <div class="control-row">
+        <button class="btn">Glossy Button</button>
+        <a class="btn" href="#buttons">Glossy Link</a>
+      </div>
+    </section>
+
+    <section class="sg-block">
+      <h2>Input</h2>
+      <input class="input" type="text" placeholder="Inset text field" />
+    </section>
+
+    <section class="sg-block">
+      <h2>Grouped list</h2>
+      <p class="sg-sub">Used for the post index and CV rows.</p>
+      <div class="list">
+        <a class="list-row" href="#list">
+          <span>2026-08-25</span>
+          <span>First list row, as a link</span>
+        </a>
+        <div class="list-row">
+          <span>2026-08-01</span>
+          <span>Second row — plain, not a link</span>
+        </div>
+        <div class="list-row">
+          <span>2026-07-14</span>
+          <span>Third row — last, no separator below</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="sg-block">
+      <h2>Surface</h2>
+      <div class="surface sg-surface-demo">
+        <p class="sg-sub" style="margin:0">A plain .surface panel — hairline border, 10px radius, subtle shadow.</p>
+      </div>
+    </section>
+
+    <section class="sg-block">
+      <h2>Letterpress</h2>
+      <div class="surface sg-letterpress-demo">
+        <span class="text-letterpress">Letterpress label on light chrome</span>
+      </div>
+    </section>
+
+    <section class="sg-block">
+      <h2>Spacing scale (8px)</h2>
+      <div class="space-rows">
+        {["1", "2", "3", "4", "5", "6", "8"].map((n) => (
+          <div class="space-row">
+            <code>--space-{n}</code>
+            <div class="space-bar" style={`width: var(--space-${n})`}></div>
+          </div>
+        ))}
+      </div>
+    </section>
+  </main>
+</BaseLayout>
+
+<style>
+  .styleguide {
+    padding-block: var(--space-section-mobile);
+  }
+
+  @media (min-width: 768px) {
+    .styleguide {
+      padding-block: var(--space-section-desktop);
+    }
+  }
+
+  .sg-block {
+    margin-bottom: var(--space-5);
+  }
+
+  @media (min-width: 768px) {
+    .sg-block {
+      margin-bottom: var(--space-8);
+    }
+  }
+
+  .sg-block > h2 {
+    margin-bottom: var(--space-2);
+  }
+
+  .sg-sub {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small);
+  }
+
+  .swatch-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+  }
+
+  .swatch {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 140px;
+  }
+
+  .swatch-chip {
+    width: 100%;
+    height: 56px;
+    border-radius: var(--radius-control);
+    border: var(--border-hairline-width) solid var(--color-hairline);
+  }
+
+  .control-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    align-items: center;
+  }
+
+  .sg-surface-demo,
+  .sg-letterpress-demo {
+    padding: var(--space-3);
+  }
+
+  .space-rows {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+
+  .space-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+
+  .space-row code {
+    width: 90px;
+    flex-shrink: 0;
+    font-size: var(--font-size-small);
+  }
+
+  .space-bar {
+    height: 12px;
+    background: var(--gradient-accent);
+    border-radius: 2px;
+  }
+</style>

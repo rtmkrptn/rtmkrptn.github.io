@@ -1,0 +1,131 @@
+@import "./tokens.css";
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--color-paper);
+  color: var(--color-text);
+  font-family: var(--font-system);
+  font-size: var(--font-size-body-mobile);
+  line-height: var(--line-height-body);
+  font-feature-settings: "tnum" 0;
+  -webkit-tap-highlight-color: transparent;
+  overflow-x: hidden;
+}
+
+@media (min-width: 768px) {
+  body {
+    font-size: var(--font-size-body-desktop);
+  }
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0;
+  font-weight: var(--font-weight-heading);
+  letter-spacing: var(--letter-spacing-heading);
+  line-height: 1.2;
+}
+
+h1 {
+  font-size: var(--font-size-h1-mobile);
+}
+h2 {
+  font-size: var(--font-size-h2-mobile);
+}
+h3 {
+  font-size: var(--font-size-h3-mobile);
+}
+
+@media (min-width: 768px) {
+  h1 {
+    font-size: var(--font-size-h1-desktop);
+  }
+  h2 {
+    font-size: var(--font-size-h2-desktop);
+  }
+  h3 {
+    font-size: var(--font-size-h3-desktop);
+  }
+}
+
+p {
+  margin: 0 0 var(--space-2) 0;
+}
+
+a {
+  color: var(--color-accent-solid);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+ul,
+ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+button {
+  font-family: inherit;
+}
+
+/* Numerals: tabular alignment for CV / stat rows */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* Visible focus ring — never remove */
+:focus-visible {
+  outline: 2px solid var(--color-accent-solid);
+  outline-offset: 2px;
+  border-radius: var(--radius-control);
+}
+
+/* Reading column */
+.reading-column {
+  max-width: var(--measure);
+  margin-inline: auto;
+  padding-inline: var(--space-2);
+}
+
+@media (min-width: 768px) {
+  .reading-column {
+    padding-inline: var(--space-3);
+  }
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

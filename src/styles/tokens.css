@@ -1,0 +1,89 @@
+/*
+  Design tokens — iOS 6 / iPhone 5 era (2012).
+  Every color, font-size, radius, spacing, and motion value used anywhere
+  in this project must be defined here as a custom property.
+*/
+
+:root {
+  /* ---- Color ---- */
+  --color-paper: #f2f2f7;
+  --color-surface: #ffffff;
+  --color-text: #1c1c1e;
+  --color-text-secondary: #8e8e93;
+  --color-hairline: #c8c7cc;
+
+  --color-accent-top: #4a9bfb;
+  --color-accent-bottom: #1272e8;
+  --gradient-accent: linear-gradient(var(--color-accent-top), var(--color-accent-bottom));
+  --color-accent-border: #0d5fc0;
+  --color-accent-solid: var(--color-accent-bottom);
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* ---- Surfaces / tangibility ---- */
+  --radius-surface: 10px;
+  --radius-control: 8px;
+  --border-hairline-width: 1px;
+
+  --shadow-surface: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --shadow-inset-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.45);
+  --shadow-inset-field: inset 0 1px 2px rgba(0, 0, 0, 0.12);
+  --text-shadow-letterpress: 0 1px 0 rgba(255, 255, 255, 0.9);
+  --text-shadow-on-accent: 0 -1px 0 rgba(0, 0, 0, 0.25);
+
+  /* ---- Type ---- */
+  --font-system: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+
+  --font-size-body-mobile: 17px;
+  --font-size-body-desktop: 19px;
+  --line-height-body: 1.55;
+  --measure: 68ch;
+  --measure-min: 64ch;
+  --measure-max: 70ch;
+
+  --font-weight-heading: 600;
+  --letter-spacing-heading: -0.02em;
+
+  --font-size-h1-mobile: 30px;
+  --font-size-h1-desktop: 40px;
+  --font-size-h2-mobile: 24px;
+  --font-size-h2-desktop: 30px;
+  --font-size-h3-mobile: 20px;
+  --font-size-h3-desktop: 23px;
+  --font-size-small: 14px;
+  --font-size-tab-label: 10px;
+
+  --font-feature-numeric: tabular-nums;
+
+  /* ---- Space (8px scale) ---- */
+  --space-1: 8px;
+  --space-2: 16px;
+  --space-3: 24px;
+  --space-4: 32px;
+  --space-5: 40px;
+  --space-6: 48px;
+  --space-7: 56px;
+  --space-8: 64px;
+  --space-10: 80px;
+
+  --space-section-mobile: var(--space-5); /* >=40px */
+  --space-section-desktop: var(--space-8); /* >=64px */
+
+  --list-row-padding-y: 15px; /* 14-16px */
+
+  /* ---- Interaction ---- */
+  --tap-target-min: 44px;
+
+  /* ---- Motion ---- */
+  --duration-press: 120ms;
+  --duration-fast: 200ms;
+  --ease-standard: ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-press: 0ms;
+    --duration-fast: 0ms;
+  }
+}

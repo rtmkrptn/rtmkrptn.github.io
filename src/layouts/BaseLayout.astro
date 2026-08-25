@@ -1,0 +1,27 @@
+---
+import "../styles/global.css";
+import "../styles/components.css";
+import { withBase } from "../lib/base";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description = "Artemii Karapetian — mathematics, alife, ML." } = Astro.props;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content={description} />
+    <link rel="icon" href={withBase("/favicon.svg")} type="image/svg+xml" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <slot />
+  </body>
+</html>

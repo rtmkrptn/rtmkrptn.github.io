@@ -1,0 +1,118 @@
+@import "./tokens.css";
+
+/* ---- Surface: generic card/panel ---- */
+.surface {
+  background: var(--color-surface);
+  border: var(--border-hairline-width) solid var(--color-hairline);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-surface);
+}
+
+/* ---- Letterpress: text sitting on light chrome only, never body copy ---- */
+.text-letterpress {
+  text-shadow: var(--text-shadow-letterpress);
+}
+
+/* ---- Grouped list (iOS table view) ---- */
+.list {
+  background: var(--color-surface);
+  border: var(--border-hairline-width) solid var(--color-hairline);
+  border-radius: var(--radius-surface);
+  box-shadow: var(--shadow-surface);
+  overflow: hidden;
+}
+
+.list-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--tap-target-min);
+  padding: var(--list-row-padding-y) var(--space-2);
+  color: inherit;
+}
+
+.list-row:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: var(--space-2);
+  right: 0;
+  bottom: 0;
+  height: var(--border-hairline-width);
+  background: var(--color-hairline);
+}
+
+a.list-row {
+  transition: background var(--duration-press) var(--ease-standard);
+}
+
+a.list-row:hover {
+  background: var(--color-paper);
+  text-decoration: none;
+}
+
+a.list-row:active {
+  background: var(--color-hairline);
+}
+
+/* ---- Glossy button (chrome only — never body text) ---- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  min-height: var(--tap-target-min);
+  min-width: var(--tap-target-min);
+  padding: 0 var(--space-3);
+  border-radius: var(--radius-control);
+  border: var(--border-hairline-width) solid var(--color-accent-border);
+  background: var(--gradient-accent);
+  box-shadow: var(--shadow-inset-highlight), var(--shadow-surface);
+  color: var(--color-white);
+  text-shadow: var(--text-shadow-on-accent);
+  font-family: inherit;
+  font-size: var(--font-size-body-mobile);
+  font-weight: var(--font-weight-heading);
+  letter-spacing: var(--letter-spacing-heading);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform var(--duration-press) var(--ease-standard),
+    box-shadow var(--duration-press) var(--ease-standard),
+    background var(--duration-press) var(--ease-standard);
+}
+
+.btn:active {
+  transform: translateY(1px);
+  background: linear-gradient(var(--color-accent-bottom), var(--color-accent-top));
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+/* ---- Plain pressable: nav links, tab bar items, icon buttons ---- */
+.pressable {
+  -webkit-tap-highlight-color: transparent;
+  transition: transform var(--duration-press) var(--ease-standard), opacity var(--duration-press) var(--ease-standard);
+}
+
+.pressable:active {
+  transform: translateY(1px);
+  opacity: 0.6;
+}
+
+/* ---- Input field: subtle inset shadow ---- */
+.input {
+  display: block;
+  width: 100%;
+  min-height: var(--tap-target-min);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-control);
+  border: var(--border-hairline-width) solid var(--color-hairline);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-inset-field);
+  font: inherit;
+  color: var(--color-text);
+}
+
+.input::placeholder {
+  color: var(--color-text-secondary);
+}
