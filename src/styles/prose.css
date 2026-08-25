@@ -2,6 +2,13 @@
 
 .prose {
   margin-top: var(--space-4);
+  font-size: var(--font-size-prose-mobile);
+}
+
+@media (min-width: 768px) {
+  .prose {
+    font-size: var(--font-size-prose-desktop);
+  }
 }
 
 .prose > * + * {
@@ -11,6 +18,8 @@
 .prose h2,
 .prose h3 {
   margin-top: var(--space-6);
+  font-weight: var(--font-weight-light);
+  letter-spacing: var(--letter-spacing-display);
 }
 
 .prose ul,
@@ -43,13 +52,13 @@
 
 /* Code blocks — scroll inside their own container, never the page */
 .prose pre {
-  background: var(--color-text);
-  color: var(--color-paper);
+  background: var(--color-paper);
+  color: var(--color-text);
+  border: var(--border-hairline-width) solid var(--color-hairline);
   border-radius: var(--radius-control);
   padding: var(--space-2);
   overflow-x: auto;
   contain: layout;
-  box-shadow: var(--shadow-surface);
 }
 
 .prose pre code {

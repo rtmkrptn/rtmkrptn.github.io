@@ -64,6 +64,9 @@
 
   --font-size-body-mobile: 17px;
   --font-size-body-desktop: 19px;
+  /* Long-read prose runs a touch smaller than site chrome — matches the density of a real article body */
+  --font-size-prose-mobile: 16px;
+  --font-size-prose-desktop: 18px;
   --line-height-body: 1.55;
   --measure: 68ch;
   --measure-min: 64ch;

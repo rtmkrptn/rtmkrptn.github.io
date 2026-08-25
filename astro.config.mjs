@@ -8,4 +8,9 @@ export default defineConfig({
   site: 'https://rtmkrptn.github.io',
   base: '/personal-website',
   integrations: [mdx(), sitemap()],
+  markdown: {
+    shikiConfig: {
+      theme: 'min-light',
+    },
+  },
 });
