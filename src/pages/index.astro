@@ -1,17 +1,84 @@
 ---
-
+import SiteLayout from "../layouts/SiteLayout.astro";
+import Icon from "../components/Icon.astro";
+import { socialLinks } from "../data/social";
 ---
 
-<html lang="en">
-	<head>
-		<meta charset="utf-8" />
-		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-		<link rel="icon" href="/favicon.ico" />
-		<meta name="viewport" content="width=device-width" />
-		<meta name="generator" content={Astro.generator} />
-		<title>Astro</title>
-	</head>
-	<body>
-		<h1>Astro</h1>
-	</body>
-</html>
+<SiteLayout title="Artemii Karapetian">
+  <header class="hero">
+    <h1>Artemii Karapetian</h1>
+    <p class="tagline">Mathematics, Alife, ML.</p>
+    <p class="bio">
+      I write about mathematics, artificial life, and machine learning — mostly notes to
+      myself that turned out legible enough to share.
+    </p>
+    <ul class="social-row">
+      {
+        socialLinks.map((link) => (
+          <li>
+            <a
+              class="social-link pressable"
+              href={link.href}
+              aria-label={link.label}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <Icon name={link.icon} size={20} />
+            </a>
+          </li>
+        ))
+      }
+    </ul>
+  </header>
+
+  <section class="posts-section">
+    <p class="sg-sub">Post index arrives in the next step.</p>
+  </section>
+</SiteLayout>
+
+<style>
+  .hero {
+    margin-bottom: var(--space-section-mobile);
+  }
+
+  @media (min-width: 768px) {
+    .hero {
+      margin-bottom: var(--space-section-desktop);
+    }
+  }
+
+  .tagline {
+    color: var(--color-text-secondary);
+    margin-top: 4px;
+  }
+
+  .bio {
+    margin-top: var(--space-2);
+    max-width: 60ch;
+  }
+
+  .social-row {
+    display: flex;
+    gap: var(--space-1);
+    margin-top: var(--space-3);
+  }
+
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--tap-target-min);
+    height: var(--tap-target-min);
+    border-radius: 50%;
+    color: var(--color-text-secondary);
+  }
+
+  .social-link:hover {
+    color: var(--color-accent-solid);
+  }
+
+  .sg-sub {
+    color: var(--color-text-secondary);
+    font-size: var(--font-size-small);
+  }
+</style>

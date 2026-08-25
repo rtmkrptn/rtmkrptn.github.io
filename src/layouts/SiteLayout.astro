@@ -1,0 +1,33 @@
+---
+import BaseLayout from "./BaseLayout.astro";
+import DesktopNav from "../components/DesktopNav.astro";
+import MobileTabBar from "../components/MobileTabBar.astro";
+
+interface Props {
+  title: string;
+  description?: string;
+}
+
+const { title, description } = Astro.props;
+---
+
+<BaseLayout title={title} description={description}>
+  <DesktopNav />
+  <main class="site-main reading-column">
+    <slot />
+  </main>
+  <MobileTabBar />
+</BaseLayout>
+
+<style>
+  .site-main {
+    padding-block: var(--space-section-mobile);
+    padding-bottom: calc(var(--space-section-mobile) + var(--tap-target-min) + 12px + env(safe-area-inset-bottom, 0px));
+  }
+
+  @media (min-width: 768px) {
+    .site-main {
+      padding-block: var(--space-section-desktop);
+    }
+  }
+</style>

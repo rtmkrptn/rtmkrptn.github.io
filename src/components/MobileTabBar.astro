@@ -1,0 +1,81 @@
+---
+import Icon from "./Icon.astro";
+import { withBase } from "../lib/base";
+import { navItems } from "../lib/nav";
+
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+
+function isActive(href: string): boolean {
+  const normalized = withBase(href).replace(/\/$/, "") || "/";
+  return currentPath === normalized;
+}
+---
+
+<nav class="tab-bar" aria-label="Primary">
+  <ul class="tab-bar-list">
+    {
+      navItems.map((item) => (
+        <li>
+          <a
+            class="tab-bar-link pressable"
+            href={withBase(item.href)}
+            aria-current={isActive(item.href) ? "page" : undefined}
+          >
+            <Icon name={item.icon} size={22} />
+            <span>{item.label}</span>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</nav>
+
+<style>
+  .tab-bar {
+    display: block;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: var(--border-hairline-width) solid var(--color-hairline);
+    padding-bottom: env(safe-area-inset-bottom, 0px);
+  }
+
+  @media (min-width: 768px) {
+    .tab-bar {
+      display: none;
+    }
+  }
+
+  .tab-bar-list {
+    display: flex;
+  }
+
+  .tab-bar-list li {
+    flex: 1;
+  }
+
+  .tab-bar-link {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2px;
+    min-height: var(--tap-target-min);
+    padding: 6px 0;
+    color: var(--color-text-secondary);
+  }
+
+  .tab-bar-link span {
+    font-size: var(--font-size-tab-label);
+    letter-spacing: 0;
+  }
+
+  .tab-bar-link[aria-current="page"] {
+    color: var(--color-accent-solid);
+  }
+</style>

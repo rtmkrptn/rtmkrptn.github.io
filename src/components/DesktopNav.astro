@@ -1,0 +1,93 @@
+---
+import Icon from "./Icon.astro";
+import { withBase } from "../lib/base";
+import { navItems } from "../lib/nav";
+
+const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
+
+function isActive(href: string): boolean {
+  const normalized = withBase(href).replace(/\/$/, "") || "/";
+  return currentPath === normalized;
+}
+---
+
+<header class="desktop-nav">
+  <div class="desktop-nav-inner reading-column">
+    <a class="desktop-nav-brand pressable" href={withBase("/")}>Artemii Karapetian</a>
+    <nav aria-label="Primary">
+      <ul class="desktop-nav-list">
+        {
+          navItems.map((item) => (
+            <li>
+              <a
+                class="desktop-nav-link pressable"
+                href={withBase(item.href)}
+                aria-current={isActive(item.href) ? "page" : undefined}
+              >
+                <Icon name={item.icon} size={18} />
+                <span>{item.label}</span>
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .desktop-nav {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .desktop-nav {
+      display: block;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      background: var(--gradient-surface);
+      border-bottom: var(--border-hairline-width) solid var(--color-hairline);
+      box-shadow: var(--shadow-surface);
+    }
+
+    .desktop-nav-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: var(--space-3);
+      height: 64px;
+    }
+
+    .desktop-nav-brand {
+      font-weight: var(--font-weight-control);
+      color: var(--color-text);
+      white-space: nowrap;
+    }
+
+    .desktop-nav-list {
+      display: flex;
+      gap: var(--space-4);
+    }
+
+    .desktop-nav-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--color-text-secondary);
+      min-height: var(--tap-target-min);
+    }
+
+    .desktop-nav-link[aria-current="page"] {
+      color: var(--color-accent-solid);
+    }
+
+    .desktop-nav-link:hover {
+      color: var(--color-text);
+    }
+
+    .desktop-nav-link[aria-current="page"]:hover {
+      color: var(--color-accent-solid);
+    }
+  }
+</style>
