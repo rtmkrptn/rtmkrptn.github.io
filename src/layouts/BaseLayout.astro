@@ -20,6 +20,7 @@ const { title, description = "Artemii Karapetian — mathematics, alife, ML." } 
     <link rel="icon" href={withBase("/favicon.svg")} type="image/svg+xml" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <slot name="head" />
   </head>
   <body>
     <slot />
