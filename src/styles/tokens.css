@@ -33,7 +33,7 @@
   --text-shadow-on-accent: 0 -1px 0 rgba(0, 0, 0, 0.25);
 
   /* ---- Type ---- */
-  --font-system: -apple-system, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-system: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
 
   --font-size-body-mobile: 17px;
   --font-size-body-desktop: 19px;
@@ -42,8 +42,8 @@
   --measure-min: 64ch;
   --measure-max: 70ch;
 
-  --font-weight-heading: 600;
-  --letter-spacing-heading: -0.02em;
+  --font-weight-heading: 500;
+  --letter-spacing-heading: -0.01em;
 
   --font-size-h1-mobile: 30px;
   --font-size-h1-desktop: 40px;
