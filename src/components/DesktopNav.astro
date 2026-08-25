@@ -35,12 +35,17 @@ function isActive(href: string): boolean {
     .desktop-nav {
       display: flex;
       justify-content: center;
-      position: sticky;
+      position: fixed;
       top: 0;
+      left: 0;
+      right: 0;
       z-index: 10;
       padding: var(--space-2) var(--space-3);
-      background-color: var(--color-paper);
-      background-image: var(--pattern-pinstripe);
+      transform: translateY(0);
+      transition: transform var(--duration-reveal) var(--ease-decelerate);
+      /* No background here on purpose — only the pill itself (.desktop-nav-bar)
+         should be opaque. A full-width opaque wrapper would cover page content
+         scrolling behind the empty space around the pill too. */
     }
 
     .desktop-nav-bar {
@@ -91,5 +96,37 @@ function isActive(href: string): boolean {
     .desktop-nav-segment[aria-current="page"]:hover {
       background: var(--gradient-chrome-active);
     }
+
+    .desktop-nav.nav-hidden {
+      transform: translateY(-130%);
+    }
   }
 </style>
+
+<script>
+  let lastScrollY = window.scrollY;
+  let ticking = false;
+
+  function updateNav() {
+    const nav = document.querySelector<HTMLElement>(".desktop-nav");
+    if (nav) {
+      const currentScrollY = window.scrollY;
+      const scrollingDown = currentScrollY > lastScrollY;
+      const pastThreshold = currentScrollY > 80;
+      nav.classList.toggle("nav-hidden", scrollingDown && pastThreshold);
+      lastScrollY = currentScrollY;
+    }
+    ticking = false;
+  }
+
+  window.addEventListener(
+    "scroll",
+    () => {
+      if (!ticking) {
+        requestAnimationFrame(updateNav);
+        ticking = true;
+      }
+    },
+    { passive: true }
+  );
+</script>

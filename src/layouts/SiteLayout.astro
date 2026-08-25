@@ -14,8 +14,12 @@ const { title, description } = Astro.props;
 <BaseLayout title={title} description={description}>
   <slot name="head" slot="head" />
   <DesktopNav />
-  <main class="site-main reading-column">
-    <slot />
+  <main class="site-main">
+    <div class="content-card">
+      <div class="reading-column">
+        <slot />
+      </div>
+    </div>
   </main>
   <MobileTabBar />
 </BaseLayout>
@@ -29,6 +33,22 @@ const { title, description } = Astro.props;
   @media (min-width: 768px) {
     .site-main {
       padding-block: var(--space-section-desktop);
+      /* The desktop nav is position:fixed (reserves no flow space) so content
+         needs its own clearance — just enough to clear the nav, not a full
+         section gap on top of it. */
+      padding-top: calc(var(--desktop-nav-height) + var(--space-3));
+    }
+
+    /* Wider than the nav pill (760px) and the text measure inside it, but not
+       full-bleed — a card the content sits on, floating on the paper texture. */
+    .content-card {
+      max-width: 900px;
+      margin-inline: auto;
+      background: var(--gradient-surface);
+      border: var(--border-hairline-width) solid var(--color-hairline);
+      border-radius: var(--radius-surface);
+      box-shadow: var(--shadow-surface);
+      padding: var(--space-6) var(--space-5);
     }
   }
 </style>
