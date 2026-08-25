@@ -1,9 +1,9 @@
-import type { IconName } from "../lib/icons";
+import type { BrandIconName } from "../lib/brand-icons";
 
 export interface SocialLink {
   href: string;
   label: string;
-  icon: IconName;
+  icon: BrandIconName;
 }
 
 // Placeholder handles — swap for real profile URLs.

@@ -1,6 +1,6 @@
 ---
 import SiteLayout from "../layouts/SiteLayout.astro";
-import Icon from "../components/Icon.astro";
+import BrandIcon from "../components/BrandIcon.astro";
 import { socialLinks } from "../data/social";
 ---
 
@@ -23,7 +23,7 @@ import { socialLinks } from "../data/social";
               target="_blank"
               rel="noopener noreferrer"
             >
-              <Icon name={link.icon} size={20} />
+              <BrandIcon name={link.icon} size={18} />
             </a>
           </li>
         ))
