@@ -5,7 +5,7 @@
   background: var(--gradient-surface);
   border: var(--border-hairline-width) solid var(--color-hairline);
   border-radius: var(--radius-surface);
-  box-shadow: var(--shadow-surface);
+  box-shadow: var(--shadow-surface), var(--shadow-inset-highlight);
 }
 
 /* ---- Letterpress: text sitting on light chrome only, never body copy ---- */
@@ -18,7 +18,7 @@
   background: var(--gradient-surface);
   border: var(--border-hairline-width) solid var(--color-hairline);
   border-radius: var(--radius-surface);
-  box-shadow: var(--shadow-surface);
+  box-shadow: var(--shadow-surface), var(--shadow-inset-highlight);
   overflow: hidden;
 }
 
