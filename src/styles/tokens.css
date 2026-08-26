@@ -12,10 +12,10 @@
   --color-text-secondary: #8e8e93;
   --color-hairline: #c8c7cc;
 
-  --color-accent-top: #4a9bfb;
-  --color-accent-bottom: #1272e8;
+  --color-accent-top: #4fb3f0;
+  --color-accent-bottom: #0a5aa8;
   --gradient-accent: linear-gradient(var(--color-accent-top), var(--color-accent-bottom));
-  --color-accent-border: #0d5fc0;
+  --color-accent-border: #063a6e;
   --color-accent-solid: var(--color-accent-bottom);
 
   --color-white: #ffffff;
@@ -30,6 +30,8 @@
   --shadow-surface-raised: 0 2px 6px rgba(0, 0, 0, 0.1);
   --shadow-inset-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.45);
   --shadow-inset-field: inset 0 1px 2px rgba(0, 0, 0, 0.12);
+  /* Accent controls sit under a more pronounced, colored shadow than a plain neutral surface */
+  --shadow-accent-raised: 0 3px 6px rgba(10, 40, 70, 0.35);
   --text-shadow-letterpress: 0 1px 0 rgba(255, 255, 255, 0.9);
   --text-shadow-on-accent: 0 -1px 0 rgba(0, 0, 0, 0.25);
 
@@ -47,6 +49,26 @@
 
   /* Glossy highlight arc across the top half of a pressable control */
   --gradient-button-gloss: linear-gradient(to bottom, rgba(255, 255, 255, 0.5), rgba(255, 255, 255, 0) 55%);
+
+  /* ---- Cool materials: metal / glass / piano-black — neutral, no organic textures ---- */
+  --gradient-metal-brushed: linear-gradient(to bottom, #f2f3f4, #d3d6d8);
+  --pattern-metal-brushed: repeating-linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.06) 0px,
+    rgba(0, 0, 0, 0.06) 1px,
+    rgba(255, 255, 255, 0.4) 1px,
+    rgba(255, 255, 255, 0.4) 2px
+  );
+  /* Same brushed striation, recolored for dark chrome (nav bar) instead of light aluminum */
+  --pattern-metal-brushed-dark: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05) 0px,
+    rgba(255, 255, 255, 0.05) 1px,
+    rgba(0, 0, 0, 0.12) 1px,
+    rgba(0, 0, 0, 0.12) 2px
+  );
+  --gradient-glass-sheen: linear-gradient(to bottom, rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0) 100%);
+  --gradient-piano: linear-gradient(160deg, #2a2a2c 0%, #0a0a0b 55%, #1c1c1e 100%);
 
   /* ---- Chrome (dark segmented desktop nav bar — classic apple.com globalnav) ---- */
   --gradient-chrome: linear-gradient(to bottom, #6e6e73, #3a3a3d);

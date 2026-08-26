@@ -84,7 +84,7 @@ a.list-row:active {
   border-radius: var(--radius-control);
   border: var(--border-hairline-width) solid var(--color-accent-border);
   background: var(--gradient-accent);
-  box-shadow: var(--shadow-inset-highlight), var(--shadow-surface);
+  box-shadow: var(--shadow-inset-highlight), var(--shadow-accent-raised);
   color: var(--color-white);
   text-shadow: var(--text-shadow-on-accent);
   font-family: inherit;
