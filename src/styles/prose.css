@@ -70,6 +70,22 @@
   padding: 0;
 }
 
+/* Display math (KaTeX) — boxed like a code block, not floating loose in the page */
+.prose .katex-display {
+  background: var(--color-paper);
+  border: var(--border-hairline-width) solid var(--color-hairline);
+  border-radius: var(--radius-control);
+  padding: var(--space-3) var(--space-2);
+  margin: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  contain: layout;
+}
+
+.prose .katex-display > .katex {
+  white-space: normal;
+}
+
 /* Editorial TODO callouts — a blockquote, kept inside the locked palette */
 .prose blockquote {
   border-left: 3px solid var(--color-accent-solid);
