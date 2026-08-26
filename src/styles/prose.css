@@ -52,11 +52,13 @@
 
 /* Code blocks — scroll inside their own container, never the page */
 .prose pre {
+  position: relative;
   background: var(--color-paper);
   color: var(--color-text);
   border: var(--border-hairline-width) solid var(--color-hairline);
   border-radius: var(--radius-control);
   padding: var(--space-2);
+  padding-right: calc(var(--tap-target-min) + var(--space-1));
   overflow-x: auto;
   contain: layout;
 }
@@ -72,14 +74,68 @@
 
 /* Display math (KaTeX) — boxed like a code block, not floating loose in the page */
 .prose .katex-display {
+  position: relative;
   background: var(--color-paper);
   border: var(--border-hairline-width) solid var(--color-hairline);
   border-radius: var(--radius-control);
   padding: var(--space-3) var(--space-2);
-  margin: 0;
+  margin-top: var(--space-3);
+  margin-bottom: 0;
   overflow-x: auto;
   overflow-y: hidden;
   contain: layout;
+}
+
+/* Copy button — a plain icon floating in the corner, no card/border of its own */
+.copy-btn {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--tap-target-min);
+  height: var(--tap-target-min);
+  padding: 0;
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform var(--duration-fast) var(--ease-standard),
+    opacity var(--duration-fast) var(--ease-standard),
+    color var(--duration-fast) var(--ease-standard);
+}
+
+.copy-btn:hover {
+  color: var(--color-text);
+}
+
+.copy-btn:active {
+  transform: translateY(1px);
+  opacity: 0.7;
+  transition-duration: var(--duration-press);
+}
+
+.copy-btn[data-copied="true"] {
+  color: var(--color-accent-solid);
+}
+
+.copy-btn svg {
+  pointer-events: none;
+}
+
+.copy-btn .copy-icon-check {
+  display: none;
+}
+
+.copy-btn[data-copied="true"] .copy-icon-default {
+  display: none;
+}
+
+.copy-btn[data-copied="true"] .copy-icon-check {
+  display: block;
 }
 
 .prose .katex-display > .katex {

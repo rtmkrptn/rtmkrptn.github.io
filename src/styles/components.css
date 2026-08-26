@@ -92,6 +92,7 @@ a.list-row:active {
   font-weight: var(--font-weight-control);
   cursor: pointer;
   overflow: hidden;
+  text-decoration: none;
   -webkit-tap-highlight-color: transparent;
   transition:
     transform var(--duration-fast) var(--ease-standard),
@@ -127,6 +128,7 @@ a.list-row:active {
 .btn:hover {
   transform: scale(1.045);
   box-shadow: var(--shadow-inset-highlight), var(--shadow-surface-raised);
+  text-decoration: none;
 }
 
 .btn:hover::after {
@@ -151,6 +153,7 @@ a.list-row:active {
 
 .pressable:hover {
   opacity: 0.8;
+  text-decoration: none;
 }
 
 .pressable:active {

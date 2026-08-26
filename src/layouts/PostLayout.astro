@@ -38,3 +38,45 @@ const formattedDate = date.toLocaleDateString("en-US", {
     margin-bottom: var(--space-1);
   }
 </style>
+
+<script>
+  import { icons } from "../lib/icons";
+
+  function buildButton(label: string) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "copy-btn";
+    btn.setAttribute("aria-label", label);
+    btn.innerHTML = `
+      <svg class="copy-icon-default" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons.copy}</svg>
+      <svg class="copy-icon-check" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${icons.check}</svg>
+    `;
+    return btn;
+  }
+
+  function wireCopy(container: Element, label: string, getText: () => string) {
+    const btn = buildButton(label);
+    container.appendChild(btn);
+    btn.addEventListener("click", async () => {
+      try {
+        await navigator.clipboard.writeText(getText().trim());
+        btn.dataset.copied = "true";
+        btn.setAttribute("aria-label", "Copied");
+        setTimeout(() => {
+          delete btn.dataset.copied;
+          btn.setAttribute("aria-label", label);
+        }, 1500);
+      } catch {
+        // Clipboard API unavailable (e.g. insecure context) — silently no-op.
+      }
+    });
+  }
+
+  document.querySelectorAll(".prose pre").forEach((pre) => {
+    wireCopy(pre, "Copy code", () => pre.querySelector("code")?.textContent ?? pre.textContent ?? "");
+  });
+
+  document.querySelectorAll(".prose .katex-display").forEach((mathEl) => {
+    wireCopy(mathEl, "Copy formula", () => mathEl.querySelector("annotation")?.textContent ?? "");
+  });
+</script>
