@@ -38,18 +38,32 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
   </header>
 
   <section class="posts-section">
-    <div class="list">
+    <div class="track-list">
+      <div class="track-list-header" aria-hidden="true">
+        <span class="track-col track-col-sorted">Date</span>
+        <span class="track-col">Title</span>
+        <span class="track-col track-col-compact">Writing</span>
+      </div>
       {
         posts.map((post) => (
-          <a class="list-row" href={withBase(`/posts/${post.id}`)}>
-            <span class="post-date tabular-nums">
-              {post.data.date.toLocaleDateString("en-US", {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })}
+          <a class="track-row" href={withBase(`/posts/${post.id}`)}>
+            <span class="track-date">
+              <span class="track-date-long">
+                {post.data.date.toLocaleDateString("en-US", {
+                  year: "numeric",
+                  month: "short",
+                  day: "numeric",
+                })}
+              </span>
+              <span class="track-date-short">
+                {post.data.date.toLocaleDateString("en-US", {
+                  year: "2-digit",
+                  month: "numeric",
+                  day: "numeric",
+                })}
+              </span>
             </span>
-            <span class="post-title">{post.data.title}</span>
+            <span class="track-title">{post.data.title}</span>
           </a>
         ))
       }
@@ -100,20 +114,4 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
     text-decoration: none;
   }
 
-  .posts-section .list-row {
-    align-items: flex-start;
-  }
-
-  .post-date {
-    flex-shrink: 0;
-    width: 7em;
-    padding-top: 0.15em;
-    font-family: var(--font-ui);
-    color: var(--color-text-tertiary);
-    font-size: var(--font-size-small);
-  }
-
-  .post-title {
-    color: var(--color-text);
-  }
 </style>

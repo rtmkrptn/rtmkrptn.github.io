@@ -200,7 +200,7 @@ const spacing = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 
     <section class="sg-section">
       <h2>09 — Grouped list</h2>
-      <p class="sg-sub">Used for the post index and CV rows. Separator insets from the left.</p>
+      <p class="sg-sub">The iOS pattern — used for CV rows. Separator insets from the left.</p>
       <div class="list">
         <a class="list-row" href="#list">
           <span class="sg-meta">2026-08-25</span>
@@ -224,7 +224,38 @@ const spacing = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
     </section>
 
     <section class="sg-section">
-      <h2>10 — Window chrome</h2>
+      <h2>10 — Striped list view</h2>
+      <p class="sg-sub">
+        The desktop pattern — used for the post index. Brushed sortable header, zebra rows,
+        recessed into the sheet. Press a row for the aqua selection fill.
+      </p>
+      <div class="track-list">
+        <div class="track-list-header" aria-hidden="true">
+          <span class="track-col track-col-sorted">Date</span>
+          <span class="track-col">Title</span>
+          <span class="track-col track-col-compact">Writing</span>
+        </div>
+        {
+          [
+            ["Aug 25, 2026", "8/25/26", "I Turned a Graphing Calculator Into a Number Theory Engine"],
+            ["Jul 02, 2026", "7/2/26", "A second post, on the striped row"],
+            ["Jun 14, 2026", "6/14/26", "A third post, back to white"],
+            ["May 30, 2026", "5/30/26", "And a fourth, striped again"],
+          ].map(([long, short, title]) => (
+            <a class="track-row" href="#track">
+              <span class="track-date">
+                <span class="track-date-long">{long}</span>
+                <span class="track-date-short">{short}</span>
+              </span>
+              <span class="track-title">{title}</span>
+            </a>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="sg-section">
+      <h2>11 — Window chrome</h2>
       <div class="window">
         <div class="window-titlebar">
           <div class="traffic">
@@ -271,7 +302,7 @@ const spacing = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
     </section>
 
     <section class="sg-section">
-      <h2>11 — Icons & dock</h2>
+      <h2>12 — Icons & dock</h2>
       <p class="sg-sub">Squircle corners at 22%, each top-lit with a single glossy sheen.</p>
       <div class="desktop-stage">
         <div class="icon-grid">
@@ -304,7 +335,7 @@ const spacing = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
     </section>
 
     <section class="sg-section">
-      <h2>12 — Radius & spacing</h2>
+      <h2>13 — Radius & spacing</h2>
       <div class="panel">
         <table class="spec-table">
           <thead>

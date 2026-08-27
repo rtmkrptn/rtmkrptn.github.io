@@ -221,6 +221,146 @@ a.list-row:active {
 }
 
 /* ============================================================
+   Striped list view (iTunes / Finder) — a desktop data table,
+   distinct from the iOS grouped list above.
+   ============================================================ */
+
+/*
+  Recessed rather than raised: a raised white list on a white sheet is very
+  nearly invisible, so the well is what makes the table read as an object.
+*/
+.track-list {
+  border: var(--border-hairline-width) solid var(--color-hairline-strong);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-inset-track);
+}
+
+/* Brushed column header, styled to look sortable */
+.track-list-header {
+  @include brushed;
+  display: grid;
+  grid-template-columns: var(--track-date-col) 1fr;
+  gap: var(--space-4);
+  padding: var(--space-2) var(--space-4);
+  border-bottom: var(--border-hairline-width) solid var(--color-hairline-strong);
+  box-shadow: var(--shadow-inset-highlight);
+}
+
+.track-col {
+  @include chrome-label(var(--font-size-caption));
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--graphite-800);
+  text-shadow: var(--text-shadow-letterpress);
+}
+
+/* Sort caret on the column the table is ordered by */
+.track-col-sorted::after {
+  content: "▲";
+  font-size: 7px;
+  line-height: 1;
+  color: var(--graphite-500);
+}
+
+.track-row {
+  display: grid;
+  grid-template-columns: var(--track-date-col) 1fr;
+  gap: var(--space-4);
+  align-items: baseline;
+  min-height: var(--list-row-min-height);
+  padding: var(--space-3) var(--space-4);
+  color: inherit;
+  transition: background var(--duration-fast) var(--ease-standard);
+}
+
+/*
+  The zebra itself. nth-of-type (not nth-child) so the brushed header, which is
+  a div sibling, does not shift the alternation and stripe the first data row.
+*/
+a.track-row:nth-of-type(even) {
+  background: var(--color-row-stripe);
+}
+
+a.track-row {
+  -webkit-tap-highlight-color: transparent;
+}
+
+a.track-row:hover {
+  background: var(--color-row-hover);
+  text-decoration: none;
+}
+
+/* Selected row, iTunes-style: full aqua fill, label flips white */
+a.track-row:active {
+  background: var(--gradient-accent);
+  box-shadow: var(--shadow-inset-highlight-soft);
+  transition-duration: var(--duration-press);
+}
+
+a.track-row:active .track-title,
+a.track-row:active .track-date {
+  color: var(--color-white);
+  text-shadow: var(--text-shadow-on-accent);
+}
+
+/*
+  Two columns is a desktop idiom. Below 480px the title column is only ~150px,
+  which wraps a real title to five lines, so the row stacks instead (the iOS
+  list idiom) and the header collapses to a single brushed section label.
+  The zebra and the recessed well — the parts that carry the look — survive.
+*/
+.track-date-short,
+.track-col-compact {
+  display: none;
+}
+
+@media (max-width: 479px) {
+  .track-list-header {
+    grid-template-columns: 1fr;
+  }
+
+  .track-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+    align-items: start;
+  }
+
+  .track-col-sorted,
+  .track-list-header .track-col:not(.track-col-compact) {
+    display: none;
+  }
+
+  .track-col-compact {
+    display: flex;
+  }
+
+  .track-date-long {
+    display: none;
+  }
+
+  .track-date-short {
+    display: inline;
+  }
+}
+
+.track-date {
+  font-family: var(--font-caption);
+  font-size: var(--font-size-small);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-text-tertiary);
+  white-space: nowrap;
+}
+
+.track-title {
+  color: var(--color-text);
+}
+
+/* ============================================================
    Input & search field
    ============================================================ */
 

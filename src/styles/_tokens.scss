@@ -59,6 +59,10 @@
   --gradient-accent-pressed: linear-gradient(180deg, var(--color-accent-pressed-top) 0%, var(--color-accent-pressed-bottom) 100%);
   /* Press-flash tint for list rows */
   --color-accent-flash: rgba(79, 179, 240, 0.18);
+  /* Zebra stripe for table rows — much fainter than the press flash, which
+     would read as a selection if used for alternation */
+  --color-row-stripe: rgba(79, 179, 240, 0.07);
+  --color-row-hover: rgba(79, 179, 240, 0.13);
 
   --color-white: #ffffff;
   --color-black: #000000;
@@ -220,12 +224,15 @@
   --space-section-desktop: var(--space-10); /* 64px */
 
   --list-row-padding-y: var(--space-3);
+  /* Date column width for the striped table view; narrows on small screens */
+  --track-date-col: 8.5em;
   --list-row-min-height: 44px;
   --list-separator-inset: var(--space-4); /* spec: inset 16px from left */
 
   /* ============ Interaction ============ */
   --tap-target-min: 44px;
-  --desktop-nav-height: 76px;
+  /* Measured: 32px wrapper padding + 44px segment + 2px border */
+  --desktop-nav-height: 78px;
 
   /* ============ Motion (spec: motion & timing) ============ */
   --duration-press: 120ms; /* spec: list-row press flash */
