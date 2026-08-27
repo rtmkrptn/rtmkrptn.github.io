@@ -73,10 +73,10 @@
 /* Brushed aluminium plate: scatters wide and soft along the grain, barely curved. */
 @mixin material-metal {
   --fx-aniso: 3;
-  /* Broad and open: squeezing it tighter and pulling it off the edges turned
-     the segment into a letterboxed stripe, which emphasised the boundary
-     rather than hiding it. */
-  --fx-sharp: 1.4;
+  /* Broad and open. Squeezing it tighter AND pulling the falloff off the edges
+     letterboxed the segment, so only the lobe size is dialled back here —
+     bevel and dome stay low so the light still opens across the full height. */
+  --fx-sharp: 1.9;
   --fx-gain: 0.6;
   --fx-bevel: 0.06;
   --fx-dome: 0.3;
