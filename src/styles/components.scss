@@ -38,7 +38,7 @@
   box-shadow: var(--shadow-inset-highlight-soft), var(--shadow-accent-raised);
   color: var(--color-white);
   text-shadow: var(--text-shadow-on-accent);
-  font-family: var(--font-system);
+  font-family: var(--font-body);
   font-size: var(--font-size-small);
   font-weight: var(--font-weight-chrome);
   cursor: pointer;
@@ -74,10 +74,16 @@
 }
 
 .btn:hover {
-  transform: scale(1.03);
-  filter: brightness(1.06);
+  /* No scale-up and no brightness shift — only the glint sweep and a lift in
+     the cast shadow. `color` is restated because the global `a:hover` rule
+     would otherwise darken an anchor-based button's label into its own fill. */
+  color: var(--color-white);
   box-shadow: var(--shadow-inset-highlight-soft), var(--shadow-raised);
   text-decoration: none;
+}
+
+.btn-secondary:hover {
+  color: var(--graphite-800);
 }
 
 .btn:hover::after {

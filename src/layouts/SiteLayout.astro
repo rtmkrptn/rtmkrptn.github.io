@@ -25,30 +25,32 @@ const { title, description } = Astro.props;
 </BaseLayout>
 
 <style>
+  /* The sheet runs the full height of the viewport with no gap above or below,
+     so the page ground only ever shows down its sides. */
   .site-main {
-    padding-block: var(--space-section-mobile);
-    padding-bottom: calc(var(--space-section-mobile) + var(--tap-target-min) + var(--space-3) + env(safe-area-inset-bottom, 0px));
+    display: flex;
+    padding: 0;
+  }
+
+  .content-card {
+    flex: 1;
+    min-height: 100vh;
+    background: var(--gradient-surface);
+    padding-block: var(--space-8)
+      calc(var(--space-8) + var(--tap-target-min) + env(safe-area-inset-bottom, 0px));
   }
 
   @media (min-width: 768px) {
-    .site-main {
-      padding-block: var(--space-section-desktop);
-      /* The desktop nav is position:fixed (reserves no flow space) so content
-         needs its own clearance — just enough to clear the nav, not a full
-         section gap on top of it. */
-      padding-top: calc(var(--desktop-nav-height) + var(--space-6));
-    }
-
-    /* Wider than the nav pill (760px) and the text measure inside it, but not
-       full-bleed — a window the content sits in, floating on the page ground. */
     .content-card {
-      max-width: 900px;
+      /* Wider than the nav pill (760px); the reading column inside still holds
+         the text to a legible measure. */
+      max-width: 1180px;
       margin-inline: auto;
-      background: var(--gradient-surface);
-      border: var(--border-hairline-width) solid var(--color-hairline);
-      border-radius: var(--radius-lg);
-      box-shadow: var(--shadow-inset-highlight), var(--shadow-panel);
-      padding: var(--space-9) var(--space-8);
+      border-inline: var(--border-hairline-width) solid var(--color-hairline);
+      box-shadow: var(--shadow-panel);
+      /* The desktop nav is position:fixed and reserves no flow space, so the
+         sheet's own top padding provides the clearance. */
+      padding-block: calc(var(--desktop-nav-height) + var(--space-6)) var(--space-10);
     }
   }
 </style>

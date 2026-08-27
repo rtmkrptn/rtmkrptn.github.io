@@ -18,7 +18,7 @@ body {
   background-image: var(--pattern-pinstripe-subtle), var(--gradient-page);
   background-attachment: fixed;
   color: var(--color-text);
-  font-family: var(--font-system);
+  font-family: var(--font-body);
   font-size: var(--font-size-body-mobile);
   line-height: var(--line-height-body);
   -webkit-tap-highlight-color: transparent;
@@ -45,6 +45,7 @@ h2,
 h3,
 h4 {
   margin: 0;
+  font-family: var(--font-heading);
   font-weight: var(--font-weight-heading);
   letter-spacing: var(--letter-spacing-heading);
   line-height: 1.2;

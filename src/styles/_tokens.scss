@@ -151,11 +151,20 @@
   --radius-control: var(--radius-sm);
 
   /* ============ Type (spec: typography scale) ============ */
-  /* iOS system face through iOS 6 */
-  --font-system: "Helvetica Neue", Helvetica, Arial, sans-serif;
-  /* Mac OS X system face through Mountain Lion — chrome, menus, captions */
-  --font-ui: "Lucida Grande", "Lucida Sans Unicode", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  --font-mono: "SF Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  /* Body & controls — Lucida Sans Unicode. Lucida Grande is the macOS-native
+     cut of the same design and stands in where Sans Unicode is absent. */
+  --font-body: "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", sans-serif;
+  /* Headings — Helvetica Neue, set thin */
+  --font-heading: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Captions & chrome labels — Helvetica Neue at normal weight */
+  --font-caption: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Code — Lucida Console, the monospace member of the same family.
+     Monaco is its macOS counterpart. */
+  --font-mono: "Lucida Console", Monaco, "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+
+  /* Aliases kept so existing rules resolve to the roles above */
+  --font-system: var(--font-body);
+  --font-ui: var(--font-caption);
 
   --font-size-body-mobile: 17px;
   --font-size-body-desktop: 19px;
@@ -175,7 +184,7 @@
     display type stays thin and small chrome labels take the spec's 700.
   */
   --font-weight-display: var(--font-weight-thin);
-  --font-weight-heading: var(--font-weight-regular);
+  --font-weight-heading: var(--font-weight-light);
   --font-weight-control: var(--font-weight-regular);
   --font-weight-chrome: var(--font-weight-bold);
 
