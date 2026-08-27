@@ -26,7 +26,9 @@ function isActive(href: string): boolean {
   </nav>
 </header>
 
-<style>
+<style lang="scss">
+  @use "../styles/mixins" as *;
+
   .desktop-nav {
     display: none;
   }
@@ -40,38 +42,44 @@ function isActive(href: string): boolean {
       left: 0;
       right: 0;
       z-index: 10;
-      padding: var(--space-2) var(--space-3);
+      padding: var(--space-4) var(--space-6);
       transform: translateY(0);
       transition: transform var(--duration-reveal) var(--ease-decelerate);
-      /* No background here on purpose — only the pill itself (.desktop-nav-bar)
-         should be opaque. A full-width opaque wrapper would cover page content
-         scrolling behind the empty space around the pill too. */
+      /* No background here on purpose — only the bar itself should be opaque.
+         A full-width opaque wrapper would cover page content scrolling behind
+         the empty space around it too. */
     }
 
+    /* Brushed-metal shell with a recessed groove — the spec's segmented control */
     .desktop-nav-bar {
+      @include brushed-dark;
       display: flex;
       width: 100%;
       max-width: 760px;
-      border-radius: var(--radius-surface);
+      border-radius: var(--radius-pill);
       overflow: hidden;
-      background: var(--pattern-metal-brushed-dark), var(--gradient-chrome);
       border: var(--border-hairline-width) solid var(--color-chrome-border);
-      box-shadow: var(--shadow-surface-raised), var(--shadow-inset-highlight);
+      box-shadow: var(--shadow-inset-highlight-soft), var(--shadow-window);
     }
 
     .desktop-nav-segment {
+      @include chrome-label(var(--font-size-nav-title));
       display: flex;
       align-items: center;
       justify-content: center;
       flex: 1;
       height: 44px;
-      padding-inline: var(--space-3);
+      padding-inline: var(--space-6);
       color: var(--color-chrome-text);
       text-shadow: var(--text-shadow-on-chrome);
+      font-family: var(--font-system);
       font-size: var(--font-size-small);
       white-space: nowrap;
       text-decoration: none;
-      box-shadow: inset -1px 0 0 var(--color-chrome-divider), inset -2px 0 0 var(--color-chrome-divider-highlight);
+      /* Beveled seam: dark line + light catch, mimicking a machined edge */
+      box-shadow:
+        inset -1px 0 0 var(--color-chrome-divider),
+        inset -2px 0 0 var(--color-chrome-divider-highlight);
       transition: background var(--duration-fast) var(--ease-standard);
     }
 
@@ -81,6 +89,7 @@ function isActive(href: string): boolean {
 
     .desktop-nav-segment:hover {
       background: rgba(255, 255, 255, 0.08);
+      color: var(--color-chrome-text);
       text-decoration: none;
     }
 

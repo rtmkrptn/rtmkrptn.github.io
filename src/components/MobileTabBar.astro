@@ -30,7 +30,10 @@ function isActive(href: string): boolean {
   </ul>
 </nav>
 
-<style>
+<style lang="scss">
+  @use "../styles/mixins" as *;
+
+  /* Spec: 49pt tall, glass/metal fill, 1px top border */
   .tab-bar {
     display: block;
     position: fixed;
@@ -38,10 +41,12 @@ function isActive(href: string): boolean {
     right: 0;
     bottom: 0;
     z-index: 10;
-    background: rgba(255, 255, 255, 0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-top: var(--border-hairline-width) solid var(--color-hairline);
+    background-color: rgba(246, 247, 248, 0.88);
+    background-image: var(--pattern-metal-striation);
+    backdrop-filter: blur(12px) saturate(1.6);
+    -webkit-backdrop-filter: blur(12px) saturate(1.6);
+    border-top: var(--border-hairline-width) solid var(--color-hairline-strong);
+    box-shadow: var(--shadow-inset-highlight);
     padding-bottom: env(safe-area-inset-bottom, 0px);
   }
 
@@ -53,6 +58,7 @@ function isActive(href: string): boolean {
 
   .tab-bar-list {
     display: flex;
+    min-height: 49px;
   }
 
   .tab-bar-list li {
@@ -66,13 +72,13 @@ function isActive(href: string): boolean {
     justify-content: center;
     gap: 2px;
     min-height: var(--tap-target-min);
-    padding: 6px 0;
-    color: var(--color-text-secondary);
+    padding: var(--space-1) 0;
+    color: var(--graphite-500);
+    text-shadow: var(--text-shadow-letterpress);
   }
 
   .tab-bar-link span {
-    font-size: var(--font-size-tab-label);
-    letter-spacing: 0;
+    @include chrome-label(var(--font-size-tab-label));
   }
 
   .tab-bar-link[aria-current="page"] {

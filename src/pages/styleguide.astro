@@ -1,197 +1,505 @@
 ---
 import BaseLayout from "../layouts/BaseLayout.astro";
 
-const swatches = [
-  { name: "--color-paper", value: "#f2f2f7" },
-  { name: "--color-surface", value: "#ffffff" },
-  { name: "--color-text", value: "#1c1c1e" },
-  { name: "--color-text-secondary", value: "#8e8e93" },
-  { name: "--color-hairline", value: "#c8c7cc" },
+const palette = [
+  { name: "--aqua-400", value: "#4fb3f0" },
+  { name: "--aqua-500", value: "#2f95e0" },
+  { name: "--aqua-700", value: "#0a5aa8" },
+  { name: "--aqua-900", value: "#063a6e" },
+  { name: "--platinum-100", value: "#f4f5f6" },
+  { name: "--platinum-500", value: "#c7cbce" },
+  { name: "--graphite-500", value: "#7d848a" },
+  { name: "--graphite-800", value: "#4a5056" },
+  { name: "--ink-900", value: "#171a1c" },
+  { name: "--piano-900", value: "#0a0a0b" },
+  { name: "--paper-white", value: "#ffffff" },
 ];
+
+const materials = [
+  { cls: "material-metal", label: "Brushed aluminum" },
+  { cls: "material-glass", label: "Glass & chrome" },
+  { cls: "material-piano", label: "Piano black" },
+  { cls: "material-platinum", label: "Platinum" },
+  { cls: "material-graphite", label: "Graphite" },
+  { cls: "material-aqua", label: "Aqua" },
+];
+
+const radii = [
+  { token: "--radius-sm", value: "6px", use: "toolbar buttons, list groups" },
+  { token: "--radius-md", value: "10px", use: "cards, panels, dialogs" },
+  { token: "--radius-lg", value: "12px", use: "windows, sheets" },
+  { token: "--radius-pill", value: "999px", use: "buttons, search, badges" },
+  { token: "--radius-icon", value: "22%", use: "app icons — never 50%" },
+];
+
+const spacing = ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10"];
 ---
 
 <BaseLayout title="Styleguide — internal">
-  <main class="reading-column styleguide">
-    <header class="sg-block">
+  <main class="sg reading-column">
+    <header class="sg-masthead">
+      <p class="kicker">Implementation reference</p>
       <h1>Styleguide</h1>
-      <p class="sg-sub">Every token, control state, and list pattern in one place. Not linked from navigation.</p>
+      <p class="sg-sub">
+        Every token, material and component in the Aqua-era system. Not linked from navigation.
+      </p>
     </header>
 
-    <section class="sg-block">
-      <h2>Color</h2>
-      <div class="swatch-row">
-        {swatches.map((s) => (
-          <div class="swatch">
-            <div class="swatch-chip" style={`background:${s.value}`}></div>
-            <code>{s.name}</code>
-            <span class="sg-sub">{s.value}</span>
-          </div>
-        ))}
-        <div class="swatch">
-          <div class="swatch-chip" style="background: linear-gradient(#4a9bfb, #1272e8); border: 1px solid #0d5fc0;"></div>
-          <code>--gradient-accent</code>
-          <span class="sg-sub">accent gradient</span>
+    <section class="sg-section">
+      <h2>01 — Palette</h2>
+      <div class="swatch-grid">
+        {
+          palette.map((s) => (
+            <div class="swatch">
+              <div class="swatch-chip" style={`background:${s.value}`} />
+              <code>{s.name}</code>
+              <span class="sg-meta">{s.value}</span>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="sg-section">
+      <h2>02 — Materials</h2>
+      <p class="sg-sub">
+        Cool family only — brushed metal, glass, piano black. No leather, felt, wood or linen.
+      </p>
+      <div class="material-grid">
+        {
+          materials.map((m) => (
+            <div class="material-tile">
+              <div class={`material-swatch ${m.cls}`} />
+              <span class="sg-meta">{m.label}</span>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <section class="sg-section">
+      <h2>03 — Typography</h2>
+      <div class="panel">
+        <div class="type-row">
+          <span class="type-sample" style="font-family: var(--font-system);">Helvetica Neue</span>
+          <span class="sg-meta">iOS body & headings · 15–17px / 400</span>
+        </div>
+        <div class="type-row">
+          <span class="type-sample" style="font-family: var(--font-ui);">Lucida Grande</span>
+          <span class="sg-meta">Mac chrome, captions, labels · 11–13px</span>
+        </div>
+        <div class="type-row">
+          <span class="type-sample" style="font-family: var(--font-mono); font-size: 22px;">SF Mono</span>
+          <span class="sg-meta">Code & formulas</span>
+        </div>
+      </div>
+      <div class="panel sg-stack">
+        <h1>Display heading — thin</h1>
+        <h2>Section heading — regular</h2>
+        <h3>Subsection heading</h3>
+        <p>
+          Body copy at reading size with a 1.55 line-height. The quick brown fox jumps over the
+          lazy dog. Numerals: 0123456789.
+        </p>
+        <p class="tabular-nums sg-meta">Tabular numerals: 1,024.50 vs 88.02 — columns align.</p>
+      </div>
+    </section>
+
+    <section class="sg-section">
+      <h2>04 — Buttons</h2>
+      <p class="sg-sub">Press any control to see it sink in and invert its gradient.</p>
+      <div class="row">
+        <button class="btn">Continue</button>
+        <button class="btn btn-secondary">Cancel</button>
+        <button class="toolbar-btn" aria-label="Toolbar action">◀</button>
+        <button class="toolbar-btn" aria-label="Toolbar action">▶</button>
+      </div>
+    </section>
+
+    <section class="sg-section">
+      <h2>05 — Segmented control</h2>
+      <div class="segmented" role="group" aria-label="View mode">
+        <button class="segmented-option" aria-pressed="true">Day</button>
+        <button class="segmented-option" aria-pressed="false">Week</button>
+        <button class="segmented-option" aria-pressed="false">Month</button>
+      </div>
+    </section>
+
+    <section class="sg-section">
+      <h2>06 — Fields</h2>
+      <div class="stack">
+        <label class="search-field">
+          <span class="visually-hidden">Search</span>
+          <svg
+            class="search-field-icon"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+          >
+            <circle cx="11" cy="11" r="7"></circle>
+            <path d="m20 20-3.5-3.5"></path>
+          </svg>
+          <input class="input" type="search" placeholder="Search" />
+        </label>
+        <input class="input" type="text" placeholder="Inset text field" />
+      </div>
+    </section>
+
+    <section class="sg-section">
+      <h2>07 — Toggle & slider</h2>
+      <div class="row">
+        <label class="toggle">
+          <span class="visually-hidden">Enable notifications</span>
+          <input type="checkbox" checked />
+          <span class="toggle-track"></span>
+          <span class="toggle-knob"></span>
+        </label>
+        <label class="toggle">
+          <span class="visually-hidden">Enable sync</span>
+          <input type="checkbox" />
+          <span class="toggle-track"></span>
+          <span class="toggle-knob"></span>
+        </label>
+      </div>
+      <div class="slider" role="img" aria-label="Slider at 60 percent">
+        <div class="slider-track">
+          <div class="slider-fill" style="width: 60%"></div>
+          <div class="slider-thumb" style="left: 60%"></div>
         </div>
       </div>
     </section>
 
-    <section class="sg-block">
-      <h2>Type</h2>
-      <h1>Heading 1 — the quick fox</h1>
-      <h2>Heading 2 — the quick fox</h2>
-      <h3>Heading 3 — the quick fox</h3>
-      <p>
-        Body copy at reading size, 1.55 line-height, measured to a 64–70ch column. The quick
-        brown fox jumps over the lazy dog. Numerals in body text: 0123456789.
-      </p>
-      <p class="sg-sub">Secondary text — dates, captions, metadata.</p>
-      <p class="tabular-nums">Tabular numerals: 1,024.50 vs 88.02 — columns align.</p>
-    </section>
-
-    <section class="sg-block">
-      <h2>Buttons</h2>
-      <p class="sg-sub">Focus a button and press it (mouse, touch, or keyboard) to see the depress state.</p>
-      <div class="control-row">
-        <button class="btn">Glossy Button</button>
-        <a class="btn" href="#buttons">Glossy Link</a>
+    <section class="sg-section">
+      <h2>08 — Badges & traffic lights</h2>
+      <div class="row">
+        <span class="badge-anchor">
+          <span class="tag">Inbox</span>
+          <span class="badge">7</span>
+        </span>
+        <span class="badge">3</span>
+        <span class="badge">128</span>
+        <div class="traffic">
+          <span class="traffic-dot traffic-dot-red"></span>
+          <span class="traffic-dot traffic-dot-yellow"></span>
+          <span class="traffic-dot traffic-dot-green"></span>
+        </div>
       </div>
     </section>
 
-    <section class="sg-block">
-      <h2>Input</h2>
-      <input class="input" type="text" placeholder="Inset text field" />
-    </section>
-
-    <section class="sg-block">
-      <h2>Grouped list</h2>
-      <p class="sg-sub">Used for the post index and CV rows.</p>
+    <section class="sg-section">
+      <h2>09 — Grouped list</h2>
+      <p class="sg-sub">Used for the post index and CV rows. Separator insets from the left.</p>
       <div class="list">
         <a class="list-row" href="#list">
-          <span>2026-08-25</span>
-          <span>First list row, as a link</span>
+          <span class="sg-meta">2026-08-25</span>
+          <span>First row, as a link</span>
+          <svg class="list-chevron" viewBox="0 0 8 13" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="m1.5 1.5 5 5-5 5"></path>
+          </svg>
         </a>
         <div class="list-row">
-          <span>2026-08-01</span>
+          <span class="sg-meta">2026-08-01</span>
           <span>Second row — plain, not a link</span>
         </div>
-        <div class="list-row">
-          <span>2026-07-14</span>
+        <a class="list-row" href="#list">
+          <span class="sg-meta">2026-07-14</span>
           <span>Third row — last, no separator below</span>
+          <svg class="list-chevron" viewBox="0 0 8 13" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+            <path d="m1.5 1.5 5 5-5 5"></path>
+          </svg>
+        </a>
+      </div>
+    </section>
+
+    <section class="sg-section">
+      <h2>10 — Window chrome</h2>
+      <div class="window">
+        <div class="window-titlebar">
+          <div class="traffic">
+            <span class="traffic-dot traffic-dot-red"></span>
+            <span class="traffic-dot traffic-dot-yellow"></span>
+            <span class="traffic-dot traffic-dot-green"></span>
+          </div>
+          <span class="window-title">Library</span>
+        </div>
+        <div class="window-toolbar">
+          <button class="toolbar-btn" aria-label="Back">◀</button>
+          <button class="toolbar-btn" aria-label="Forward">▶</button>
+          <label class="search-field" style="margin-left:auto; max-width:180px;">
+            <span class="visually-hidden">Search library</span>
+            <svg
+              class="search-field-icon"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+              aria-hidden="true"
+            >
+              <circle cx="11" cy="11" r="7"></circle>
+              <path d="m20 20-3.5-3.5"></path>
+            </svg>
+            <input class="input" type="search" placeholder="Search" />
+          </label>
+        </div>
+        <div class="window-body">
+          <nav class="window-sidebar" aria-label="Library sections">
+            <span class="sidebar-item" aria-current="true">Bookshelf</span>
+            <span class="sidebar-item">Purchased</span>
+            <span class="sidebar-item">Collections</span>
+            <span class="sidebar-item">Recent</span>
+          </nav>
+          <div class="window-content">
+            <div class="content-line" style="width:70%"></div>
+            <div class="content-line" style="width:92%"></div>
+            <div class="content-line" style="width:55%"></div>
+            <div class="scrollbar-track"><div class="scrollbar-thumb"></div></div>
+          </div>
         </div>
       </div>
     </section>
 
-    <section class="sg-block">
-      <h2>Surface</h2>
-      <div class="surface sg-surface-demo">
-        <p class="sg-sub" style="margin:0">A plain .surface panel — hairline border, 10px radius, subtle shadow.</p>
+    <section class="sg-section">
+      <h2>11 — Icons & dock</h2>
+      <p class="sg-sub">Squircle corners at 22%, each top-lit with a single glossy sheen.</p>
+      <div class="desktop-stage">
+        <div class="icon-grid">
+          {
+            [
+              "material-metal",
+              "material-glass",
+              "material-piano",
+              "material-aqua",
+              "material-platinum",
+              "material-graphite",
+              "material-metal",
+              "material-glass",
+              "material-piano",
+              "material-aqua",
+            ].map((cls) => <div class={`app-icon ${cls}`} />)
+          }
+        </div>
+        <div class="dock">
+          {
+            ["material-metal", "material-glass", "material-piano", "material-aqua"].map((cls) => (
+              <div class="dock-slot">
+                <div class={`dock-icon ${cls}`} />
+                <div class={`dock-reflection ${cls}`} />
+              </div>
+            ))
+          }
+        </div>
       </div>
     </section>
 
-    <section class="sg-block">
-      <h2>Letterpress</h2>
-      <div class="surface sg-letterpress-demo">
-        <span class="text-letterpress">Letterpress label on light chrome</span>
-      </div>
-    </section>
-
-    <section class="sg-block">
-      <h2>Spacing scale (8px)</h2>
-      <div class="space-rows">
-        {["1", "2", "3", "4", "5", "6", "8"].map((n) => (
-          <div class="space-row">
-            <code>--space-{n}</code>
-            <div class="space-bar" style={`width: var(--space-${n})`}></div>
-          </div>
-        ))}
+    <section class="sg-section">
+      <h2>12 — Radius & spacing</h2>
+      <div class="panel">
+        <table class="spec-table">
+          <thead>
+            <tr><th>Token</th><th>Value</th><th>Used for</th></tr>
+          </thead>
+          <tbody>
+            {
+              radii.map((r) => (
+                <tr>
+                  <td><code>{r.token}</code></td>
+                  <td class="tabular-nums">{r.value}</td>
+                  <td class="sg-meta">{r.use}</td>
+                </tr>
+              ))
+            }
+          </tbody>
+        </table>
+        <div class="space-rows">
+          {
+            spacing.map((n) => (
+              <div class="space-row">
+                <code>--space-{n}</code>
+                <div class="space-bar" style={`width: var(--space-${n})`} />
+              </div>
+            ))
+          }
+        </div>
       </div>
     </section>
   </main>
 </BaseLayout>
 
-<style>
-  .styleguide {
+<style lang="scss">
+  @use "../styles/mixins" as *;
+
+  .sg {
     padding-block: var(--space-section-mobile);
   }
 
   @media (min-width: 768px) {
-    .styleguide {
+    .sg {
       padding-block: var(--space-section-desktop);
     }
   }
 
-  .sg-block {
-    margin-bottom: var(--space-5);
+  .sg-masthead {
+    padding-bottom: var(--space-7);
+    margin-bottom: var(--space-9);
+    border-bottom: var(--border-hairline-width) solid var(--color-hairline);
   }
 
-  @media (min-width: 768px) {
-    .sg-block {
-      margin-bottom: var(--space-8);
-    }
+  .sg-section {
+    margin-bottom: var(--space-10);
   }
 
-  .sg-block > h2 {
-    margin-bottom: var(--space-2);
+  .sg-section > h2 {
+    margin-bottom: var(--space-4);
   }
 
-  .sg-sub {
+  .sg-sub,
+  .sg-meta {
+    font-family: var(--font-ui);
     color: var(--color-text-secondary);
     font-size: var(--font-size-small);
   }
 
-  .swatch-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
+  .sg-meta {
+    font-size: var(--font-size-caption);
+    color: var(--color-text-tertiary);
   }
 
-  .swatch {
+  .sg-stack {
+    margin-top: var(--space-4);
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    width: 140px;
+    gap: var(--space-4);
+  }
+
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--space-4);
+  }
+
+  .stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 360px;
+  }
+
+  /* Palette */
+  .swatch-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .swatch code {
+    display: block;
+    font-size: var(--font-size-caption);
+    margin-top: var(--space-2);
   }
 
   .swatch-chip {
-    width: 100%;
     height: 56px;
-    border-radius: var(--radius-control);
+    border-radius: var(--radius-sm);
     border: var(--border-hairline-width) solid var(--color-hairline);
+    box-shadow: var(--shadow-inset-highlight-soft), var(--shadow-surface);
   }
 
-  .control-row {
+  /* Materials */
+  .material-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    gap: var(--space-4);
+  }
+
+  .material-swatch {
+    height: 96px;
+    border-radius: var(--radius-md);
+    border: var(--border-hairline-width) solid var(--color-hairline-strong);
+    box-shadow: var(--shadow-raised), var(--shadow-inset-highlight-soft);
+    margin-bottom: var(--space-2);
+  }
+
+  /* Typography */
+  .type-row {
     display: flex;
     flex-wrap: wrap;
-    gap: var(--space-2);
-    align-items: center;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: var(--space-3);
+    padding: var(--space-3) 0;
+    border-bottom: var(--border-hairline-width) solid var(--color-separator);
   }
 
-  .sg-surface-demo,
-  .sg-letterpress-demo {
-    padding: var(--space-3);
+  .type-row:last-child {
+    border-bottom: none;
   }
 
+  .type-sample {
+    font-size: 26px;
+  }
+
+  /* Window filler */
+  .content-line {
+    height: 10px;
+    border-radius: var(--radius-sm);
+    background: var(--platinum-300);
+  }
+
+  /* Spec table */
+  .spec-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: var(--space-6);
+  }
+
+  .spec-table th {
+    @include chrome-label(var(--font-size-caption));
+    text-align: left;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--color-text-tertiary);
+    padding: var(--space-2);
+    border-bottom: 2px solid var(--color-hairline);
+  }
+
+  .spec-table td {
+    padding: var(--space-2);
+    border-bottom: var(--border-hairline-width) solid var(--color-separator);
+    font-size: var(--font-size-small);
+  }
+
+  .spec-table code {
+    font-family: var(--font-mono);
+    font-size: var(--font-size-caption);
+  }
+
+  /* Spacing scale */
   .space-rows {
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: var(--space-2);
   }
 
   .space-row {
     display: flex;
     align-items: center;
-    gap: var(--space-2);
+    gap: var(--space-4);
   }
 
   .space-row code {
     width: 90px;
     flex-shrink: 0;
-    font-size: var(--font-size-small);
+    font-family: var(--font-mono);
+    font-size: var(--font-size-caption);
   }
 
   .space-bar {
     height: 12px;
-    background: var(--gradient-accent);
     border-radius: 2px;
+    background: var(--gradient-accent);
+    box-shadow: var(--shadow-inset-highlight-soft);
   }
 </style>

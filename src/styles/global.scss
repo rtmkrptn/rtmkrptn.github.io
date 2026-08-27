@@ -1,4 +1,5 @@
-@import "./tokens.css";
+@use "tokens";
+@use "mixins" as *;
 
 *,
 *::before,
@@ -12,13 +13,14 @@ html {
 
 body {
   margin: 0;
+  min-height: 100vh;
   background-color: var(--color-paper);
-  background-image: var(--pattern-pinstripe);
+  background-image: var(--pattern-pinstripe-subtle), var(--gradient-page);
+  background-attachment: fixed;
   color: var(--color-text);
   font-family: var(--font-system);
   font-size: var(--font-size-body-mobile);
   line-height: var(--line-height-body);
-  font-feature-settings: "tnum" 0;
   -webkit-tap-highlight-color: transparent;
   overflow-x: hidden;
 }
@@ -48,15 +50,18 @@ h4 {
   line-height: 1.2;
 }
 
-/* h1 is the one big hero-style headline per page — thin, Apple-hero-headline weight */
+/* The single hero headline per page — thin, Apple-hero weight */
 h1 {
   font-size: var(--font-size-h1-mobile);
   font-weight: var(--font-weight-display);
   letter-spacing: var(--letter-spacing-display);
+  text-shadow: var(--text-shadow-letterpress);
 }
+
 h2 {
   font-size: var(--font-size-h2-mobile);
 }
+
 h3 {
   font-size: var(--font-size-h3-mobile);
 }
@@ -74,7 +79,7 @@ h3 {
 }
 
 p {
-  margin: 0 0 var(--space-2) 0;
+  margin: 0 0 var(--space-4) 0;
 }
 
 a {
@@ -83,6 +88,7 @@ a {
 }
 
 a:hover {
+  color: var(--aqua-900);
   text-decoration: underline;
 }
 
@@ -97,29 +103,34 @@ button {
   font-family: inherit;
 }
 
-/* Numerals: tabular alignment for CV / stat rows */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
 }
 
-/* Visible focus ring — never remove */
 :focus-visible {
-  outline: 2px solid var(--color-accent-solid);
+  outline: 2px solid var(--aqua-500);
   outline-offset: 2px;
-  border-radius: var(--radius-control);
+  border-radius: var(--radius-sm);
 }
 
-/* Reading column */
 .reading-column {
   max-width: var(--measure);
   margin-inline: auto;
-  padding-inline: var(--space-2);
+  padding-inline: var(--space-4);
 }
 
 @media (min-width: 768px) {
   .reading-column {
-    padding-inline: var(--space-3);
+    padding-inline: var(--space-6);
   }
+}
+
+/* Small uppercase eyebrow label above a title — Mac chrome idiom */
+.kicker {
+  @include chrome-label(var(--font-size-chrome));
+  letter-spacing: var(--letter-spacing-kicker);
+  text-transform: uppercase;
+  color: var(--color-text-secondary);
 }
 
 .visually-hidden {

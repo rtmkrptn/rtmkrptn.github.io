@@ -1,0 +1,715 @@
+@use "tokens";
+@use "mixins" as *;
+
+/* ============================================================
+   Surfaces
+   ============================================================ */
+
+.surface,
+.panel {
+  @include raised();
+  border-radius: var(--radius-md);
+}
+
+.panel {
+  box-shadow: var(--shadow-inset-highlight), var(--shadow-panel);
+  padding: var(--space-6);
+}
+
+.text-letterpress {
+  text-shadow: var(--text-shadow-letterpress);
+}
+
+/* ============================================================
+   Buttons — pill, glossy aqua (spec: primary button)
+   ============================================================ */
+
+.btn {
+  @include tap-target;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-6);
+  border-radius: var(--radius-pill);
+  border: var(--border-hairline-width) solid var(--color-accent-border);
+  background: var(--gradient-accent);
+  box-shadow: var(--shadow-inset-highlight-soft), var(--shadow-accent-raised);
+  color: var(--color-white);
+  text-shadow: var(--text-shadow-on-accent);
+  font-family: var(--font-system);
+  font-size: var(--font-size-small);
+  font-weight: var(--font-weight-chrome);
+  cursor: pointer;
+  overflow: hidden;
+  text-decoration: none;
+  transition:
+    transform var(--duration-control) var(--ease-standard),
+    box-shadow var(--duration-control) var(--ease-standard),
+    filter var(--duration-control) var(--ease-standard);
+}
+
+/* Static gloss across the upper half */
+.btn::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: var(--gradient-button-gloss);
+  pointer-events: none;
+}
+
+/* Traveling glint on hover */
+.btn::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 45%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.55) 50%, transparent);
+  filter: blur(6px);
+  transform: translateX(-320%) skewX(-20deg);
+  pointer-events: none;
+}
+
+.btn:hover {
+  transform: scale(1.03);
+  filter: brightness(1.06);
+  box-shadow: var(--shadow-inset-highlight-soft), var(--shadow-raised);
+  text-decoration: none;
+}
+
+.btn:hover::after {
+  transform: translateX(450%) skewX(-20deg);
+  transition: transform var(--duration-shine) var(--ease-standard);
+}
+
+.btn:active {
+  @include pressed();
+  transition-duration: var(--duration-press);
+}
+
+/* Neutral variant — metal instead of aqua, for secondary actions */
+.btn-secondary {
+  background: var(--gradient-metal);
+  border-color: var(--color-hairline-strong);
+  box-shadow: var(--shadow-inset-highlight), var(--shadow-surface);
+  color: var(--graphite-800);
+  text-shadow: var(--text-shadow-letterpress);
+}
+
+.btn-secondary:active {
+  @include pressed(linear-gradient(180deg, #d3d6d8, #f2f3f4));
+}
+
+/* Small square toolbar button */
+.toolbar-btn {
+  @include raised(linear-gradient(180deg, #ffffff, #dcdfe1), none, var(--color-hairline-strong));
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 30px;
+  height: 24px;
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--graphite-800);
+  cursor: pointer;
+  transition: filter var(--duration-fast) var(--ease-standard);
+}
+
+.toolbar-btn:hover {
+  filter: brightness(0.97);
+}
+
+.toolbar-btn:active {
+  @include pressed(linear-gradient(180deg, #dcdfe1, #ffffff));
+}
+
+/* Plain pressable — nav links, icon links */
+.pressable {
+  -webkit-tap-highlight-color: transparent;
+  transition:
+    transform var(--duration-fast) var(--ease-standard),
+    opacity var(--duration-fast) var(--ease-standard);
+}
+
+.pressable:hover {
+  opacity: 0.8;
+  text-decoration: none;
+}
+
+.pressable:active {
+  transform: translateY(1px);
+  opacity: 0.6;
+  transition-duration: var(--duration-press);
+}
+
+/* ============================================================
+   Grouped list (iOS table view)
+   ============================================================ */
+
+.list {
+  @include raised();
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.list-row {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: var(--list-row-min-height);
+  padding: var(--list-row-padding-y) var(--space-4);
+  color: inherit;
+}
+
+/* Separator, inset from the left per spec */
+.list-row:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: var(--list-separator-inset);
+  right: 0;
+  bottom: 0;
+  height: var(--border-hairline-width);
+  background: var(--color-separator);
+}
+
+/*
+  End rows round themselves rather than relying on the parent's overflow clip —
+  Chromium does not reliably clip a painted/transformed child to an ancestor's
+  border-radius, which left a square notch on the hovered first row.
+*/
+.list-row:first-child {
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
+.list-row:last-child {
+  border-radius: 0 0 var(--radius-md) var(--radius-md);
+}
+
+a.list-row {
+  -webkit-tap-highlight-color: transparent;
+  transition: background var(--duration-fast) var(--ease-standard);
+}
+
+a.list-row:hover {
+  background: rgba(0, 0, 0, 0.025);
+  text-decoration: none;
+}
+
+/* Spec: press flash, aqua tint, 120ms */
+a.list-row:active {
+  background: var(--color-accent-flash);
+  transition-duration: var(--duration-press);
+}
+
+/* Chevron accessory — 8x13px per spec */
+.list-chevron {
+  flex-shrink: 0;
+  margin-left: auto;
+  width: 8px;
+  height: 13px;
+  color: var(--graphite-500);
+}
+
+/* ============================================================
+   Input & search field
+   ============================================================ */
+
+.input {
+  @include inset-track;
+  @include tap-target;
+  display: block;
+  width: 100%;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  font: inherit;
+  font-size: var(--font-size-small);
+  color: var(--color-text);
+}
+
+.input::placeholder {
+  color: var(--color-text-tertiary);
+}
+
+/* Pill search field with a leading magnifier */
+.search-field {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.search-field .input {
+  border-radius: var(--radius-pill);
+  padding-left: calc(var(--space-6) + var(--space-4));
+}
+
+.search-field-icon {
+  position: absolute;
+  left: var(--space-3);
+  width: 14px;
+  height: 14px;
+  color: var(--graphite-500);
+  pointer-events: none;
+}
+
+/* ============================================================
+   Segmented control — brushed shell, glossy selected pill
+   ============================================================ */
+
+.segmented {
+  @include brushed;
+  display: inline-flex;
+  padding: 2px;
+  border-radius: var(--radius-pill);
+  border: var(--border-hairline-width) solid var(--color-hairline-strong);
+  box-shadow: var(--shadow-inset-groove);
+}
+
+.segmented-option {
+  @include chrome-label;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 30px;
+  padding: 0 var(--space-5);
+  border: none;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  color: var(--graphite-800);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--ease-standard);
+}
+
+.segmented-option:hover {
+  background: rgba(255, 255, 255, 0.45);
+}
+
+.segmented-option[aria-pressed="true"],
+.segmented-option[aria-selected="true"] {
+  background: linear-gradient(180deg, #ffffff, #eceeef);
+  box-shadow: var(--shadow-inset-highlight), 0 1px 2px rgba(20, 25, 30, 0.2);
+  color: var(--color-text);
+}
+
+/* ============================================================
+   Toggle switch — 51x31 track, 27px glossy knob
+   ============================================================ */
+
+.toggle {
+  position: relative;
+  display: inline-block;
+  width: 51px;
+  height: 31px;
+  flex-shrink: 0;
+}
+
+.toggle input {
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  cursor: pointer;
+}
+
+.toggle-track {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(180deg, #d8dcde, #eef0f1);
+  border: var(--border-hairline-width) solid var(--color-hairline-strong);
+  box-shadow: var(--shadow-inset-groove);
+  transition: background var(--duration-fast) var(--ease-standard);
+  pointer-events: none;
+}
+
+.toggle-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 27px;
+  height: 27px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffffff, #e8eaec);
+  border: var(--border-hairline-width) solid rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-icon), var(--shadow-inset-highlight);
+  transition: transform var(--duration-fast) var(--ease-standard);
+  pointer-events: none;
+}
+
+.toggle input:checked ~ .toggle-track {
+  background: var(--gradient-accent);
+  border-color: var(--color-accent-border);
+}
+
+.toggle input:checked ~ .toggle-knob {
+  transform: translateX(20px);
+}
+
+.toggle input:focus-visible ~ .toggle-track {
+  outline: 2px solid var(--aqua-500);
+  outline-offset: 2px;
+}
+
+/* ============================================================
+   Badge — glossy red count
+   ============================================================ */
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(180deg, var(--red-glossy-light), var(--red-glossy) 45%, var(--red-glossy-dark));
+  border: var(--border-hairline-width) solid rgba(120, 20, 15, 0.5);
+  box-shadow: var(--shadow-inset-highlight-soft), 0 1px 2px rgba(0, 0, 0, 0.3);
+  color: var(--color-white);
+  font-family: var(--font-system);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-chrome);
+  text-shadow: var(--text-shadow-on-accent);
+  line-height: 1;
+}
+
+.badge-anchor {
+  position: relative;
+  display: inline-flex;
+}
+
+.badge-anchor .badge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+}
+
+/* ============================================================
+   Slider — grooved track, aqua fill, glossy thumb
+   ============================================================ */
+
+.slider {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--tap-target-min);
+}
+
+.slider-track {
+  position: relative;
+  width: 100%;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(180deg, #d3d6d8, #eef0f1);
+  border: var(--border-hairline-width) solid var(--color-hairline-strong);
+  box-shadow: var(--shadow-inset-groove);
+}
+
+.slider-fill {
+  position: absolute;
+  inset: 0 auto 0 0;
+  border-radius: var(--radius-pill);
+  background: var(--gradient-accent);
+  box-shadow: var(--shadow-inset-highlight-soft);
+}
+
+.slider-thumb {
+  position: absolute;
+  top: 50%;
+  width: 28px;
+  height: 28px;
+  margin-top: -14px;
+  margin-left: -14px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #ffffff, #e4e7e9);
+  border: var(--border-hairline-width) solid rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-icon), var(--shadow-inset-highlight);
+  transition: transform var(--duration-fast) var(--ease-standard);
+}
+
+.slider:hover .slider-thumb {
+  transform: scale(1.05);
+}
+
+/* ============================================================
+   Traffic-light controls
+   ============================================================ */
+
+.traffic {
+  display: flex;
+  gap: var(--space-2);
+}
+
+.traffic-dot {
+  position: relative;
+  width: 13px;
+  height: 13px;
+  border-radius: 50%;
+}
+
+/* Specular pinprick highlight */
+.traffic-dot::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 2px;
+  width: 6px;
+  height: 4px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.traffic-dot-red {
+  @include glossy-dot(var(--red-glossy-light), var(--red-glossy), var(--red-glossy-dark));
+}
+
+.traffic-dot-yellow {
+  @include glossy-dot(var(--yellow-glossy-light), var(--yellow-glossy), var(--yellow-glossy-dark));
+}
+
+.traffic-dot-green {
+  @include glossy-dot(var(--green-glossy-light), var(--green-glossy), var(--green-glossy-dark));
+}
+
+/* Spec: an inactive window desaturates all three. Opt-in, so a static
+   specimen shows the live colors rather than the dimmed state. */
+.traffic-dot {
+  transition: filter var(--duration-fast) var(--ease-standard);
+}
+
+.window-inactive .traffic-dot {
+  filter: saturate(0.15);
+}
+
+/* ============================================================
+   Window chrome
+   ============================================================ */
+
+.window {
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  border: var(--border-hairline-width) solid rgba(0, 0, 0, 0.28);
+  box-shadow: var(--shadow-window);
+}
+
+.window-titlebar {
+  @include brushed;
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  min-height: 30px;
+  padding: var(--space-2) var(--space-3);
+  border-bottom: var(--border-hairline-width) solid rgba(0, 0, 0, 0.18);
+}
+
+.window-title {
+  @include chrome-label;
+  flex: 1;
+  text-align: center;
+  color: var(--graphite-800);
+  text-shadow: var(--text-shadow-letterpress);
+  /* Balance the traffic-light cluster so the title reads as centered */
+  margin-right: 58px;
+}
+
+.window-toolbar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 40px;
+  padding: var(--space-2) var(--space-3);
+  background: var(--gradient-metal-light);
+  border-bottom: var(--border-hairline-width) solid var(--color-hairline);
+}
+
+.window-body {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  min-height: 200px;
+  background: var(--color-surface);
+}
+
+.window-sidebar {
+  background-color: #eef0f1;
+  background-image: var(--pattern-pinstripe);
+  padding: var(--space-3);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  border-right: var(--border-hairline-width) solid var(--color-hairline);
+}
+
+.sidebar-item {
+  @include chrome-label;
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  color: var(--graphite-800);
+  font-weight: var(--font-weight-regular);
+  cursor: pointer;
+}
+
+.sidebar-item[aria-current="true"] {
+  background: var(--gradient-accent);
+  box-shadow: var(--shadow-inset-highlight-soft);
+  color: var(--color-white);
+  font-weight: var(--font-weight-chrome);
+  text-shadow: var(--text-shadow-on-accent);
+}
+
+.window-content {
+  padding: var(--space-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+/* Aqua scrollbar */
+.scrollbar-track {
+  width: 12px;
+  height: 120px;
+  margin-left: auto;
+  padding: 2px;
+  border-radius: var(--radius-pill);
+  background: #e7e9ea;
+  box-shadow: var(--shadow-inset-track);
+}
+
+.scrollbar-thumb {
+  width: 100%;
+  height: 55%;
+  border-radius: var(--radius-pill);
+  background: linear-gradient(180deg, #cfd3d6, #9aa0a6);
+  box-shadow: var(--shadow-inset-highlight-soft);
+}
+
+/* ============================================================
+   App icons (squircle) & dock
+   ============================================================ */
+
+.icon-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--space-6) var(--space-5);
+}
+
+@media (min-width: 480px) {
+  .icon-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}
+
+.app-icon {
+  @include squircle;
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border: var(--border-hairline-width) solid rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-icon), var(--shadow-inset-highlight-soft);
+  overflow: hidden;
+}
+
+.app-icon::after {
+  @include glass-sheen;
+}
+
+.material-metal {
+  @include brushed(linear-gradient(180deg, #e4e7e9 0%, #b9bec2 50%, #d7dadd 100%));
+  background-color: var(--platinum-500);
+}
+
+.material-glass {
+  background: var(--gradient-glass);
+}
+
+.material-piano {
+  background: var(--gradient-piano);
+}
+
+.material-aqua {
+  background: var(--gradient-accent);
+}
+
+.material-platinum {
+  background: linear-gradient(180deg, var(--platinum-100), var(--platinum-500));
+}
+
+.material-graphite {
+  background: linear-gradient(180deg, var(--graphite-500), var(--graphite-800));
+}
+
+/* A desktop-like ground so translucent glass and reflections have something
+   to sit against — glass over a white panel is invisible. */
+.desktop-stage {
+  padding: var(--space-7) var(--space-6) var(--space-6);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(160deg, #8e9aa5 0%, #6d7c8a 45%, #55636f 100%);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.25), var(--shadow-inset-track);
+}
+
+.dock {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-6);
+  margin-top: var(--space-6);
+  padding: var(--space-3) var(--space-4) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0.35), rgba(255, 255, 255, 0.08));
+  border: var(--border-hairline-width) solid rgba(255, 255, 255, 0.4);
+  box-shadow:
+    inset 0 8px 20px rgba(15, 20, 25, 0.18),
+    0 4px 10px rgba(15, 20, 25, 0.12);
+  backdrop-filter: blur(2px);
+  -webkit-backdrop-filter: blur(2px);
+}
+
+.dock-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.dock-icon {
+  @include squircle;
+  position: relative;
+  width: 56px;
+  height: 56px;
+  border: var(--border-hairline-width) solid rgba(0, 0, 0, 0.25);
+  box-shadow: var(--shadow-icon), var(--shadow-inset-highlight-soft);
+  overflow: hidden;
+}
+
+.dock-icon::after {
+  @include glass-sheen;
+}
+
+/* Flipped, mask-faded duplicate — the dock's pane-of-glass reflection */
+.dock-reflection {
+  @include squircle;
+  width: 56px;
+  height: 24px;
+  margin-top: 2px;
+  opacity: 0.28;
+  transform: scaleY(-1);
+  mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0, 0, 0, 0.7), transparent);
+}
+
+/* ============================================================
+   Tag / pill label
+   ============================================================ */
+
+.tag {
+  @include raised(linear-gradient(180deg, #ffffff, #eceeef), none, var(--color-hairline));
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-1) var(--space-4);
+  border-radius: var(--radius-pill);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-chrome);
+  color: var(--graphite-800);
+}

@@ -1,0 +1,98 @@
+/*
+  Recipe mixins for the Aqua-era surface language.
+
+  The spec's core rule — "every raised surface pairs a top highlight with a
+  bottom shadow, never a flat single-color fill" — is repeated across ~15
+  components. These mixins express it once.
+*/
+
+/* A raised surface: 2-stop gradient + specular top edge + cast shadow. */
+@mixin raised($gradient: var(--gradient-surface), $shadow: var(--shadow-surface), $border: var(--color-hairline)) {
+  background: $gradient;
+  border: var(--border-hairline-width) solid $border;
+  box-shadow: var(--shadow-inset-highlight), $shadow;
+}
+
+/* A recessed groove: search fields, sliders, scrollbar tracks, segmented shells. */
+@mixin inset-track($gradient: linear-gradient(180deg, #ffffff, #eef0f1)) {
+  background: $gradient;
+  border: var(--border-hairline-width) solid var(--color-hairline-strong);
+  box-shadow: var(--shadow-inset-track);
+}
+
+/* Brushed aluminum: fine striations layered over a vertical gradient. */
+@mixin brushed($gradient: var(--gradient-metal)) {
+  background-image: var(--pattern-metal-striation), $gradient;
+}
+
+@mixin brushed-dark($gradient: var(--gradient-chrome)) {
+  background-image: var(--pattern-metal-striation-dark), $gradient;
+}
+
+/*
+  The glossy "jellybean" sheen across the upper half of an element.
+  Applied to a pseudo-element so it composites over any fill.
+*/
+@mixin glass-sheen($height: 46%, $inset: 4%) {
+  content: "";
+  position: absolute;
+  top: $inset;
+  left: $inset;
+  right: $inset;
+  height: $height;
+  background: var(--gradient-glass-sheen);
+  border-radius: 40% 40% 60% 60% / 55% 55% 100% 100%;
+  pointer-events: none;
+}
+
+/*
+  Squircle corners for app icons. Progressive enhancement: browsers with
+  `corner-shape` draw a true superellipse, everything else gets the spec's
+  22% rounded-square approximation.
+*/
+@mixin squircle($radius: var(--radius-icon)) {
+  border-radius: $radius;
+
+  @supports (corner-shape: squircle) {
+    border-radius: 28%;
+    corner-shape: squircle;
+  }
+}
+
+/* Physical press: sink in, invert the gradient, dim slightly. */
+@mixin pressed($gradient: var(--gradient-accent-pressed)) {
+  background: $gradient;
+  box-shadow: var(--shadow-pressed);
+  transform: translateY(1px);
+  filter: brightness(0.96);
+}
+
+/* Every interactive control clears the 44x44 minimum regardless of glyph size. */
+@mixin tap-target {
+  min-width: var(--tap-target-min);
+  min-height: var(--tap-target-min);
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Small chrome label — Mac UI caption styling. */
+@mixin chrome-label($size: var(--font-size-chrome)) {
+  font-family: var(--font-ui);
+  font-size: $size;
+  font-weight: var(--font-weight-chrome);
+  letter-spacing: 0;
+}
+
+/* A glossy status dot with a specular highlight (traffic lights, badges). */
+@mixin glossy-dot($light, $mid, $dark) {
+  background: radial-gradient(circle at 35% 30%, $light, $mid 45%, $dark 100%);
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.3);
+}
+
+/* Content that must scroll inside its own box, never widening the page. */
+@mixin scroll-container {
+  overflow-x: auto;
+  overflow-y: hidden;
+  contain: layout;
+}

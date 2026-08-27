@@ -27,7 +27,7 @@ const { title, description } = Astro.props;
 <style>
   .site-main {
     padding-block: var(--space-section-mobile);
-    padding-bottom: calc(var(--space-section-mobile) + var(--tap-target-min) + 12px + env(safe-area-inset-bottom, 0px));
+    padding-bottom: calc(var(--space-section-mobile) + var(--tap-target-min) + var(--space-3) + env(safe-area-inset-bottom, 0px));
   }
 
   @media (min-width: 768px) {
@@ -36,19 +36,19 @@ const { title, description } = Astro.props;
       /* The desktop nav is position:fixed (reserves no flow space) so content
          needs its own clearance — just enough to clear the nav, not a full
          section gap on top of it. */
-      padding-top: calc(var(--desktop-nav-height) + var(--space-3));
+      padding-top: calc(var(--desktop-nav-height) + var(--space-6));
     }
 
     /* Wider than the nav pill (760px) and the text measure inside it, but not
-       full-bleed — a card the content sits on, floating on the paper texture. */
+       full-bleed — a window the content sits in, floating on the page ground. */
     .content-card {
       max-width: 900px;
       margin-inline: auto;
       background: var(--gradient-surface);
       border: var(--border-hairline-width) solid var(--color-hairline);
-      border-radius: var(--radius-surface);
-      box-shadow: var(--shadow-surface), var(--shadow-inset-highlight);
-      padding: var(--space-6) var(--space-5);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-inset-highlight), var(--shadow-panel);
+      padding: var(--space-9) var(--space-8);
     }
   }
 </style>

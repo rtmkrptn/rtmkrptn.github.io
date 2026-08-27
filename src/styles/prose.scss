@@ -1,7 +1,8 @@
-@import "./tokens.css";
+@use "tokens";
+@use "mixins" as *;
 
 .prose {
-  margin-top: var(--space-4);
+  margin-top: var(--space-7);
   font-size: var(--font-size-prose-mobile);
 }
 
@@ -12,12 +13,12 @@
 }
 
 .prose > * + * {
-  margin-top: var(--space-3);
+  margin-top: var(--space-6);
 }
 
 .prose h2,
 .prose h3 {
-  margin-top: var(--space-6);
+  margin-top: var(--space-9);
   font-weight: var(--font-weight-light);
   letter-spacing: var(--letter-spacing-display);
 }
@@ -33,34 +34,34 @@
 }
 
 .prose li + li {
-  margin-top: var(--space-1);
+  margin-top: var(--space-2);
 }
 
 .prose strong {
-  font-weight: 600;
+  font-weight: var(--font-weight-bold);
 }
 
 /* Inline code */
 .prose :not(pre) > code {
   font-family: var(--font-mono);
   font-size: 0.88em;
-  background: var(--color-paper);
+  background: var(--platinum-100);
   border: var(--border-hairline-width) solid var(--color-hairline);
-  border-radius: 4px;
+  border-radius: var(--radius-sm);
   padding: 0.1em 0.4em;
 }
 
 /* Code blocks — scroll inside their own container, never the page */
 .prose pre {
+  @include scroll-container;
   position: relative;
-  background: var(--color-paper);
+  background: var(--platinum-100);
   color: var(--color-text);
   border: var(--border-hairline-width) solid var(--color-hairline);
-  border-radius: var(--radius-control);
-  padding: var(--space-2);
-  padding-right: calc(var(--tap-target-min) + var(--space-1));
-  overflow-x: auto;
-  contain: layout;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-inset-track);
+  padding: var(--space-4);
+  padding-right: calc(var(--tap-target-min) + var(--space-2));
 }
 
 .prose pre code {
@@ -72,22 +73,26 @@
   padding: 0;
 }
 
-/* Display math (KaTeX) — boxed like a code block, not floating loose in the page */
+/* Display math — boxed like a code block */
 .prose .katex-display {
+  @include scroll-container;
   position: relative;
-  background: var(--color-paper);
+  background: var(--platinum-100);
   border: var(--border-hairline-width) solid var(--color-hairline);
-  border-radius: var(--radius-control);
-  padding: var(--space-3) var(--space-2);
-  margin-top: var(--space-3);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-inset-track);
+  padding: var(--space-6) var(--space-4);
+  margin-top: var(--space-6);
   margin-bottom: 0;
-  overflow-x: auto;
-  overflow-y: hidden;
-  contain: layout;
 }
 
-/* Copy button — a plain icon floating in the corner, no card/border of its own */
+.prose .katex-display > .katex {
+  white-space: normal;
+}
+
+/* Copy button — a plain icon in the corner, no card of its own */
 .copy-btn {
+  @include tap-target;
   position: absolute;
   top: var(--space-2);
   right: var(--space-2);
@@ -99,9 +104,8 @@
   padding: 0;
   background: none;
   border: none;
-  color: var(--color-text-secondary);
+  color: var(--color-text-tertiary);
   cursor: pointer;
-  -webkit-tap-highlight-color: transparent;
   transition:
     transform var(--duration-fast) var(--ease-standard),
     opacity var(--duration-fast) var(--ease-standard),
@@ -138,17 +142,13 @@
   display: block;
 }
 
-.prose .katex-display > .katex {
-  white-space: normal;
-}
-
-/* Editorial TODO callouts — a blockquote, kept inside the locked palette */
+/* Editorial callouts */
 .prose blockquote {
-  border-left: 3px solid var(--color-accent-solid);
-  background: var(--color-paper);
+  border-left: 3px solid var(--aqua-500);
+  background: var(--platinum-100);
   color: var(--color-text-secondary);
-  padding: var(--space-2) var(--space-3);
-  border-radius: 0 var(--radius-control) var(--radius-control) 0;
+  padding: var(--space-4) var(--space-6);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
   font-style: italic;
 }
 
@@ -164,18 +164,19 @@
 .prose hr {
   border: none;
   border-top: var(--border-hairline-width) solid var(--color-hairline);
-  margin-block: var(--space-5);
+  margin-block: var(--space-8);
 }
 
 .prose img {
-  border-radius: var(--radius-control);
+  border-radius: var(--radius-md);
+  border: var(--border-hairline-width) solid var(--color-hairline);
+  box-shadow: var(--shadow-surface);
   width: 100%;
 }
 
 .prose table {
+  @include scroll-container;
   display: block;
-  overflow-x: auto;
-  contain: layout;
   border-collapse: collapse;
   width: 100%;
 }
@@ -183,19 +184,29 @@
 .prose th,
 .prose td {
   border: var(--border-hairline-width) solid var(--color-hairline);
-  padding: var(--space-1) var(--space-2);
+  padding: var(--space-2) var(--space-4);
   text-align: left;
 }
 
-/* Footnotes (remark-gfm) */
+.prose th {
+  background: var(--platinum-100);
+  font-family: var(--font-ui);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-chrome);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--color-text-tertiary);
+}
+
+/* Footnotes */
 .prose .footnotes {
-  margin-top: var(--space-6);
-  padding-top: var(--space-3);
+  margin-top: var(--space-9);
+  padding-top: var(--space-6);
   border-top: var(--border-hairline-width) solid var(--color-hairline);
   font-size: var(--font-size-small);
   color: var(--color-text-secondary);
 }
 
 .prose sup > a {
-  scroll-margin-top: var(--space-6);
+  scroll-margin-top: var(--space-9);
 }

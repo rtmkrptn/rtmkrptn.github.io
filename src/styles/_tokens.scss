@@ -1,0 +1,243 @@
+/*
+  Design tokens — "Skeuomorphism, the Aqua years" (Mac OS X Leopard–Mountain
+  Lion / iOS 4–6). Values follow the moodboard's build spec verbatim.
+
+  Every color, size, radius, spacing and motion value used anywhere in this
+  project must be defined here as a custom property.
+
+  Deliberately excluded per direction: leather, felt, wood, linen. Only the
+  neutral "cool material" family ships — brushed metal, glass, piano black.
+*/
+
+:root {
+  /* ============ Primitive palette (spec: Color tokens) ============ */
+  --aqua-400: #4fb3f0;
+  --aqua-500: #2f95e0;
+  --aqua-700: #0a5aa8;
+  --aqua-900: #063a6e;
+
+  --platinum-100: #f4f5f6;
+  --platinum-300: #e2e5e7;
+  --platinum-500: #c7cbce;
+
+  --graphite-500: #7d848a;
+  --graphite-800: #4a5056;
+
+  --ink-900: #171a1c;
+  --paper-white: #ffffff;
+  --piano-900: #0a0a0b;
+
+  /* Glossy status colors — traffic lights, badges */
+  --red-glossy-light: #ff8a80;
+  --red-glossy: #ff5f57;
+  --red-glossy-dark: #d33a32;
+  --yellow-glossy-light: #ffe08a;
+  --yellow-glossy: #ffbd2e;
+  --yellow-glossy-dark: #dc9615;
+  --green-glossy-light: #8ef2a0;
+  --green-glossy: #28c840;
+  --green-glossy-dark: #1a9c2e;
+
+  /* ============ Semantic aliases ============ */
+  --color-paper: #eef1f3;
+  --color-paper-deep: #dfe3e6;
+  --color-surface: var(--paper-white);
+  --color-text: #1c1f22;
+  --color-text-secondary: #6b7278;
+  --color-text-tertiary: #8b9095;
+  --color-hairline: rgba(0, 0, 0, 0.12);
+  --color-hairline-strong: rgba(0, 0, 0, 0.2);
+  --color-separator: rgba(0, 0, 0, 0.08);
+
+  --color-accent-top: var(--aqua-400);
+  --color-accent-bottom: var(--aqua-700);
+  --color-accent-border: rgba(6, 58, 110, 0.45);
+  --color-accent-solid: var(--aqua-700);
+  --color-accent-pressed-top: var(--aqua-700);
+  --color-accent-pressed-bottom: var(--aqua-900);
+  --gradient-accent: linear-gradient(180deg, var(--color-accent-top) 0%, var(--color-accent-bottom) 100%);
+  --gradient-accent-pressed: linear-gradient(180deg, var(--color-accent-pressed-top) 0%, var(--color-accent-pressed-bottom) 100%);
+  /* Press-flash tint for list rows */
+  --color-accent-flash: rgba(79, 179, 240, 0.18);
+
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* ============ Materials (cool family only) ============ */
+  /* Page ground: a soft top-lit gradient, never a flat fill */
+  --gradient-page: linear-gradient(180deg, #eef1f3 0%, #dfe3e6 40%, #d3d8db 100%);
+
+  /* Raised panel / card */
+  --gradient-surface: linear-gradient(180deg, #ffffff 0%, #f6f7f8 100%);
+
+  /* Brushed aluminum — titlebars, toolbars */
+  --gradient-metal: linear-gradient(180deg, #f2f3f4 0%, #d3d6d8 100%);
+  --gradient-metal-light: linear-gradient(180deg, #fafbfb 0%, #e9ebec 100%);
+  --pattern-metal-striation: repeating-linear-gradient(
+    180deg,
+    rgba(0, 0, 0, 0.06) 0px,
+    rgba(0, 0, 0, 0.06) 1px,
+    rgba(255, 255, 255, 0.4) 1px,
+    rgba(255, 255, 255, 0.4) 2px
+  );
+  /* Same striation recolored for dark chrome */
+  --pattern-metal-striation-dark: repeating-linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.05) 0px,
+    rgba(255, 255, 255, 0.05) 1px,
+    rgba(0, 0, 0, 0.12) 1px,
+    rgba(0, 0, 0, 0.12) 2px
+  );
+
+  /* Pinstripe — sidebars, page ground texture */
+  --pattern-pinstripe: repeating-linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.06) 0px,
+    rgba(0, 0, 0, 0.06) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+  --pattern-pinstripe-subtle: repeating-linear-gradient(
+    90deg,
+    rgba(0, 0, 0, 0.028) 0px,
+    rgba(0, 0, 0, 0.028) 1px,
+    transparent 1px,
+    transparent 4px
+  );
+
+  /* Glass & piano black */
+  --gradient-glass: linear-gradient(180deg, #ffffff 0%, #dfe3e6 46%, #aab0b5 50%, #eef1f3 100%);
+  --gradient-piano: linear-gradient(160deg, #2a2a2c 0%, #0a0a0b 55%, #1c1c1e 100%);
+  --gradient-glass-sheen: linear-gradient(180deg, rgba(255, 255, 255, 0.75) 0%, rgba(255, 255, 255, 0) 100%);
+  --gradient-button-gloss: linear-gradient(180deg, rgba(255, 255, 255, 0.5) 0%, rgba(255, 255, 255, 0) 55%);
+
+  /* Dark chrome — desktop nav */
+  --gradient-chrome: linear-gradient(180deg, #6e6e73 0%, #3a3a3d 100%);
+  --gradient-chrome-active: linear-gradient(180deg, #000000 0%, #1c1c1e 100%);
+  --color-chrome-border: #222224;
+  --color-chrome-divider: rgba(0, 0, 0, 0.4);
+  --color-chrome-divider-highlight: rgba(255, 255, 255, 0.08);
+  --color-chrome-text: #f5f5f7;
+  --shadow-chrome-active-inset: inset 0 2px 4px rgba(0, 0, 0, 0.7);
+  --text-shadow-on-chrome: 0 1px 1px rgba(0, 0, 0, 0.5);
+
+  /* ============ Elevation (spec: shadow recipes) ============ */
+  --shadow-inset-highlight: inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  --shadow-inset-highlight-soft: inset 0 1px 0 rgba(255, 255, 255, 0.5);
+  --shadow-surface: 0 3px 8px rgba(20, 25, 30, 0.08);
+  --shadow-panel: 0 10px 24px rgba(20, 25, 30, 0.1);
+  --shadow-raised: 0 6px 14px rgba(20, 25, 30, 0.18);
+  --shadow-window: 0 18px 34px rgba(15, 20, 25, 0.28);
+  --shadow-icon: 0 5px 10px rgba(15, 20, 25, 0.3);
+  --shadow-accent-raised: 0 3px 6px rgba(10, 40, 70, 0.35);
+  --shadow-inset-track: inset 0 1px 2px rgba(0, 0, 0, 0.15);
+  --shadow-inset-groove: inset 0 1px 3px rgba(0, 0, 0, 0.22);
+  --shadow-pressed: inset 0 1px 2px rgba(0, 0, 0, 0.35);
+
+  --text-shadow-letterpress: 0 1px 0 rgba(255, 255, 255, 0.6);
+  --text-shadow-on-accent: 0 -1px 0 rgba(0, 0, 0, 0.25);
+
+  --border-hairline-width: 1px;
+
+  /* ============ Radii (spec: radius scale) ============ */
+  --radius-sm: 6px; /* toolbar buttons, list groups */
+  --radius-md: 10px; /* cards, panels, dialogs */
+  --radius-lg: 12px; /* windows, sheets */
+  --radius-pill: 999px; /* buttons, search fields, badges */
+  --radius-icon: 22%; /* app icons — squircle, never 50% */
+
+  /* Back-compat aliases used across older component rules */
+  --radius-surface: var(--radius-md);
+  --radius-control: var(--radius-sm);
+
+  /* ============ Type (spec: typography scale) ============ */
+  /* iOS system face through iOS 6 */
+  --font-system: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /* Mac OS X system face through Mountain Lion — chrome, menus, captions */
+  --font-ui: "Lucida Grande", "Lucida Sans Unicode", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-mono: "SF Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  --font-size-body-mobile: 17px;
+  --font-size-body-desktop: 19px;
+  --font-size-prose-mobile: 16px;
+  --font-size-prose-desktop: 18px;
+  --line-height-body: 1.55;
+  --measure: 68ch;
+
+  --font-weight-thin: 200;
+  --font-weight-light: 300;
+  --font-weight-regular: 400;
+  --font-weight-bold: 700;
+
+  /*
+    Weight strategy: the spec calls for 700 on headings, but that is written
+    for small chrome labels (10–24px). At hero sizes 700 reads as heavy, so
+    display type stays thin and small chrome labels take the spec's 700.
+  */
+  --font-weight-display: var(--font-weight-thin);
+  --font-weight-heading: var(--font-weight-regular);
+  --font-weight-control: var(--font-weight-regular);
+  --font-weight-chrome: var(--font-weight-bold);
+
+  --letter-spacing-display: -0.02em;
+  --letter-spacing-heading: -0.01em;
+  --letter-spacing-kicker: 3px;
+
+  --font-size-h1-mobile: 30px;
+  --font-size-h1-desktop: 40px;
+  --font-size-h2-mobile: 22px;
+  --font-size-h2-desktop: 26px;
+  --font-size-h3-mobile: 18px;
+  --font-size-h3-desktop: 20px;
+  --font-size-nav-title: 17px; /* spec: iOS nav title */
+  --font-size-chrome: 12px; /* spec: Mac UI labels */
+  --font-size-small: 13px;
+  --font-size-caption: 11px;
+  --font-size-tab-label: 10px; /* spec: tab bar label */
+
+  /* ============ Space (spec: 4px base unit) ============ */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-7: 32px;
+  --space-8: 40px;
+  --space-9: 48px;
+  --space-10: 64px;
+
+  --space-section-mobile: var(--space-8); /* 40px */
+  --space-section-desktop: var(--space-10); /* 64px */
+
+  --list-row-padding-y: var(--space-3);
+  --list-row-min-height: 44px;
+  --list-separator-inset: var(--space-4); /* spec: inset 16px from left */
+
+  /* ============ Interaction ============ */
+  --tap-target-min: 44px;
+  --desktop-nav-height: 76px;
+
+  /* ============ Motion (spec: motion & timing) ============ */
+  --duration-press: 120ms; /* spec: list-row press flash */
+  --duration-fast: 200ms;
+  --duration-control: 250ms; /* spec: button press/release */
+  --duration-reveal: 320ms;
+  --duration-shine: 420ms;
+  --duration-spring: 400ms; /* spec: rubber-band settle */
+
+  --ease-standard: cubic-bezier(0.25, 0.1, 0.25, 1); /* spec: button press */
+  --ease-decelerate: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.17, 0.67, 0.32, 1.28); /* spec: overshoot */
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-press: 0ms;
+    --duration-fast: 0ms;
+    --duration-control: 0ms;
+    --duration-reveal: 0ms;
+    --duration-shine: 0ms;
+    --duration-spring: 0ms;
+  }
+}
