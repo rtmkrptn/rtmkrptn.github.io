@@ -110,9 +110,18 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
   .social-row {
     display: flex;
     gap: var(--space-2);
-    /* Pull against .social-link's 44px tap target so the icons sit optically
-       level with the name rather than riding low. */
-    margin-block: calc(var(--space-2) * -1);
+    /*
+      .social-link is a 44px tap target around an 18px glyph, so the row is far
+      taller than the icons look; these negative margins collapse that back.
+
+      They are asymmetric on purpose. Centring on the flex line puts the icons
+      on the name's cap-height centre, but the name's visual mass sits in the
+      lowercase x-height band, which is lower — so true centring reads as
+      riding high. The extra 4px on top drops them onto the text's optical
+      centre. Margins still sum to -16px, so the line's height is unchanged.
+    */
+    margin-top: calc(var(--space-1) - var(--space-2));
+    margin-bottom: calc(-1 * var(--space-1) - var(--space-2));
   }
 
   .social-link {
