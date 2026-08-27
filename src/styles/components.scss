@@ -69,7 +69,14 @@
   height: 100%;
   background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.55) 50%, transparent);
   filter: blur(6px);
-  transform: translateX(-320%) skewX(-20deg);
+  /*
+    Travel is tuned so the sweep is on the button for its whole duration.
+    translateX is a percentage of the glint's own width (45% of the button),
+    so -100% parks it just off the left edge and 222% just off the right.
+    The old -320%/450% range spent over half the timeline off-screen, which
+    capped how long the visible sweep could feel.
+  */
+  transform: translateX(-100%) skewX(-20deg);
   pointer-events: none;
 }
 
@@ -78,17 +85,18 @@
      the cast shadow. `color` is restated because the global `a:hover` rule
      would otherwise darken an anchor-based button's label into its own fill. */
   color: var(--color-white);
-  box-shadow: var(--shadow-inset-highlight-soft), var(--shadow-raised);
+  box-shadow: var(--shadow-inset-highlight-soft), var(--shadow-accent-raised-hover);
   text-decoration: none;
 }
 
 .btn-secondary:hover {
   color: var(--graphite-800);
+  box-shadow: var(--shadow-inset-highlight), var(--shadow-surface-hover);
 }
 
 .btn:hover::after {
-  transform: translateX(450%) skewX(-20deg);
-  transition: transform var(--duration-shine) var(--ease-standard);
+  transform: translateX(222%) skewX(-20deg);
+  transition: transform var(--duration-shine) var(--ease-expo);
 }
 
 .btn:active {

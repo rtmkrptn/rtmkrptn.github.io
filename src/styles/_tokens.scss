@@ -134,6 +134,11 @@
   --shadow-window: 0 18px 34px rgba(15, 20, 25, 0.28);
   --shadow-icon: 0 5px 10px rgba(15, 20, 25, 0.3);
   --shadow-accent-raised: 0 3px 6px rgba(10, 40, 70, 0.35);
+  /* Hover lift for controls. Deliberately close to the rest state and in the
+     same hue family — jumping to --shadow-raised doubled the blur and swapped
+     the tint from blue to neutral grey, which read as a bloom, not a lift. */
+  --shadow-accent-raised-hover: 0 4px 9px rgba(10, 40, 70, 0.38);
+  --shadow-surface-hover: 0 4px 10px rgba(20, 25, 30, 0.12);
   --shadow-inset-track: inset 0 1px 2px rgba(0, 0, 0, 0.15);
   --shadow-inset-groove: inset 0 1px 3px rgba(0, 0, 0, 0.22);
   --shadow-pressed: inset 0 1px 2px rgba(0, 0, 0, 0.35);
@@ -239,11 +244,13 @@
   --duration-fast: 200ms;
   --duration-control: 250ms; /* spec: button press/release */
   --duration-reveal: 320ms;
-  --duration-shine: 420ms;
+  --duration-shine: 800ms;
   --duration-spring: 400ms; /* spec: rubber-band settle */
 
   --ease-standard: cubic-bezier(0.25, 0.1, 0.25, 1); /* spec: button press */
   --ease-decelerate: cubic-bezier(0.16, 1, 0.3, 1);
+  /* easeInOutExpo — creeps in, whips through the middle, eases out */
+  --ease-expo: cubic-bezier(0.87, 0, 0.13, 1);
   --ease-spring: cubic-bezier(0.17, 0.67, 0.32, 1.28); /* spec: overshoot */
 }
 
