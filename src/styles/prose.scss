@@ -4,6 +4,8 @@
 .prose {
   margin-top: var(--space-7);
   font-size: var(--font-size-prose-mobile);
+  /* Long URLs and identifiers in running text must not widen the page */
+  overflow-wrap: break-word;
 }
 
 @media (min-width: 768px) {
@@ -43,6 +45,9 @@
 
 /* Inline code */
 .prose :not(pre) > code {
+  /* A file path or long identifier has no break opportunities, so without this
+     it forces the whole column wider than the viewport on small screens. */
+  overflow-wrap: anywhere;
   font-family: var(--font-mono);
   font-size: 0.88em;
   background: var(--platinum-100);
