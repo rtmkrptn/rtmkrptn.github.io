@@ -62,7 +62,9 @@
   /* Zebra stripe for table rows — much fainter than the press flash, which
      would read as a selection if used for alternation */
   --color-row-stripe: rgba(79, 179, 240, 0.07);
-  --color-row-hover: rgba(79, 179, 240, 0.13);
+  /* Deep enough that a white glint has room to brighten into it — at 0.13 the
+     hovered row was already so close to white that the sweep was invisible. */
+  --color-row-hover: rgba(79, 179, 240, 0.24);
 
   --color-white: #ffffff;
   --color-black: #000000;

@@ -1,3 +1,5 @@
+@use "sass:math";
+
 /*
   Recipe mixins for the Aqua-era surface language.
 
@@ -5,6 +7,36 @@
   bottom shadow, never a flat single-color fill" — is repeated across ~15
   components. These mixins express it once.
 */
+
+/*
+  Traveling glint — a band of light that sweeps across a control on hover.
+
+  $w is the band's width as a percentage of the element. translateX is a
+  percentage of the band's OWN width, so -100% parks it exactly off the left
+  edge and 10000/$w % parks it exactly off the right. Deriving the end stop
+  from the width keeps the whole sweep on the element's face for the full
+  duration, whatever width a caller picks — otherwise part of the timeline is
+  spent off-screen and the sweep cannot be lengthened usefully.
+
+  Pair `glint-band` on the resting ::after with `glint-sweep` on :hover::after.
+*/
+@mixin glint-band($w: 45, $alpha: 0.55, $blur: 6px) {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: $w * 1%;
+  height: 100%;
+  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, $alpha) 50%, transparent);
+  filter: blur($blur);
+  transform: translateX(-100%) skewX(-20deg);
+  pointer-events: none;
+}
+
+@mixin glint-sweep($w: 45) {
+  transform: translateX(math.div(10000, $w) * 1%) skewX(-20deg);
+  transition: transform var(--duration-shine) var(--ease-expo);
+}
 
 /* A raised surface: 2-stop gradient + specular top edge + cast shadow. */
 @mixin raised($gradient: var(--gradient-surface), $shadow: var(--shadow-surface), $border: var(--color-hairline)) {

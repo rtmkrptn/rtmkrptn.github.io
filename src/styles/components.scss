@@ -61,23 +61,7 @@
 
 /* Traveling glint on hover */
 .btn::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 45%;
-  height: 100%;
-  background: linear-gradient(115deg, transparent, rgba(255, 255, 255, 0.55) 50%, transparent);
-  filter: blur(6px);
-  /*
-    Travel is tuned so the sweep is on the button for its whole duration.
-    translateX is a percentage of the glint's own width (45% of the button),
-    so -100% parks it just off the left edge and 222% just off the right.
-    The old -320%/450% range spent over half the timeline off-screen, which
-    capped how long the visible sweep could feel.
-  */
-  transform: translateX(-100%) skewX(-20deg);
-  pointer-events: none;
+  @include glint-band;
 }
 
 .btn:hover {
@@ -95,8 +79,7 @@
 }
 
 .btn:hover::after {
-  transform: translateX(222%) skewX(-20deg);
-  transition: transform var(--duration-shine) var(--ease-expo);
+  @include glint-sweep;
 }
 
 .btn:active {
@@ -276,6 +259,8 @@ a.list-row:active {
 }
 
 .track-row {
+  position: relative;
+  overflow: hidden;
   display: grid;
   grid-template-columns: var(--track-date-col) 1fr;
   gap: var(--space-4);
@@ -298,9 +283,41 @@ a.track-row {
   -webkit-tap-highlight-color: transparent;
 }
 
+/*
+  Glint on the rows too. These are light surfaces, so a white band would be
+  invisible on the plain rows; it is dialled down and reads as the sweep
+  lightening the aqua hover tint back toward white.
+  Absolutely positioned, so it is out of flow and never becomes a grid item.
+*/
+a.track-row::after {
+  @include glint-band($alpha: 0.85, $blur: 7px);
+}
+
+/*
+  Lift the row's own text above the glint. The band is absolutely positioned
+  and comes last in document order, so by default it paints over the content —
+  on a light row with dark text that visibly washes the title out as it passes.
+  Giving the cells a z-index puts the sweep behind them, over the background
+  only, so the band can stay bright without hurting legibility.
+*/
+.track-date,
+.track-title {
+  position: relative;
+  z-index: 1;
+}
+
+a.track-row:hover::after {
+  @include glint-sweep;
+}
+
 a.track-row:hover {
   background: var(--color-row-hover);
   text-decoration: none;
+}
+
+/* The selected fill owns the row; a glint on top of it just muddies the blue */
+a.track-row:active::after {
+  opacity: 0;
 }
 
 /* Selected row, iTunes-style: full aqua fill, label flips white */

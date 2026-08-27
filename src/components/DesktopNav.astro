@@ -64,6 +64,8 @@ function isActive(href: string): boolean {
 
     .desktop-nav-segment {
       @include chrome-label(var(--font-size-nav-title));
+      position: relative;
+      overflow: hidden;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -85,6 +87,15 @@ function isActive(href: string): boolean {
 
     .desktop-nav-segment:last-child {
       box-shadow: none;
+    }
+
+    /* Traveling glint, same recipe as the buttons */
+    .desktop-nav-segment::after {
+      @include glint-band($alpha: 0.5);
+    }
+
+    .desktop-nav-segment:hover::after {
+      @include glint-sweep;
     }
 
     .desktop-nav-segment:hover {
