@@ -103,8 +103,9 @@ function isActive(href: string): boolean {
       @include glint-band($alpha: 0.5);
     }
 
-    /* CSS sweep is the fallback; the shader takes over when it initialises */
-    :root:not(.fx-ripple) .desktop-nav-segment:hover::after {
+    /* CSS sweep is the fallback; the shader takes over when it initialises.
+       The active segment is excluded on both paths. */
+    :root:not(.fx-ripple) .desktop-nav-segment:not([aria-current="page"]):hover::after {
       @include glint-sweep;
     }
 

@@ -30,8 +30,12 @@ const { title, description = "Artemii Karapetian — mathematics, alife, ML." } 
 <script>
   import { createRippleRunner } from "../lib/ripple";
 
-  // Only genuinely physical surfaces are lit; a table row is not one.
-  const SURFACES = ".btn, .desktop-nav-segment";
+  /*
+    Only genuinely physical surfaces are lit; a table row is not one. The
+    current page's segment is excluded too — it is already activated, so
+    lighting it on hover offers nothing and muddies the pressed-in look.
+  */
+  const SURFACES = '.btn, .desktop-nav-segment:not([aria-current="page"])';
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   let runner: ReturnType<typeof createRippleRunner> = null;
