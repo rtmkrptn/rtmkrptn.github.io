@@ -73,12 +73,15 @@
 /* Brushed aluminium plate: scatters wide and soft along the grain, barely curved. */
 @mixin material-metal {
   --fx-aniso: 3;
-  --fx-sharp: 2;
+  /* Broad and open: squeezing it tighter and pulling it off the edges turned
+     the segment into a letterboxed stripe, which emphasised the boundary
+     rather than hiding it. */
+  --fx-sharp: 1.4;
   --fx-gain: 0.6;
-  --fx-bevel: 0.14;
-  --fx-dome: 0.5;
+  --fx-bevel: 0.06;
+  --fx-dome: 0.3;
   --fx-bend: 0.06;
-  --fx-rim: 0.14;
+  --fx-rim: 0.22;
   --fx-ambient: 0.06;
   --fx-light: 255 252 244;
 }
@@ -86,7 +89,7 @@
 /* Moulded glossy plastic: a domed pill. Tight formed highlight, strong rim. */
 @mixin material-plastic {
   --fx-aniso: 1.2;
-  --fx-sharp: 5;
+  --fx-sharp: 3.4;
   --fx-gain: 0.95;
   --fx-bevel: 0.55;
   --fx-dome: 0.95;
