@@ -12,29 +12,31 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
 
 <SiteLayout title="Artemii Karapetian">
   <header class="hero">
-    <h1 class="text-letterpress">Artemii Karapetian</h1>
+    <div class="hero-identity">
+      <h1 class="text-letterpress">Artemii Karapetian</h1>
+      <ul class="social-row">
+        {
+          socialLinks.map((link) => (
+            <li>
+              <a
+                class="social-link pressable"
+                href={link.href}
+                aria-label={link.label}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <BrandIcon name={link.icon} size={18} />
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
     <p class="tagline">Mathematics, Alife, ML.</p>
     <p class="bio">
       I write about mathematics, artificial life, and machine learning — mostly notes to
       myself that turned out legible enough to share.
     </p>
-    <ul class="social-row">
-      {
-        socialLinks.map((link) => (
-          <li>
-            <a
-              class="social-link pressable"
-              href={link.href}
-              aria-label={link.label}
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              <BrandIcon name={link.icon} size={18} />
-            </a>
-          </li>
-        ))
-      }
-    </ul>
   </header>
 
   <section class="posts-section">
@@ -93,10 +95,24 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
     max-width: 60ch;
   }
 
+  /*
+    Name and icons share one line. Wraps on narrow screens, where the icons
+    drop below the name rather than squeezing it.
+  */
+  .hero-identity {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: var(--space-7);
+    row-gap: var(--space-2);
+  }
+
   .social-row {
     display: flex;
     gap: var(--space-2);
-    margin-top: var(--space-6);
+    /* Pull against .social-link's 44px tap target so the icons sit optically
+       level with the name rather than riding low. */
+    margin-block: calc(var(--space-2) * -1);
   }
 
   .social-link {
