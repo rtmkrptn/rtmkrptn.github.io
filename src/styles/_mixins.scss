@@ -38,6 +38,64 @@
   transition: transform var(--duration-shine) var(--ease-expo);
 }
 
+/*
+  ---- Material light response ----
+
+  How a surface answers the pointer-origin ripple. This belongs to the
+  material, not the element: every brushed-metal surface reflects the same way,
+  every moulded-plastic one the same way. Components include the material they
+  are made of; they do not hand-tune numbers individually.
+
+  $aniso — smear along the grain. 1 is isotropic.
+  $sharp — how tightly the highlight holds together. Low scatters it broad
+           and soft; high concentrates it into a defined shape.
+  $gain  — reflectivity.
+*/
+
+/*
+  $bevel — how far in from the edge the surface is still curving, as a
+           fraction of its short side. A moulded pill domes across most of its
+           height; a metal plate only chamfers at the very edge.
+  $dome  — how hard the highlight dies as the normal turns away. High values
+           extinguish it completely at the silhouette, which is what a bumped
+           surface actually does.
+  $bend  — how far the tilting normal drags the reflection, curving it around
+           the contour rather than sliding it across as if the face were flat.
+  $rim   — the thin catch of light where a curved edge rolls over.
+  $light — the colour the surface returns. Bare metal reflects the source
+           almost neutrally; a dielectric like glass or paper returns the
+           source's own warmth. This matters more than gain on a pale surface:
+           a hovered row sits near luminance 234, so white light can only ever
+           add ~21 levels before clipping, whereas warm light against a cool
+           tint separates by chroma and stays visible.
+*/
+
+/* Brushed aluminium plate: scatters wide and soft along the grain, barely curved. */
+@mixin material-metal {
+  --fx-aniso: 3;
+  --fx-sharp: 2;
+  --fx-gain: 0.6;
+  --fx-bevel: 0.14;
+  --fx-dome: 0.5;
+  --fx-bend: 0.06;
+  --fx-rim: 0.14;
+  --fx-ambient: 0.06;
+  --fx-light: 255 252 244;
+}
+
+/* Moulded glossy plastic: a domed pill. Tight formed highlight, strong rim. */
+@mixin material-plastic {
+  --fx-aniso: 1.2;
+  --fx-sharp: 5;
+  --fx-gain: 0.95;
+  --fx-bevel: 0.55;
+  --fx-dome: 0.95;
+  --fx-bend: 0.35;
+  --fx-rim: 0.45;
+  --fx-ambient: 0.05;
+  --fx-light: 255 248 232;
+}
+
 /* A raised surface: 2-stop gradient + specular top edge + cast shadow. */
 @mixin raised($gradient: var(--gradient-surface), $shadow: var(--shadow-surface), $border: var(--color-hairline)) {
   background: $gradient;

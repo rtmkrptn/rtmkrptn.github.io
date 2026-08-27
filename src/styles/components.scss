@@ -43,21 +43,13 @@
   pointer-events: none;
 }
 
-.btn,
-a.track-row {
+.btn {
   isolation: isolate;
 }
 
-/* Per-surface strength. A wide row smears the gleam further along its grain
-   than a small pill does. */
-a.track-row {
-  --fx-ripple-intensity: 0.3;
-  --fx-ripple-aniso: 3.4;
-}
-
+/* Each lit surface declares what it is made of. */
 .btn {
-  --fx-ripple-intensity: 0.32;
-  --fx-ripple-aniso: 1.8;
+  @include material-plastic;
 }
 
 /* ============================================================
@@ -322,6 +314,7 @@ a.track-row:nth-of-type(even) {
 
 a.track-row {
   -webkit-tap-highlight-color: transparent;
+  transition: background var(--duration-fast) var(--ease-standard);
 }
 
 /*
@@ -330,35 +323,9 @@ a.track-row {
   lightening the aqua hover tint back toward white.
   Absolutely positioned, so it is out of flow and never becomes a grid item.
 */
-a.track-row::after {
-  @include glint-band($alpha: 0.85, $blur: 7px);
-}
-
-/*
-  Lift the row's own text above the glint. The band is absolutely positioned
-  and comes last in document order, so by default it paints over the content —
-  on a light row with dark text that visibly washes the title out as it passes.
-  Giving the cells a z-index puts the sweep behind them, over the background
-  only, so the band can stay bright without hurting legibility.
-*/
-.track-date,
-.track-title {
-  position: relative;
-  z-index: 1;
-}
-
-:root:not(.fx-ripple) a.track-row:hover::after {
-  @include glint-sweep;
-}
-
 a.track-row:hover {
   background: var(--color-row-hover);
   text-decoration: none;
-}
-
-/* The selected fill owns the row; a glint on top of it just muddies the blue */
-a.track-row:active::after {
-  opacity: 0;
 }
 
 /* Selected row, iTunes-style: full aqua fill, label flips white */

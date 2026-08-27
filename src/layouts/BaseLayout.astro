@@ -30,7 +30,8 @@ const { title, description = "Artemii Karapetian — mathematics, alife, ML." } 
 <script>
   import { createRippleRunner } from "../lib/ripple";
 
-  const SURFACES = ".btn, a.track-row, .desktop-nav-segment";
+  // Only genuinely physical surfaces are lit; a table row is not one.
+  const SURFACES = ".btn, .desktop-nav-segment";
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
 
   let runner: ReturnType<typeof createRippleRunner> = null;

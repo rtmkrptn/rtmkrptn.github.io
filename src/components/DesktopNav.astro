@@ -69,9 +69,8 @@ function isActive(href: string): boolean {
       /* Stacking context so the ripple canvas's z-index: -1 lands above the
          segment's own fill rather than behind it */
       isolation: isolate;
-      /* Dark chrome shows the gleam most readily, so it needs the least gain */
-      --fx-ripple-intensity: 0.3;
-      --fx-ripple-aniso: 2.2;
+      /* The segment is brushed aluminium and reflects like it */
+      @include material-metal;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -88,7 +87,11 @@ function isActive(href: string): boolean {
       box-shadow:
         inset -1px 0 0 var(--color-chrome-divider),
         inset -2px 0 0 var(--color-chrome-divider-highlight);
-      transition: background var(--duration-fast) var(--ease-standard);
+      /*
+        Ambient term of the same lighting model as the ripple, so it rises with
+        the light instead of snapping on 250ms before any light exists.
+      */
+      transition: background var(--fx-rise) var(--ease-decelerate);
     }
 
     .desktop-nav-segment:last-child {
@@ -106,7 +109,7 @@ function isActive(href: string): boolean {
     }
 
     .desktop-nav-segment:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, var(--fx-ambient));
       color: var(--color-chrome-text);
       text-decoration: none;
     }

@@ -249,12 +249,17 @@
   --duration-shine: 800ms;
 
   /* ---- Pointer-origin ripple ("sun play") ---- */
+  /* Duration is global; the light response itself is per material
+     (see the material-* mixins). */
   --fx-ripple-duration: 900;
-  --fx-ripple-intensity: 1;
-  /* How far the gleam smears along the brush grain; 1 = circular */
-  --fx-ripple-aniso: 2.6;
-  /* Space-separated RGB so the shader runner can parse it out of CSS */
-  --fx-ripple-light: 255 255 255;
+  /*
+    The ambient term rises over the same window the specular does, so a surface
+    cannot brighten before its light has arrived. The specular peaks halfway
+    through the ripple, hence half the duration.
+  */
+  --fx-rise: 450ms;
+  /* Fallback only; each material declares its own --fx-light */
+  --fx-light: 255 255 255;
   --duration-spring: 400ms; /* spec: rubber-band settle */
 
   --ease-standard: cubic-bezier(0.25, 0.1, 0.25, 1); /* spec: button press */
