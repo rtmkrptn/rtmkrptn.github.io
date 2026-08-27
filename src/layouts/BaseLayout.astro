@@ -26,3 +26,45 @@ const { title, description = "Artemii Karapetian — mathematics, alife, ML." } 
     <slot />
   </body>
 </html>
+
+<script>
+  import { createRippleRunner } from "../lib/ripple";
+
+  const SURFACES = ".btn, a.track-row, .desktop-nav-segment";
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+
+  let runner: ReturnType<typeof createRippleRunner> = null;
+
+  function onEnter(event: Event) {
+    const pointer = event as PointerEvent;
+    // Captured on document, so this also fires with `document` itself as the
+    // target, which has no closest().
+    const target = pointer.target;
+    if (!(target instanceof Element)) return;
+    const host = target.closest<HTMLElement>(SURFACES);
+    if (!host || !runner) return;
+    const rect = host.getBoundingClientRect();
+    runner.trigger(host, pointer.clientX - rect.left, pointer.clientY - rect.top);
+  }
+
+  function enable() {
+    if (runner || reduce.matches) return;
+    runner = createRippleRunner();
+    // Only claim the effect once the context and shaders actually came up;
+    // otherwise the CSS sweep stays in charge.
+    if (!runner) return;
+    document.documentElement.classList.add("fx-ripple");
+    document.addEventListener("pointerenter", onEnter, { capture: true });
+  }
+
+  function disable() {
+    if (!runner) return;
+    document.removeEventListener("pointerenter", onEnter, { capture: true });
+    runner.destroy();
+    runner = null;
+    document.documentElement.classList.remove("fx-ripple");
+  }
+
+  if (!reduce.matches) enable();
+  reduce.addEventListener("change", () => (reduce.matches ? disable() : enable()));
+</script>

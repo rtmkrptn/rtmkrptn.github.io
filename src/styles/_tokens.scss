@@ -62,9 +62,9 @@
   /* Zebra stripe for table rows — much fainter than the press flash, which
      would read as a selection if used for alternation */
   --color-row-stripe: rgba(79, 179, 240, 0.07);
-  /* Deep enough that a white glint has room to brighten into it — at 0.13 the
-     hovered row was already so close to white that the sweep was invisible. */
-  --color-row-hover: rgba(79, 179, 240, 0.24);
+  /* The ripple is bipolar so it no longer depends on this for headroom; kept
+     at a level that reads as a clear hover without turning the row solid blue. */
+  --color-row-hover: rgba(79, 179, 240, 0.22);
 
   --color-white: #ffffff;
   --color-black: #000000;
@@ -247,6 +247,14 @@
   --duration-control: 250ms; /* spec: button press/release */
   --duration-reveal: 320ms;
   --duration-shine: 800ms;
+
+  /* ---- Pointer-origin ripple ("sun play") ---- */
+  --fx-ripple-duration: 900;
+  --fx-ripple-intensity: 1;
+  /* How far the gleam smears along the brush grain; 1 = circular */
+  --fx-ripple-aniso: 2.6;
+  /* Space-separated RGB so the shader runner can parse it out of CSS */
+  --fx-ripple-light: 255 255 255;
   --duration-spring: 400ms; /* spec: rubber-band settle */
 
   --ease-standard: cubic-bezier(0.25, 0.1, 0.25, 1); /* spec: button press */
@@ -264,5 +272,7 @@
     --duration-reveal: 0ms;
     --duration-shine: 0ms;
     --duration-spring: 0ms;
+    /* The runner also bails out in JS; this covers the CSS fallback path. */
+    --fx-ripple-duration: 0;
   }
 }

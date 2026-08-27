@@ -66,6 +66,12 @@ function isActive(href: string): boolean {
       @include chrome-label(var(--font-size-nav-title));
       position: relative;
       overflow: hidden;
+      /* Stacking context so the ripple canvas's z-index: -1 lands above the
+         segment's own fill rather than behind it */
+      isolation: isolate;
+      /* Dark chrome shows the gleam most readily, so it needs the least gain */
+      --fx-ripple-intensity: 0.3;
+      --fx-ripple-aniso: 2.2;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -94,7 +100,8 @@ function isActive(href: string): boolean {
       @include glint-band($alpha: 0.5);
     }
 
-    .desktop-nav-segment:hover::after {
+    /* CSS sweep is the fallback; the shader takes over when it initialises */
+    :root:not(.fx-ripple) .desktop-nav-segment:hover::after {
       @include glint-sweep;
     }
 

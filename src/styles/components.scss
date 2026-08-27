@@ -21,6 +21,46 @@
 }
 
 /* ============================================================
+   Pointer-origin ripple ("sun play")
+   ============================================================ */
+
+/*
+  The shader canvas is re-parented into whichever surface was just entered.
+
+  z-index -1 puts it above the host's background but below its content, which is
+  what keeps labels legible — `.btn` and the nav segments render their label as
+  a bare text node that cannot take a z-index of its own, so the canvas has to
+  go under rather than the text going over. That only works if the host is a
+  stacking context, hence `isolation: isolate` on the hosts below; without it a
+  negative-z child drops behind the host's own background and vanishes.
+*/
+.fx-ripple-canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}
+
+.btn,
+a.track-row {
+  isolation: isolate;
+}
+
+/* Per-surface strength. A wide row smears the gleam further along its grain
+   than a small pill does. */
+a.track-row {
+  --fx-ripple-intensity: 0.3;
+  --fx-ripple-aniso: 3.4;
+}
+
+.btn {
+  --fx-ripple-intensity: 0.32;
+  --fx-ripple-aniso: 1.8;
+}
+
+/* ============================================================
    Buttons — pill, glossy aqua (spec: primary button)
    ============================================================ */
 
@@ -78,7 +118,8 @@
   box-shadow: var(--shadow-inset-highlight), var(--shadow-surface-hover);
 }
 
-.btn:hover::after {
+/* CSS sweep is the fallback; the shader takes over when it initialises */
+:root:not(.fx-ripple) .btn:hover::after {
   @include glint-sweep;
 }
 
@@ -306,7 +347,7 @@ a.track-row::after {
   z-index: 1;
 }
 
-a.track-row:hover::after {
+:root:not(.fx-ripple) a.track-row:hover::after {
   @include glint-sweep;
 }
 
