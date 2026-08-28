@@ -5,6 +5,7 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import { remarkDisplayMath } from './src/lib/remark-display-math.mjs';
 
 // https://astro.build/config
 export default defineConfig({
@@ -22,7 +23,9 @@ export default defineConfig({
       theme: 'min-light',
     },
     processor: unified({
-      remarkPlugins: [remarkMath],
+      // remarkDisplayMath runs after remarkMath, which is what creates the
+      // inlineMath nodes it promotes.
+      remarkPlugins: [remarkMath, remarkDisplayMath],
       rehypePlugins: [rehypeKatex],
     }),
   },
