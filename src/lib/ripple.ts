@@ -41,7 +41,9 @@ uniform float uSharp; // tightness of the lobe; low = broad, high = concentrated
 uniform float uGain;
 
 // ---- geometry ----
-uniform float uRadius; // the host's own corner radius, px
+uniform float uRadius;      // corner radius of the true silhouette, px
+uniform vec2  uShapeCenter; // centre of that silhouette, in host pixels
+uniform vec2  uShapeHalf;   // its half-extents
 uniform float uBevel;  // how far in from the edge the surface keeps curving
 uniform float uDome;   // how hard the highlight dies as the normal turns away
 uniform float uBend;   // how far the tilting normal drags the reflection
@@ -92,9 +94,17 @@ void main() {
     nz is the normal's z on a circular dome profile: it falls to 0 exactly at
     the rim, where the surface has turned edge-on to the viewer.
   */
-  vec2 halfSize = uResolution * 0.5;
-  float inside = -roundedRectSDF(fragPx - halfSize, halfSize, uRadius);
-  float bevelW = max(uResolution.y * uBevel, 1.0);
+  /*
+    The silhouette is not always the element the canvas sits in. A nav segment
+    is a square slice of a pill: shading it against its own box gives the light
+    a flat rectangle to run along, so it never rolls over the rounded ends that
+    are actually there. Shading against the shape the surface belongs to lets
+    one plate read as one plate — and for a button, where the two coincide,
+    this is exactly what it was before.
+  */
+  float shapeH = uShapeHalf.y * 2.0;
+  float inside = -roundedRectSDF(fragPx - uShapeCenter, uShapeHalf, uRadius);
+  float bevelW = max(shapeH * uBevel, 1.0);
   float t = clamp(inside / bevelW, 0.0, 1.0);
   float nz = sqrt(max(1.0 - (1.0 - t) * (1.0 - t), 0.0));
 
@@ -104,8 +114,8 @@ void main() {
     outward tilt makes the highlight BEND around the contour near the edge
     instead of sliding across as if the surface were flat.
   */
-  vec2 outward = normalize((fragPx - halfSize) + vec2(0.0001));
-  vec2 bent = fragPx + outward * (1.0 - t) * uBend * uResolution.y;
+  vec2 outward = normalize((fragPx - uShapeCenter) + vec2(0.0001));
+  vec2 bent = fragPx + outward * (1.0 - t) * uBend * shapeH;
 
   /*
     Anisotropy: a brushed surface drags its reflection along the grain, so the
@@ -204,6 +214,8 @@ export function createRippleRunner(): RippleRunner | null {
   const uSharp = gl.getUniformLocation(prog, "uSharp");
   const uGain = gl.getUniformLocation(prog, "uGain");
   const uRadius = gl.getUniformLocation(prog, "uRadius");
+  const uShapeCenter = gl.getUniformLocation(prog, "uShapeCenter");
+  const uShapeHalf = gl.getUniformLocation(prog, "uShapeHalf");
   const uDome = gl.getUniformLocation(prog, "uDome");
   const uRim = gl.getUniformLocation(prog, "uRim");
   const uBevel = gl.getUniformLocation(prog, "uBevel");
@@ -250,10 +262,25 @@ export function createRippleRunner(): RippleRunner | null {
     // 0 keeps the original constant-speed sweep for any surface that is silent
     // about it, so adding drag to one material cannot disturb the others.
     const drag = readNumber(host, "--fx-drag", 0);
-    // The host's real corner radius, so the light follows the actual shape.
+    /*
+      A surface may be a slice of a larger shape — a nav segment is part of a
+      pill and carries no radius of its own. [data-fx-surface] on the ancestor
+      names the silhouette the light should actually curve around; without it
+      the element is its own shape, which is the case for a button.
+    */
+    const shapeEl = host.closest<HTMLElement>("[data-fx-surface]") ?? host;
+    const hostRect = host.getBoundingClientRect();
+    const shapeRect = shapeEl.getBoundingClientRect();
+    const shapeCenter: [number, number] = [
+      shapeRect.left - hostRect.left + shapeRect.width / 2,
+      shapeRect.top - hostRect.top + shapeRect.height / 2,
+    ];
     // A pill reports a huge radius, which caps at half the short side.
-    const cs = getComputedStyle(host);
-    const radius = Math.min(parseFloat(cs.borderTopLeftRadius) || 0, Math.min(w, h) / 2);
+    const cs = getComputedStyle(shapeEl);
+    const radius = Math.min(
+      parseFloat(cs.borderTopLeftRadius) || 0,
+      Math.min(shapeRect.width, shapeRect.height) / 2
+    );
     const tint = readTint(host);
 
     gl!.viewport(0, 0, canvas.width, canvas.height);
@@ -264,6 +291,8 @@ export function createRippleRunner(): RippleRunner | null {
     gl!.uniform1f(uSharp, sharp);
     gl!.uniform1f(uGain, gain);
     gl!.uniform1f(uRadius, radius);
+    gl!.uniform2f(uShapeCenter, shapeCenter[0], shapeCenter[1]);
+    gl!.uniform2f(uShapeHalf, shapeRect.width / 2, shapeRect.height / 2);
     gl!.uniform1f(uDome, dome);
     gl!.uniform1f(uRim, rim);
     gl!.uniform1f(uBevel, bevel);
