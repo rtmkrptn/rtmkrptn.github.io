@@ -20,6 +20,13 @@ $$Z(x) = \left\lfloor \, |\cos(\pi x)| \, \right\rfloor$$
 
 $\cos(\pi x)$ only ever hits exactly $\pm 1$ when $x$ is an integer — everywhere else it's strictly between $-1$ and $1$. Take the absolute value, and integers give you exactly $1$, everything else gives you something strictly less than $1$. Floor that, and integers collapse to $1$, everything else collapses to $0$.
 
+```desmos The wave, and the switch it collapses to. Drag and zoom it.
+y=\left|\cos\left(\pi x\right)\right|
+Z\left(x\right)=\operatorname{floor}\left(\left|\cos\left(\pi x\right)\right|\right)
+y=Z\left(x\right)
+\left(\left[-10,...,10\right],Z\left(\left[-10,...,10\right]\right)\right)
+```
+
 $Z(x)$ is an "is this an integer" detector, built entirely out of trigonometry and a floor function. That's the whole trick. Everything downstream is just this idea, reused.
 
 ## Step two: from "is it an integer" to "does it divide"
@@ -40,7 +47,7 @@ $$E(x,k) = \frac{1}{x} \sum_{n=1}^{x} \sigma(n,k)$$
 
 This tracks the *running average* of $\sigma$ as $x$ grows — and this is where it stops being a party trick and starts brushing up against real analytic number theory. For $k=0$, the average number of divisors of the integers up to $x$ doesn't hover around a constant. It grows, and grows specifically like $\ln(x)$:
 
-$$\text{avg}\big(d(n)\big)_{n \le x} \;\approx\; \ln(x) + 2\gamma - 1$$
+$$\mathbb{E}\big(d(n)\big)_{n \le x} \;\approx\; \ln(x) + 2\gamma - 1$$
 
 where $\gamma \approx 0.5772$ is the Euler–Mascheroni constant. The error term in that approximation — how tight you can make it — is called the Dirichlet divisor problem, and it's still not fully resolved. You built the exact function whose average behavior is the subject of an unsolved problem, using a calculator most people use to plot $y = x^2$.
 
