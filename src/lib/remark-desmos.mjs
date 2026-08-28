@@ -7,26 +7,39 @@ import { visit } from "unist-util-visit";
     Z(x)=\left\lfloor\left|\cos\left(\pi x\right)\right|\right\rfloor
     ```
 
-  One LaTeX expression per line; the text after the language is an optional
+  One Desmos expression per line; the text after the language is an optional
   caption. A fence was chosen over an MDX component so notes stay plain
   Markdown: Obsidian shows this as an ordinary code block, and the vault never
   has to contain site-specific markup.
 
-  The static fallback is not a placeholder image — it is the same expressions
-  rendered as display math by KaTeX, which is what the reader would have seen
-  before this plugin existed. If the Desmos script is blocked or fails, the
-  post degrades to exactly that rather than to an empty box.
+  What goes in the fence is DESMOS syntax, which is its own language and not
+  the LaTeX of a $...$ formula. The two overlap enough to be mistaken for one
+  another — and KaTeX will happily typeset most Desmos input without
+  complaining — but it does not mean the same thing: `y_1~mx_1+b` is a
+  regression, `a=3` is a slider, `[1,...,10]` is a list. Rendering those as
+  maths produces something that looks correct and says something else.
+
+  So the fallback shows the expressions as source, not as typeset maths. A post
+  that wants a typeset formula writes one with $...$, independently; the graph
+  and the formula are separate things and neither is derived from the other.
 */
 
 const FENCES = new Set(["desmos", "desmos-graph"]);
 
-/** A hast <div class="math math-display">, which rehype-katex renders later. */
-function mathBlock(latex) {
+/** The expressions verbatim, as the source they are. */
+function sourceBlock(expressions) {
   return {
     type: "element",
-    tagName: "div",
-    properties: { className: ["math", "math-display"] },
-    children: [{ type: "text", value: latex }],
+    tagName: "pre",
+    properties: { className: ["desmos-source"] },
+    children: [
+      {
+        type: "element",
+        tagName: "code",
+        properties: {},
+        children: [{ type: "text", value: expressions.join("\n") }],
+      },
+    ],
   };
 }
 
@@ -63,12 +76,12 @@ export function remarkDesmos() {
               properties: {
                 className: ["desmos-fallback"],
                 // Reachable and announced before any script runs, so the
-                // formulas are never keyboard- or screen-reader-only content.
+                // expressions are never keyboard- or screen-reader-only.
                 tabindex: "0",
                 role: "group",
                 "aria-label": label,
               },
-              children: expressions.map(mathBlock),
+              children: [sourceBlock(expressions)],
             },
           ],
         },

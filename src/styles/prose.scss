@@ -258,13 +258,17 @@
   overflow-y: auto;
 }
 
-/* The fallback's formulas are already inside the stage's own frame. */
-.prose .desmos-fallback .katex-display {
-  background: none;
-  border: 0;
-  box-shadow: none;
-  padding: 0;
+/*
+  The fallback shows Desmos source, not typeset maths — the fence's contents are
+  Desmos's own language, and rendering it through KaTeX would misstate it.
+*/
+.prose .desmos-source {
   margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+  white-space: pre;
+  overflow-x: auto;
 }
 
 .prose .desmos.is-live .desmos-fallback {
