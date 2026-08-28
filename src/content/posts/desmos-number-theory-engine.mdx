@@ -4,7 +4,6 @@ description: "Building a primality test, a totient count, and an exact nth-prime
 date: 2026-08-28
 tags: ["math", "number-theory", "desmos"]
 ---
-[PLACEHOLDER — real hook: what were you actually doing right before this started? Bored in a lesson, avoiding a different problem set, trying to solve something else entirely? One or two sentences, specific and true, land better than anything I can invent for you. Drop it in here.]
 
 Desmos is built to draw parabolas. Type in a function, watch a curve. That's the whole contract. So the fact that you can also use it to test whether a number is prime, count how many integers below a number share no factors with it, and hand back the exact value of the $x$-th prime — not an approximation, the exact integer — is not something the software is trying to let you do. With no loops, no `if` statements, no modulo, and no boolean logic, none of that is supposed to be possible. It's something you can force out of it if you're willing to abuse continuous functions until they behave like discrete logic.
 
@@ -101,5 +100,3 @@ $Z(x)$ depends on Desmos evaluating $\cos(\pi x)$ precisely enough to land on *e
 ## The actual point
 
 The same move gets reused at every layer here: build a test that's exactly $1$ at the one case you care about and $0$ everywhere else, then let a sum or a gate pick that one case out. Integer detector, divisibility test, divisor sum, shared-divisor count, primality test, prime-counting function, the $x$-th prime itself — none of the individual steps are hard, and each one is just the last idea, recombined. Give yourself `%` and a `for` loop and the whole chain is a few lines nobody remembers writing. Take those away, and you end up rebuilding most of elementary number theory from first principles, because you weren't allowed to just import it.
-
-[PLACEHOLDER — closing: you've got an actual prime-generating formula now. What's next — prime gaps, twin primes, something else entirely, or was this the natural stopping point? A real next step here is a stronger ending than anything generic I'd write.]

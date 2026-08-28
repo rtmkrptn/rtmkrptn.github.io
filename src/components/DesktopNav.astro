@@ -11,7 +11,10 @@ function isActive(href: string): boolean {
 ---
 
 <header class="desktop-nav">
-  <nav class="desktop-nav-bar" aria-label="Primary">
+  <nav
+    class:list={["desktop-nav-bar", { "is-single": navItems.length < 2 }]}
+    aria-label="Primary"
+  >
     {
       navItems.map((item) => (
         <a
@@ -60,6 +63,21 @@ function isActive(href: string): boolean {
       overflow: hidden;
       border: var(--border-hairline-width) solid var(--color-chrome-border);
       box-shadow: var(--shadow-inset-highlight-soft), var(--shadow-raised);
+    }
+
+    /*
+      With a single destination the segments have nothing to divide, and a
+      full-width bar holding one permanently-active label reads as broken. Let
+      it hug its content instead. Reverts on its own once a second nav item
+      exists, so this needs no undoing later.
+    */
+    .desktop-nav-bar.is-single {
+      width: auto;
+    }
+
+    .desktop-nav-bar.is-single .desktop-nav-segment {
+      flex: 0 0 auto;
+      padding-inline: var(--space-9);
     }
 
     .desktop-nav-segment {

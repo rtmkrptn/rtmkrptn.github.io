@@ -11,7 +11,12 @@ export default defineConfig({
   site: 'https://rtmkrptn.github.io',
   // User site (repo named <user>.github.io) serves from the domain root.
   base: '/',
-  integrations: [mdx(), sitemap()],
+  integrations: [
+    mdx(),
+    // /styleguide is an internal reference, not content — keep it out of
+    // the sitemap so search engines are not pointed at it.
+    sitemap({ filter: (page) => !page.includes('/styleguide') }),
+  ],
   markdown: {
     shikiConfig: {
       theme: 'min-light',
