@@ -22,3 +22,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# local Obsidian vault location (machine-specific)
+.vault-path
+
+# attachments copied out of the vault by `npm run sync`
+public/vault/
