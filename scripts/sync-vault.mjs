@@ -1,10 +1,17 @@
 #!/usr/bin/env node
 /*
-  Pull publishable notes out of an Obsidian vault into src/content/posts/.
+  Pull publishable notes out of the vault's Articles/ folder into
+  src/content/posts/.
+
+  Two independent gates, both of which a note must pass:
+
+    1. It lives inside <vault>/Articles/. This is a hard boundary — the rest of
+       the vault is never read, never scanned, and cannot reach the site by any
+       route, including a symlink pointing out of the folder.
+    2. Its frontmatter says `publish: true`. The default for every note is
+       therefore "private", even inside Articles/.
 
   The vault stays entirely local — nothing private is ever committed or pushed.
-  A note is published only when its frontmatter says `publish: true`, so the
-  default for every note in the vault is "private".
 
   Usage:
     npm run sync            # copy publishable notes in, report stale ones
@@ -22,6 +29,12 @@ import os from "node:os";
 import YAML from "yaml";
 
 const SITE_ROOT = path.resolve(import.meta.dirname, "..");
+/*
+  The one folder the site is allowed to read. Hard-coded on purpose: making it
+  configurable would turn a privacy boundary into a setting that can be widened
+  by accident.
+*/
+const ARTICLES_DIRNAME = "Articles";
 const OUT_DIR = path.join(SITE_ROOT, "src/content/posts");
 const ATTACH_DIR = path.join(SITE_ROOT, "public/vault");
 const PRUNE = process.argv.includes("--prune");
@@ -38,18 +51,43 @@ function resolveVault() {
 }
 const expand = (p) => (p.startsWith("~") ? path.join(os.homedir(), p.slice(1)) : path.resolve(p));
 const VAULT = resolveVault();
+const SOURCE = path.join(VAULT, ARTICLES_DIRNAME);
 
 /* ---------- helpers ---------- */
+
+/*
+  Resolving each entry and re-checking it against the root is what makes the
+  Articles/ boundary real rather than nominal: a symlink inside the folder that
+  points at the rest of the vault (or anywhere else on disk) is refused here,
+  so there is no path by which an unpublished note becomes readable.
+*/
+function contains(root, target) {
+  const rel = path.relative(root, target);
+  return rel !== "" && !rel.startsWith("..") && !path.isAbsolute(rel);
+}
 
 function walk(dir, out = []) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
     if (e.name.startsWith(".")) continue; // .obsidian, .trash, .git
     const p = path.join(dir, e.name);
+    let real;
+    try {
+      real = fs.realpathSync(p);
+    } catch {
+      continue; // broken symlink
+    }
+    if (!contains(SOURCE_REAL, real)) {
+      escaped.push(path.relative(SOURCE, p));
+      continue;
+    }
     if (e.isDirectory()) walk(p, out);
     else out.push(p);
   }
   return out;
 }
+
+/* Files refused by the boundary check, reported at the end so it is visible. */
+const escaped = [];
 
 function splitFrontmatter(raw) {
   const m = raw.match(/^---\r?\n([\s\S]*?)\r?\n---\r?\n?([\s\S]*)$/);
@@ -117,8 +155,19 @@ if (!fs.existsSync(VAULT)) {
   console.error(`Vault not found: ${VAULT}\nSet VAULT_PATH or write the path into .vault-path`);
   process.exit(1);
 }
+if (!fs.existsSync(SOURCE)) {
+  console.error(
+    `No ${ARTICLES_DIRNAME}/ folder in the vault: ${SOURCE}\n` +
+      `Posts are only ever read from there. Create it and move the notes you want published into it.`
+  );
+  process.exit(1);
+}
 
-const notes = walk(VAULT).filter((f) => f.endsWith(".md"));
+const SOURCE_REAL = fs.realpathSync(SOURCE);
+
+/* Every file the site is allowed to see, resolved once. */
+const sourceFiles = walk(SOURCE);
+const notes = sourceFiles.filter((f) => f.endsWith(".md"));
 const publishable = [];
 for (const file of notes) {
   const raw = fs.readFileSync(file, "utf8");
@@ -139,13 +188,20 @@ for (const n of publishable) {
 
 fs.mkdirSync(OUT_DIR, { recursive: true });
 const attachmentsUsed = new Set();
+const missingEmbeds = new Set();
 
 function transformBody(body) {
   // ![[image.png]] -> a real image, copied into public/vault/
   body = body.replace(/!\[\[([^\]|]+?)(?:\|[^\]]*)?\]\]/g, (_match, target) => {
     const name = path.basename(target.trim());
-    const found = walk(VAULT).find((f) => path.basename(f) === name);
-    if (!found) return ""; // silently drop a missing embed rather than print [[...]]
+    // Attachments are resolved inside Articles/ only, like everything else. An
+    // image sitting in the vault's usual attachments folder will not be found —
+    // that is the boundary working, so say so instead of failing quietly.
+    const found = sourceFiles.find((f) => path.basename(f) === name);
+    if (!found) {
+      missingEmbeds.add(name);
+      return "";
+    }
     fs.mkdirSync(ATTACH_DIR, { recursive: true });
     const safe = slugify(path.parse(name).name) + path.extname(name).toLowerCase();
     fs.copyFileSync(found, path.join(ATTACH_DIR, safe));
@@ -179,7 +235,7 @@ for (const note of publishable) {
     draft: note.data.draft === true,
     // Marks this file as generated, and records where from. --prune only ever
     // removes files carrying this key.
-    vaultSource: path.relative(VAULT, note.file),
+    vaultSource: path.relative(SOURCE, note.file),
   };
   if (Array.isArray(note.data.tags)) frontmatter.tags = note.data.tags;
 
@@ -204,10 +260,21 @@ for (const f of fs.readdirSync(OUT_DIR)) {
 
 /* ---------- report ---------- */
 
-console.log(`vault:  ${VAULT}`);
+console.log(`source: ${SOURCE}`);
 console.log(`notes:  ${notes.length} scanned, ${publishable.length} with publish: true\n`);
 for (const w of written) console.log(`  ${w.changed ? "updated" : "  same "}  ${w.slug}  — ${w.title}`);
 if (attachmentsUsed.size) console.log(`\nattachments copied to public/vault/: ${[...attachmentsUsed].join(", ")}`);
+
+if (missingEmbeds.size) {
+  console.log(`\n${missingEmbeds.size} embed(s) not found inside ${ARTICLES_DIRNAME}/ and dropped:`);
+  for (const n of missingEmbeds) console.log(`  ${n}`);
+  console.log(`move the file into ${ARTICLES_DIRNAME}/ — nothing outside it is readable`);
+}
+
+if (escaped.length) {
+  console.log(`\n${escaped.length} path(s) refused for pointing outside ${ARTICLES_DIRNAME}/:`);
+  for (const p of escaped) console.log(`  ${p}`);
+}
 
 if (stale.length) {
   console.log(`\n${stale.length} previously-published note(s) no longer marked publish: true:`);
