@@ -215,3 +215,65 @@
 .prose sup > a {
   scroll-margin-top: var(--space-9);
 }
+
+/* ============================================================
+   Embedded Desmos graph (see remark-desmos + lib/desmos.ts)
+   ============================================================ */
+
+.prose .desmos {
+  margin: var(--space-6) 0 0;
+}
+
+/*
+  The stage carries the height so the box is the same size before and after the
+  calculator arrives — the fallback sits inside it rather than below it, so
+  hydrating swaps content without ever shifting the text under it.
+
+  contain: layout stops the calculator's own internal reflowing from
+  invalidating the article's layout around it.
+*/
+.prose .desmos-stage {
+  position: relative;
+  height: min(60vh, 420px);
+  contain: layout;
+  background: var(--platinum-100);
+  border: var(--border-hairline-width) solid var(--color-hairline);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-inset-track);
+  overflow: hidden;
+}
+
+.prose .desmos-mount,
+.prose .desmos-fallback {
+  position: absolute;
+  inset: 0;
+}
+
+.prose .desmos-fallback {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--space-4);
+  padding: var(--space-6) var(--space-4);
+  overflow-y: auto;
+}
+
+/* The fallback's formulas are already inside the stage's own frame. */
+.prose .desmos-fallback .katex-display {
+  background: none;
+  border: 0;
+  box-shadow: none;
+  padding: 0;
+  margin: 0;
+}
+
+.prose .desmos.is-live .desmos-fallback {
+  display: none;
+}
+
+.prose .desmos figcaption {
+  margin-top: var(--space-2);
+  font-family: var(--font-caption);
+  font-size: var(--font-size-small);
+  color: var(--color-text-secondary);
+}

@@ -41,6 +41,9 @@ const formattedDate = date.toLocaleDateString("en-US", {
 </style>
 
 <script>
+  import { initDesmos } from "../lib/desmos";
+  initDesmos();
+
   import { icons } from "../lib/icons";
 
   function buildButton(label: string) {
