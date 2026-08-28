@@ -44,7 +44,9 @@
   --color-surface: var(--paper-white);
   --color-text: #1c1f22;
   --color-text-secondary: #6b7278;
-  --color-text-tertiary: #8b9095;
+  /* 4.60:1 on white. The previous #8b9095 was 3.22:1, which failed WCAG AA
+     for the small date text in the post table. */
+  --color-text-tertiary: #70767c;
   --color-hairline: rgba(0, 0, 0, 0.12);
   --color-hairline-strong: rgba(0, 0, 0, 0.2);
   --color-separator: rgba(0, 0, 0, 0.08);

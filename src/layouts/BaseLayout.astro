@@ -36,9 +36,34 @@ const { title, description = "Artemii Karapetian — mathematics, alife, ML." } 
     lighting it on hover offers nothing and muddies the pressed-in look.
   */
   const SURFACES = '.btn, .desktop-nav-segment:not([aria-current="page"])';
+
   const reduce = window.matchMedia("(prefers-reduced-motion: reduce)");
+  /*
+    A hover effect is meaningless on a touch screen, and building the GL context
+    there is pure cost. Gating on hover capability also keeps it off the device
+    class that is most sensitive to main-thread work.
+  */
+  const canHover = window.matchMedia("(hover: hover) and (pointer: fine)");
 
   let runner: ReturnType<typeof createRippleRunner> = null;
+  let built = false;
+  let listening = false;
+
+  /*
+    Compiling and linking the shader costs ~900ms of blocking main-thread time
+    on a throttled CPU. Doing it at load put a single long task in front of
+    every visitor for an effect most of them never trigger, so it is deferred
+    to the first hover that actually needs it.
+  */
+  function ensureRunner() {
+    if (built) return runner;
+    built = true;
+    runner = createRippleRunner();
+    // The optimistic class comes off if the context or shaders turn out to be
+    // unavailable, handing the surfaces back to the CSS sweep.
+    if (!runner) document.documentElement.classList.remove("fx-ripple");
+    return runner;
+  }
 
   function onEnter(event: Event) {
     const pointer = event as PointerEvent;
@@ -47,29 +72,31 @@ const { title, description = "Artemii Karapetian — mathematics, alife, ML." } 
     const target = pointer.target;
     if (!(target instanceof Element)) return;
     const host = target.closest<HTMLElement>(SURFACES);
-    if (!host || !runner) return;
+    if (!host) return;
+    const active = ensureRunner();
+    if (!active) return;
     const rect = host.getBoundingClientRect();
-    runner.trigger(host, pointer.clientX - rect.left, pointer.clientY - rect.top);
+    active.trigger(host, pointer.clientX - rect.left, pointer.clientY - rect.top);
   }
 
   function enable() {
-    if (runner || reduce.matches) return;
-    runner = createRippleRunner();
-    // Only claim the effect once the context and shaders actually came up;
-    // otherwise the CSS sweep stays in charge.
-    if (!runner) return;
+    if (listening || reduce.matches || !canHover.matches) return;
+    listening = true;
     document.documentElement.classList.add("fx-ripple");
     document.addEventListener("pointerenter", onEnter, { capture: true });
   }
 
   function disable() {
-    if (!runner) return;
+    if (!listening) return;
+    listening = false;
     document.removeEventListener("pointerenter", onEnter, { capture: true });
-    runner.destroy();
+    runner?.destroy();
     runner = null;
+    built = false;
     document.documentElement.classList.remove("fx-ripple");
   }
 
-  if (!reduce.matches) enable();
+  enable();
   reduce.addEventListener("change", () => (reduce.matches ? disable() : enable()));
+  canHover.addEventListener("change", () => (canHover.matches ? enable() : disable()));
 </script>
