@@ -9,7 +9,8 @@ import rehypeKatex from 'rehype-katex';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://rtmkrptn.github.io',
-  base: '/personal-website',
+  // User site (repo named <user>.github.io) serves from the domain root.
+  base: '/',
   integrations: [mdx(), sitemap()],
   markdown: {
     shikiConfig: {
