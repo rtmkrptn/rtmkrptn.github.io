@@ -46,6 +46,7 @@ uniform float uBevel;  // how far in from the edge the surface keeps curving
 uniform float uDome;   // how hard the highlight dies as the normal turns away
 uniform float uBend;   // how far the tilting normal drags the reflection
 uniform float uRim;    // catch of light where a curved edge rolls over
+uniform float uDrag;   // how hard the boundary arrests the travelling highlight
 
 float roundedRectSDF(vec2 p, vec2 b, float r) {
   vec2 q = abs(p) - b + r;
@@ -64,7 +65,20 @@ void main() {
   */
   float dir = uOrigin.x < uResolution.x * 0.5 ? 1.0 : -1.0;
   float travel = uResolution.x + uResolution.y * 2.0;
-  vec2 lightPos = vec2(uOrigin.x + dir * uProgress * travel, uOrigin.y);
+
+  /*
+    The highlight does not slide at a constant rate. Under viscous drag a
+    velocity decays exponentially, so the position approaches its limit rather
+    than arriving at it — the light runs out across the open middle and then
+    settles as the far boundary closes in, instead of sailing through the edge
+    still at full speed.
+
+    Normalised so the sweep still completes exactly at uProgress = 1 whatever
+    the drag; uDrag = 0 collapses back to the linear travel.
+  */
+  float k = max(uDrag, 0.001);
+  float eased = (1.0 - exp(-k * uProgress)) / (1.0 - exp(-k));
+  vec2 lightPos = vec2(uOrigin.x + dir * eased * travel, uOrigin.y);
 
   /*
     ---- Shape ----
@@ -194,6 +208,7 @@ export function createRippleRunner(): RippleRunner | null {
   const uRim = gl.getUniformLocation(prog, "uRim");
   const uBevel = gl.getUniformLocation(prog, "uBevel");
   const uBend = gl.getUniformLocation(prog, "uBend");
+  const uDrag = gl.getUniformLocation(prog, "uDrag");
 
   gl.enable(gl.BLEND);
   gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);
@@ -232,6 +247,9 @@ export function createRippleRunner(): RippleRunner | null {
     const rim = readNumber(host, "--fx-rim", 0);
     const bevel = readNumber(host, "--fx-bevel", 0.1);
     const bend = readNumber(host, "--fx-bend", 0);
+    // 0 keeps the original constant-speed sweep for any surface that is silent
+    // about it, so adding drag to one material cannot disturb the others.
+    const drag = readNumber(host, "--fx-drag", 0);
     // The host's real corner radius, so the light follows the actual shape.
     // A pill reports a huge radius, which caps at half the short side.
     const cs = getComputedStyle(host);
@@ -250,6 +268,7 @@ export function createRippleRunner(): RippleRunner | null {
     gl!.uniform1f(uRim, rim);
     gl!.uniform1f(uBevel, bevel);
     gl!.uniform1f(uBend, bend);
+    gl!.uniform1f(uDrag, drag);
 
     const start = performance.now();
 

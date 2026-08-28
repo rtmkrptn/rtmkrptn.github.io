@@ -29,7 +29,13 @@
   height: 100%;
   background: linear-gradient(115deg, transparent, rgba(255, 255, 255, $alpha) 50%, transparent);
   filter: blur($blur);
-  transform: translateX(-100%) skewX(-20deg);
+  /*
+    -100% puts the band's right edge exactly on the host's left edge, but a
+    blurred element paints well outside its own box, so at rest it smeared a
+    permanent white glow into the left corner. Backing off by 3x the blur
+    radius clears the visible tail.
+  */
+  transform: translateX(calc(-100% - #{$blur * 3})) skewX(-20deg);
   pointer-events: none;
 }
 
@@ -82,6 +88,9 @@
   --fx-dome: 0.3;
   --fx-bend: 0.06;
   --fx-rim: 0.22;
+  /* A long metal segment reads as a heavier thing to move light across, so the
+     sweep decelerates hard into the far end rather than running off it. */
+  --fx-drag: 2.6;
   --fx-ambient: 0.06;
   --fx-light: 255 252 244;
 }
