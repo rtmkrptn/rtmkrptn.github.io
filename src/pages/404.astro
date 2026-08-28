@@ -21,6 +21,15 @@ import { withBase } from "../lib/base";
     padding-block: var(--space-8);
   }
 
+  /*
+    align-items: flex-start sizes children to their content, so a long path in
+    the message could grow past the container and scroll the page sideways.
+    Capping the width is what lets the wrapping below actually take effect.
+  */
+  .not-found > * {
+    max-width: 100%;
+  }
+
   .not-found .kicker {
     margin: 0;
   }
@@ -29,10 +38,15 @@ import { withBase } from "../lib/base";
     color: var(--color-text-secondary);
   }
 
-  .not-found code {
+  /*
+    :global because this <code> is created in the script below, at runtime, and
+    so never receives Astro's scoping attribute — a plain `.not-found code`
+    rule compiles to `code[data-astro-cid-...]` and silently never matches.
+    Without the wrapping, a long path widens the page on a narrow screen.
+  */
+  .not-found :global(code) {
     font-family: var(--font-mono);
     font-size: 0.9em;
-    /* A long unbroken path must not widen the page on a narrow screen. */
     overflow-wrap: anywhere;
   }
 </style>
