@@ -5,8 +5,9 @@ import { withBase } from "../lib/base";
 
 <SiteLayout title="Not found — Artemii Karapetian">
   <div class="not-found">
-    <h1>Page not found</h1>
-    <p>There's nothing at this address.</p>
+    <p class="kicker" data-404-kicker>Error 404</p>
+    <h1 data-404-title>Page not found</h1>
+    <p data-404-message>There's nothing at this address.</p>
     <a class="btn" href={withBase("/")}>Back home</a>
   </div>
 </SiteLayout>
@@ -20,7 +21,54 @@ import { withBase } from "../lib/base";
     padding-block: var(--space-8);
   }
 
+  .not-found .kicker {
+    margin: 0;
+  }
+
   .not-found p {
     color: var(--color-text-secondary);
   }
+
+  .not-found code {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    /* A long unbroken path must not widen the page on a narrow screen. */
+    overflow-wrap: anywhere;
+  }
 </style>
+
+<script>
+  /*
+    GitHub Pages serves this one file for every missing path, so without this
+    every dead URL reads identically — /cv and /gallery were indistinguishable.
+    Naming the path, and saying explicitly when a route is planned rather than
+    simply wrong, is the difference between "you broke it" and "not yet".
+
+    The static markup above is the generic message, so this is purely additive
+    and the page still reads correctly with JavaScript off.
+  */
+  const PLANNED: Record<string, string> = {
+    "/cv": "CV",
+    "/gallery": "Gallery",
+  };
+
+  const path = location.pathname.replace(/\/+$/, "") || "/";
+  const kicker = document.querySelector<HTMLElement>("[data-404-kicker]");
+  const title = document.querySelector<HTMLElement>("[data-404-title]");
+  const message = document.querySelector<HTMLElement>("[data-404-message]");
+  const planned = PLANNED[path];
+
+  if (planned && kicker && title && message) {
+    kicker.textContent = "Coming soon";
+    title.textContent = `${planned} isn't up yet`;
+    message.textContent = "This page is still being built — it'll live here once it is.";
+    document.title = `${planned} — coming soon — Artemii Karapetian`;
+  } else if (message && path !== "/") {
+    message.textContent = "";
+    message.append("There's nothing at ");
+    const code = document.createElement("code");
+    // textContent, not innerHTML — the path is attacker-controlled.
+    code.textContent = path;
+    message.append(code, ".");
+  }
+</script>
