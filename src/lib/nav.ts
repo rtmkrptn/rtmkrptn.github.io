@@ -7,11 +7,13 @@ export interface NavItem {
 }
 
 /*
-  Only routes that actually exist belong here — a nav entry pointing at a page
-  that has not been built yet is a 404 on the live site.
-
-  /cv and /gallery are still to come; add them back the moment those pages land:
-    { href: "/cv", label: "CV", icon: "cv" },
-    { href: "/gallery", label: "Gallery", icon: "gallery" },
+  The nav shows the site's structure, including sections that are still being
+  built. /cv and /gallery currently land on the 404, which recognises them as
+  planned routes and says "coming soon" rather than "not found" — an honest
+  destination, not a dead end.
 */
-export const navItems: NavItem[] = [{ href: "/", label: "Home", icon: "home" }];
+export const navItems: NavItem[] = [
+  { href: "/", label: "Home", icon: "home" },
+  { href: "/cv", label: "CV", icon: "cv" },
+  { href: "/gallery", label: "Gallery", icon: "gallery" },
+];
