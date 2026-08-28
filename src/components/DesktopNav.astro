@@ -116,8 +116,9 @@ function isActive(href: string): boolean {
       box-shadow: none;
     }
 
-    /* Traveling glint, same recipe as the buttons */
-    .desktop-nav-segment::after {
+    /* Traveling glint, same recipe as the buttons — and, like it, only exists
+       when the shader is not the one lighting the surface. */
+    :root:not(.fx-ripple) .desktop-nav-segment::after {
       @include glint-band($alpha: 0.5);
     }
 
