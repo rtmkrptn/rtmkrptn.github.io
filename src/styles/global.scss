@@ -15,14 +15,30 @@ body {
   margin: 0;
   min-height: 100vh;
   background-color: var(--color-paper);
-  background-image: var(--pattern-pinstripe-subtle), var(--gradient-page);
-  background-attachment: fixed;
   color: var(--color-text);
   font-family: var(--font-body);
   font-size: var(--font-size-body-mobile);
   line-height: var(--line-height-body);
   -webkit-tap-highlight-color: transparent;
   overflow-x: hidden;
+}
+
+/*
+  The page pattern sits on its own fixed layer rather than on body with
+  background-attachment: fixed. Visually identical — the pinstripe stays put
+  while content scrolls past it — but a fixed background cannot be moved by the
+  compositor, so the browser repaints the whole viewport on every scroll frame,
+  re-rasterising a 4px-period hairline gradient at device pixel ratio. On its
+  own layer it is rasterised once and merely composited from then on.
+*/
+body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background-color: var(--color-paper);
+  background-image: var(--pattern-pinstripe-subtle), var(--gradient-page);
+  pointer-events: none;
 }
 
 @media (min-width: 768px) {
