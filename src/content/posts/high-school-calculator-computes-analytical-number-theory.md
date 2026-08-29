@@ -1,24 +1,20 @@
 ---
 title: High School Calculator Computes Analytical Number Theory
-description: One or two sentences shown in the post list.
+description: Prime generating function without explicit if-statements,
+  conditional functions, and advanced functions like mod, gcd
 date: 2026-08-28
 draft: false
 vaultSource: High School Calculator Computes Analytical Number Theory.md
 ---
 
-PLACEHOLDER — real hook: what were you actually doing right before this started? Bored in a lesson, avoiding a different problem set, trying to solve something else entirely? One or two sentences, specific and true, land better than anything I can invent for you. Drop it in here.
+Most of the time Desmos is used to draw polynomials to find roots. However, not many people know how far you can go. This article is absolutely useless from **a** scientific point of view, yet it is interesting to trace how limitations force creativity. My goal was to build **a** prime generating function $f(1) = p_1 = 2$ without explicit `if` statements, conditional functions, and advanced functions like $\text{mod}$ and $\text{gcd}$.
+## What Is a Prime Number?
+Quick recap for those who may not be familiar with the topic. A prime number is a number that has no divisors besides one and itself. $1$ is excluded from the set of primes. 
+## Is This an Integer?
+My thought process was the following: to check whether a number is prime, we have to know **if** it has any divisors. If $a,b,\frac{a}{b} \in \mathbb{Z}$ then $b$ is **a** divisor of $a$. This method is based on knowing that **the** inputs and output are integers. So, let's build it.
 
-Desmos is built to draw parabolas. Type in a function, watch a curve. That's the whole contract. So the fact that you can also use it to test whether a number is prime, count how many integers below a number share no factors with it, and hand back the exact value of the $x$-th prime — not an approximation, the exact integer — is not something the software is trying to let you do. With no loops, no `if` statements, no modulo, and no boolean logic, none of that is supposed to be possible. It's something you can force out of it if you're willing to abuse continuous functions until they behave like discrete logic.
-
-Here's the build, one layer at a time — all the way up.
-
-## Step one: turning a curve into a switch
-
-Everything starts with one line:
-
+$\cos(\pi x) = \pm 1$ when $x$ is an integer, everywhere else it's strictly between $-1$ and $1$. Take the absolute value, and integers give exactly $1$, everything else gives something strictly less than $1$. Discard everything after the decimal point (or floor **it**) and non-integers collapse to $0$.
 $$Z(x) = \left\lfloor \, |\cos(\pi x)| \, \right\rfloor$$
-
-$\cos(\pi x)$ only ever hits exactly $\pm 1$ when $x$ is an integer — everywhere else it's strictly between $-1$ and $1$. Take the absolute value, and integers give you exactly $1$, everything else gives you something strictly less than $1$. Floor that, and integers collapse to $1$, everything else collapses to $0$.
 
 ```desmos The wave, and the switch it collapses to. Drag and zoom it.
 y=\left|\cos\left(\pi x\right)\right|
@@ -27,86 +23,43 @@ y=Z\left(x\right)
 \left(\left[-10,...,10\right],Z\left(\left[-10,...,10\right]\right)\right)
 ```
 
-$Z(x)$ is an "is this an integer" detector, built entirely out of trigonometry and a floor function. That's the whole trick. Everything downstream is just this idea, reused.
+$Z(x)$ is an "is this an integer" detector, built entirely out of trigonometry and a floor function. That's the whole trick.
 
-## Step two: from "is it an integer" to "does it divide"
+## Divisibility Without Modulo
 
 $$d(x,y) = Z(y) \cdot Z\!\left(\frac{x}{y}\right)$$
 
-This says: $y$ is an integer, *and* $x/y$ is an integer. If both hold, $y$ divides $x$ cleanly. You've just built a divisibility test without a single modulo operator, because Desmos doesn't give you one to abuse in the first place — you have to derive it from scratch. (An earlier version added a third factor, $Z(x)$, to also check that $x$ itself is an integer. Turns out that's automatic — if $y$ and $x/y$ are both integers, $x = y \cdot (x/y)$ has to be too. Same output either way; this is the leaner version.)
+This says: $y$ is an integer, *and* $x/y$ is an integer. If both hold, $y$ divides $x$ cleanly. We just built a divisibility test without a single modulo operator. Interestingly, a third factor, $Z(x)$, is unnecessary. If $y$ and $x/y$ are both integers, $x = y \cdot (x/y)$ has to be too because an integer times another integer is just an integer.
 
-## Step three: the divisor-sum function, for free
-
-$$\sigma(x,k) = \sum_{n=1}^{x} d(x,n) \cdot n^k$$
-
-Run $d(x,n)$ across every $n$ from $1$ to $x$, and it's $1$ exactly at the divisors of $x$ and $0$ everywhere else — so the sum only ever picks up the divisors, each raised to the $k$-th power. That's the generalized divisor-sum function from real number theory: $\sigma_0(n)$ counts the divisors, $\sigma_1(n)$ adds them up. Set $k=0$ and check it against small numbers — $\sigma(4,0) = 3$ (divisors 1, 2, 4), $\sigma(6,0) = 4$ (1, 2, 3, 6), $\sigma(9,0) = 3$ (1, 3, 9). It matches, every time.
-
-## Step four: averaging it, and running into an actual open-ish problem
-
-$$E(x,k) = \frac{1}{x} \sum_{n=1}^{x} \sigma(n,k)$$
-
-This tracks the *running average* of $\sigma$ as $x$ grows — and this is where it stops being a party trick and starts brushing up against real analytic number theory. For $k=0$, the average number of divisors of the integers up to $x$ doesn't hover around a constant. It grows, and grows specifically like $\ln(x)$:
-
-$$\mathbb{E}\big(d(n)\big)_{n \le x} \;\approx\; \ln(x) + 2\gamma - 1$$
-
-where $\gamma \approx 0.5772$ is the Euler–Mascheroni constant. The error term in that approximation — how tight you can make it — is called the Dirichlet divisor problem, and it's still not fully resolved. You built the exact function whose average behavior is the subject of an unsolved problem, using a calculator most people use to plot $y = x^2$.
-
-## Step five: counting shared divisors, not just testing for them
-
-For two numbers, run the divisor test against every shared candidate from $2$ upward and count where both agree:
-
-$$C(x,y) = Z(x) \cdot Z(y) \cdot \sum_{i=1}^{\min(x,y)-1} d(x,i+1) \cdot d(y,i+1)$$
-
-The sum stops at $\min(x,y)-1$ because a shared divisor can't exceed the smaller number, and each term just re-runs the divisibility test from step two directly — no intermediate list needed. What it computes: the number of integers $\ge 2$ that divide *both* $x$ and $y$. That's a genuine count, and it has a clean closed form using the divisor-count function from step three:
-
-$$C(x,y) = Z(x) \cdot Z(y) \cdot \big(\sigma(\gcd(x,y),\,0) - 1\big)$$
-
-Check it: $8$ and $15$ share no factors, $\gcd=1$, $\sigma(1,0)=1$, $C=0$. $8$ and $12$ share $2$ and $4$, $\gcd=4$, $\sigma(4,0)=3$, $C=2$ — an actual count of two shared divisors. And $C(x,y)=0$ exactly when $x$ and $y$ are coprime, since the only way to have zero common divisors $\ge 2$ is to have none.
-
-The $Z(x)Z(y)$ gate out front is doing exactly what the extra factor in step two's $d$ used to do — nothing, numerically. Each $d(x,i+1)$ term is already $0$ whenever $x$ isn't an integer, so the sum is already $0$ before the gate multiplies it. Same pattern twice now: an explicit check that never flips an output, kept because it states the intended domain on the page instead of leaving it to be inferred from what happens to cancel out.
-
-Sum $\{C(n,y) = 0\}$ over every $y$ from $1$ to $n$, and you're counting how many integers up to $n$ are coprime to $n$ — Euler's totient function, $\varphi(n)$.
-
-## Step six: a primality test, hiding inside a divisor count
+## How Many?
 
 $$D(x) = \sum_{n=2}^{x-1} d(x,n)$$
 
-This counts divisors of $x$ strictly between $1$ and $x$ — no $1$, no $x$ itself. $D(x) = 0$ exactly when $x$ has no divisors in that range, which for $x \ge 2$ is just the definition of prime. $D(7)=0$ (prime), $D(9)=1$ (the divisor 3), $D(4)=1$ (the divisor 2).
+This counts divisors of $x$ strictly between $1$ and $x$. It is a specific design choice. I didn't want to map $2$ to $1$ (2 divisors are the number itself and $1$). $D(x) = 0$ exactly when $x$ has no divisors in that range, which for $x \ge 2$ is just the definition of prime. $D(7)=0$ (prime), $D(9)=1$, $D(4)=1$.
 
 $$p(x) = \left\lfloor \frac{1}{1 + D(x)} \right\rfloor$$
 
-The same $\frac{1}{1+\text{something}}$ trick from step five's cousin, turning "zero divisors" into a clean $1$ and "one or more" into $0$. $p(7)=1$, $p(9)=0$.
+This is an old trick. $\frac{1}{1}=1$ when $D(x_i)=0$, so $x_i$ is prime. **The** $D(x)$ range is $[0,\infty)$, therefore $\frac{1}{1+n}<1$ if $n>0$. Floor it and we get a boolean operator that outputs $1$ if $x$ is prime and $0$ if $x$ isn't prime.
 
-One real edge case worth knowing about, not fixing: $D(1)$ is an empty sum, so it's $0$ too — which means $p(1)=1$, falsely flagging $1$ as prime. It never causes a problem downstream because everywhere $p$ actually gets used, the sum starts at $n=2$, so $p(1)$ is never called. But it's a live trap sitting in $p$ on its own, worth remembering if you ever reuse it somewhere new.
+One real edge case worth knowing about: $D(1)$ is an empty sum, so it's $0$ too. This means $p(1)=1$, falsely flagging $1$ as prime. It never causes a problem in my case because everywhere $p$ actually gets used, the sum starts at $n=2$, so $p(1)$ is never called. But it's a trap hidden in $p$ on its own.
 
-## Step seven: counting primes without a counting variable
+## Brute Force Without Memory
+$\sum_{n=2}^{k}p(n)=\pi(k)$, the count of primes up to $k$. Let's define an intermediate function $g(n,k)=n-\pi(k)$. Say, $n=3$, $\pi(4)=2$, $\pi(5)=3$. We can observe **that** the moment $k$ is $p_n$, $g(n,k)$ becomes $0$. Now take an absolute value to make sure it stays positive. 
 
-$$f(x,k) = \left\lfloor \frac{1}{1 + \left|\, x - \sum_{n=2}^{k} p(n) \,\right|} \right\rfloor$$
+$$f(n,k) = \left\lfloor \frac{1}{1 + \left|\, n - \pi(k) \,\right|} \right\rfloor$$
 
-$\sum_{n=2}^{k} p(n)$ is exactly $\pi(k)$, the count of primes up to $k$ — starting at $n=2$ costs nothing since no prime is smaller anyway. $f(x,k)$ is the exact-match trick again: $1$ when $x = \pi(k)$, $0$ everywhere else.
+$f(n,k)$ is the same trick again: $1$ when $\pi(p_n)=n<\pi(p_{n+1})$. This is bad. $f(3,5)=f(3,6)=1$; we need to track the value of $k$ not when $f$ is $1$ but when $f$ changes. This is a simple discrete derivative: $\Delta_n(k)=f(n,k)-f(n,k-1)$. As soon as $k$ is $p_n$, $f(n,k)=1$, $f(n,k-1)=0$, so the difference is $1$. The **next** $k$ will evaluate both functions at $1$ and therefore the difference is $0$, as we wanted.
 
-## Step eight: isolating the x-th prime
+## Isolating $p_n$
+$\Delta_n(k)$ tracks both rise and fall. Therefore, when $k$ becomes $p_{n+1}$, the difference evaluates at $-1$. In order to track when the positive change occurs, we construct a simple function: $\frac{1}{2-\Delta_n(k)}$; it evaluates at $1$ when $\Delta_n(k)=1$ and $1/3$ when $\Delta_n(k)=-1$. The last thing is to floor the expression so it equals $1$ exactly once when $k=p_n$.
 
-$$P(x) = \sum_{k=2}^{N} k \cdot \left\lfloor \frac{1}{2 - \big(f(x,k) - f(x,k-1)\big)} \right\rfloor$$
+$$p_n = \sum_{k=2}^{N} k \left\lfloor \frac{1}{2 - \Delta_n(k)} \right\rfloor$$
 
-$f(x,k) - f(x,k-1)$ is $0$ almost everywhere, but hits exactly $1$ at the one $k$ where $\pi$ just ticked over from $x-1$ to $x$ — meaning $k$ is prime, and is specifically the $x$-th one. $\left\lfloor \frac{1}{2-\Delta} \right\rfloor$ turns that single $+1$ into a clean $1$, everything else to $0$. Multiply by $k$ before summing, and the sum has exactly one nonzero term: the $x$-th prime itself, in full.
+Sum from $k=2$ up to some $N$. Once the fraction is $1$ we multiply it by $k$, which is precisely $p_n$. Voila, we got **a** prime generating function from the simple idea of "is this an integer" detector.
 
-The interesting part is the upper bound $N$, which has to be large enough to guarantee the $x$-th prime actually falls inside the range being summed — get this wrong and the formula doesn't error, it just silently returns the wrong answer or zero. The first version used
+## When to Stop
+The interesting part is the upper bound $N$, which has to be sufficiently large to guarantee $p_n$ actually falls inside the range being summed.
+$N = \left\lfloor n(\ln n + \ln \ln n) \right\rfloor$ is the real theorem (Rosser–Schoenfeld) but only proven to exceed $p_n$ for $n \ge 6$. $N = \left\lfloor n(\ln(n+1) + 2) \right\rfloor$ fixes the small cases but overcounts as $n$ goes further from $1$.
+## The Actual Point
 
-$$N = \left\lfloor x(\ln x + \ln \ln x) \right\rfloor,$$
-
-a real theorem (Rosser–Schoenfeld) — but one only proven to exceed the $x$-th prime for $x \ge 6$. Checked by hand: it broke outright at $x=1$ ($\ln \ln 1 = \ln 0$, undefined) and silently undercounted for $x=2$ through $5$.
-
-The current version,
-
-$$N = \left\lfloor x(\ln(x+1) + 2) \right\rfloor,$$
-
-fixes the small cases — checked by hand rather than by proof. $P(1)=2$, $P(6)=13$, both correct, and $x=2$ through $5$ all land safely inside the new bound. Worth being precise about what kind of guarantee that is, though: it's not a theorem the way the first attempt was. Its safety margin over the true prime grows like a fixed multiple of $x$, while the real asymptotic margin grows slower but without bound — meaning somewhere far out (rough estimate: hundreds of millions to billions, not a range worth pinning down more precisely without real bounding work) the two could in principle cross again. Completely irrelevant to anything you'd type into Desmos — the nested sums would choke long before $x$ got anywhere near that — but it's a checked patch, not a proof, and that's a real distinction rather than a technicality.
-
-## Where it actually breaks
-
-$Z(x)$ depends on Desmos evaluating $\cos(\pi x)$ precisely enough to land on *exactly* $1.0$ at integers. That's fine for small $x$, but floating-point trig gets less trustworthy as $x$ grows, and every layer above $Z$ inherits that risk. $\sigma$ and $E$ were run out to $x=5000$; $C(x,y)$ re-runs the divisibility test up to $\min(x,y)$ times per pair, compounding it further; and $P(x)$ compounds it more than anything else — every term calls $f$, which calls $p$, which calls $D$, which calls $d$ — so one evaluation of $P(x)$ is doing a lot of nested divisibility checks, and that cost grows with $x$. Worth being honest that the verification here has been by hand, for small cases up to $x=6$ — not cross-checked against an actual prime table at, say, $x=1000$, where a silent misfire would be much easier to miss.
-
-## The actual point
-
-The same move gets reused at every layer here: build a test that's exactly $1$ at the one case you care about and $0$ everywhere else, then let a sum or a gate pick that one case out. Integer detector, divisibility test, divisor sum, shared-divisor count, primality test, prime-counting function, the $x$-th prime itself — none of the individual steps are hard, and each one is just the last idea, recombined. Give yourself `%` and a `for` loop and the whole chain is a few lines nobody remembers writing. Take those away, and you end up rebuilding most of elementary number theory from first principles, because you weren't allowed to just import it.
+The same move gets reused at every layer here: build a test that's exactly $1$ at the one case you care about and $0$ everywhere else, then let a sum or a gate pick that one case out. Integer detector, divisibility test, divisor sum, prime function. None of the individual steps are hard, and each one is just the last idea reused. Give yourself `%` and a `for` loop and the whole chain is a few lines. Without them you **are** rebuilding most of elementary number theory from first principles.
