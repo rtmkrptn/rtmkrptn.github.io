@@ -20,6 +20,22 @@ const { title, description = "Artemii Karapetian — mathematics, alife, ML." } 
     <link rel="icon" href={withBase("/favicon.svg")} type="image/svg+xml" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    {
+      /*
+        GoatCounter, the same account the Fractals page reports to. Built only
+        for production so `npm run dev` and `npm run preview` never inflate the
+        counts — its script skips localhost on its own, but not building it at
+        all is the version that cannot be got wrong.
+      */
+      import.meta.env.PROD && (
+        <script
+          is:inline
+          data-goatcounter="https://artemkrptn.goatcounter.com/count"
+          async
+          src="//gc.zgo.at/count.js"
+        />
+      )
+    }
     <slot name="head" />
   </head>
   <body>
