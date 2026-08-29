@@ -14,6 +14,7 @@ Quick recap for those who may not be familiar with the topic. A prime number is 
 My thought process was the following: to check whether a number is prime, we have to know if it has any divisors. If $a,b,\frac{a}{b} \in \mathbb{Z}$, then $b$ is a divisor of $a$. This method is based on knowing that the inputs and output are integers. So, let's build it.
 
 $\cos(\pi x) = \pm 1$ when $x$ is an integer; everywhere else it's strictly between $-1$ and $1$. Take the absolute value, and integers give exactly $1$; everything else gives something strictly less than $1$. Discard everything after the decimal point (or floor it) and non-integers collapse to $0$.
+
 $$Z(x) = \left\lfloor \, |\cos(\pi x)| \, \right\rfloor$$
 
 ```desmos The wave, and the switch it collapses to. Drag and zoom it.
