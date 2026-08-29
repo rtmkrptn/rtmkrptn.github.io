@@ -190,6 +190,60 @@ fs.mkdirSync(OUT_DIR, { recursive: true });
 const attachmentsUsed = new Set();
 const missingEmbeds = new Set();
 
+/*
+  Guarantee a blank line either side of every $$...$$ block.
+
+  remark only treats $$ as display maths when the block is separated from the
+  prose around it. Obsidian does not care, so a formula written straight under
+  a sentence renders as a block while writing and inline once published —
+  silently, and only for that one formula. Normalising here means the author
+  never has to think about it.
+
+  Fenced code is skipped: a $$ inside a ```desmos or ```latex block is content,
+  not a formula, and inserting blank lines into it would corrupt it.
+*/
+function padMathBlocks(body) {
+  const lines = body.split("\n");
+  const out = [];
+  let inCode = false;
+  let inMathFence = false;
+
+  const blankBefore = () => {
+    if (out.length && out[out.length - 1].trim() !== "") out.push("");
+  };
+
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i];
+    const trimmed = line.trim();
+
+    if (/^(```|~~~)/.test(trimmed)) {
+      inCode = !inCode;
+      out.push(line);
+      continue;
+    }
+    if (inCode || !trimmed.startsWith("$$")) {
+      out.push(line);
+      continue;
+    }
+
+    const selfContained = trimmed.length > 2 && trimmed.endsWith("$$");
+
+    if (!inMathFence) blankBefore();
+    out.push(line);
+
+    if (selfContained || inMathFence) {
+      // Block just ended — make sure prose does not butt against its close.
+      const next = lines[i + 1];
+      if (next !== undefined && next.trim() !== "") out.push("");
+      inMathFence = false;
+    } else {
+      inMathFence = true; // opening fence of a multi-line block
+    }
+  }
+
+  return out.join("\n");
+}
+
 function transformBody(body) {
   // ![[image.png]] -> a real image, copied into public/vault/
   body = body.replace(/!\[\[([^\]|]+?)(?:\|[^\]]*)?\]\]/g, (_match, target) => {
@@ -216,7 +270,7 @@ function transformBody(body) {
     return slug ? `[${text}](/posts/${slug})` : text;
   });
 
-  return body.trim();
+  return padMathBlocks(body).trim();
 }
 
 const written = [];
