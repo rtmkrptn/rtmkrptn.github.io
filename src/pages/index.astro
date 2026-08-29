@@ -16,21 +16,41 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
       <h1 class="text-letterpress">Artemii Karapetian</h1>
       <ul class="social-row">
         {
-          socialLinks.map((link) => (
-            <li>
-              <a
-                class="social-link pressable"
-                href={link.href}
-                aria-label={link.label}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
-                <BrandIcon name={link.icon} size={18} />
-              </a>
-            </li>
-          ))
+          socialLinks.map((link) =>
+            link.copy ? (
+              /*
+                Discord: a handle to paste into Add Friend, not a destination.
+                A button rather than a link, because nothing is navigated to.
+              */
+              <li>
+                <button
+                  type="button"
+                  class="social-link social-copy pressable"
+                  data-copy={link.copy}
+                  aria-label={`Copy ${link.label} username, ${link.copy}`}
+                  title={link.copy}
+                >
+                  <BrandIcon name={link.icon} size={18} />
+                </button>
+              </li>
+            ) : (
+              <li>
+                <a
+                  class="social-link pressable"
+                  href={link.href}
+                  aria-label={link.label}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <BrandIcon name={link.icon} size={18} />
+                </a>
+              </li>
+            )
+          )
         }
       </ul>
+      {/* Announces the copy to screen readers, which get no visual tooltip. */}
+      <p class="visually-hidden" role="status" aria-live="polite" id="copy-status" />
     </div>
     <p class="tagline">Mathematics, Alife, ML.</p>
     <p class="bio">
@@ -187,4 +207,112 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
     text-decoration: none;
   }
 
+  /*
+    The Discord icon is a button, not a link, so it has to be stripped back to
+    match the anchors beside it. Everything visual still comes from .social-link.
+  */
+  .social-copy {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    cursor: pointer;
+    position: relative;
+  }
+
+  /*
+    Confirmation bubble. Sits above the icon and is inert to pointer events so
+    it can never swallow a second click on the button underneath.
+  */
+  .social-copy::after {
+    content: attr(data-copied-label);
+    position: absolute;
+    bottom: calc(100% - var(--space-1));
+    left: 50%;
+    transform: translate(-50%, 4px);
+    padding: 0.15em 0.5em;
+    border-radius: var(--radius-sm);
+    background: var(--color-text);
+    color: var(--color-surface);
+    font-size: var(--font-size-caption);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-standard);
+  }
+
+  .social-copy.is-copied::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .social-copy::after {
+      transition: none;
+    }
+  }
+
 </style>
+
+<script>
+  /*
+    Discord has no profile URL to link to, so its icon copies the handle for
+    pasting into Add Friend. Feedback is a bubble on the button plus a live
+    region for screen readers, which never see the bubble.
+  */
+  const status = document.getElementById("copy-status");
+
+  /*
+    navigator.clipboard needs a secure context and can still be refused by
+    permissions policy. The textarea fallback is what keeps the button useful
+    when it is, rather than failing silently.
+  */
+  async function copyText(text: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      const scratch = document.createElement("textarea");
+      scratch.value = text;
+      scratch.setAttribute("readonly", "");
+      // Kept out of view and out of the a11y tree while it is focused.
+      scratch.style.cssText = "position:fixed;top:-9999px;opacity:0";
+      scratch.setAttribute("aria-hidden", "true");
+      document.body.appendChild(scratch);
+      scratch.select();
+      let ok = false;
+      try {
+        ok = document.execCommand("copy");
+      } catch {
+        ok = false;
+      }
+      scratch.remove();
+      return ok;
+    }
+  }
+
+  for (const button of document.querySelectorAll<HTMLButtonElement>(".social-copy")) {
+    const handle = button.dataset.copy;
+    if (!handle) continue;
+
+    let clearTimer: ReturnType<typeof setTimeout> | undefined;
+
+    button.addEventListener("click", async () => {
+      const ok = await copyText(handle);
+
+      // On failure, say the handle instead — the visitor can still read it.
+      button.dataset.copiedLabel = ok ? "Copied" : handle;
+      button.classList.add("is-copied");
+      if (status) status.textContent = ok ? `${handle} copied to clipboard` : `Username: ${handle}`;
+
+      // Restart the countdown on every click, so rapid clicks do not cut it short.
+      clearTimeout(clearTimer);
+      clearTimer = setTimeout(() => {
+        button.classList.remove("is-copied");
+        if (status) status.textContent = "";
+      }, 1600);
+    });
+  }
+</script>
