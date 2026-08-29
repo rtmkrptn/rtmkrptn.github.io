@@ -166,7 +166,9 @@
   /* ============ Type (spec: typography scale) ============ */
   /* Body & controls — Lucida Sans Unicode. Lucida Grande is the macOS-native
      cut of the same design and stands in where Sans Unicode is absent. */
-  --font-body: "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", sans-serif;
+  /* Open Sans is the fallback for platforms with no Lucida at all (Android);
+     the Lucidas still win wherever they exist. See the @font-face in global. */
+  --font-body: "Lucida Sans Unicode", "Lucida Grande", "Lucida Sans", "Open Sans", sans-serif;
   /* Headings — Helvetica Neue, set thin */
   --font-heading: "Helvetica Neue", Helvetica, Arial, sans-serif;
   /* Captions & chrome labels — Helvetica Neue at normal weight */
