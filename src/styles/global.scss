@@ -35,6 +35,21 @@
   font-weight: 200 700;
   font-style: normal;
   font-display: swap;
+  /*
+    Inter set solid runs wider than Helvetica Neue — measured at 100px against
+    the real face: +10.3% at weight 200, +8.3% at 300, +5.9% at 400, while cap
+    height differs by only 1.9%. So the mismatch is spacing, not letterform
+    size, and it is worst exactly where h1 lives.
+
+    These descriptors scale this @font-face alone. letter-spacing would have
+    been the wrong instrument: it cannot be conditioned on which font actually
+    resolved, so it would have tightened real Helvetica on macOS and iOS too.
+    The ascent/descent overrides are Helvetica's own, divided by the adjust, so
+    the line box stays put and swapping faces reflows nothing.
+  */
+  size-adjust: 93%;
+  ascent-override: 102.2%;
+  descent-override: 22.6%;
 }
 
 @font-face {
