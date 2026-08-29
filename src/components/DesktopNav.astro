@@ -1,6 +1,6 @@
 ---
 import { withBase } from "../lib/base";
-import { navItems } from "../lib/nav";
+import { visibleNavItems } from "../lib/nav";
 
 const currentPath = Astro.url.pathname.replace(/\/$/, "") || "/";
 
@@ -14,12 +14,12 @@ function isActive(href: string): boolean {
   <!-- data-fx-surface: the segments are slices of this pill, so the light
        curves around the bar's shape rather than each segment's square box. -->
   <nav
-    class:list={["desktop-nav-bar", { "is-single": navItems.length < 2 }]}
+    class:list={["desktop-nav-bar", { "is-single": visibleNavItems.length < 2 }]}
     aria-label="Primary"
     data-fx-surface
   >
     {
-      navItems.map((item) => (
+      visibleNavItems.map((item) => (
         <a
           class="desktop-nav-segment"
           href={withBase(item.href)}
