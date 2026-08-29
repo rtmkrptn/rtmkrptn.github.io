@@ -151,6 +151,27 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
     margin-bottom: var(--space-1);
   }
 
+  /*
+    Below this width the icons take their own line — by flex-basis rather than
+    by waiting for the name to overflow, so the layout switches at a width we
+    choose instead of one that drifts with whatever font resolved.
+
+    Once the row is alone on a line there is no shared baseline to sit on, so
+    the optical nudge is dropped: it exists to drop the icons onto the name's
+    x-height band, and off that line it only pushes them at the tagline. That
+    single change tightens the gap above and opens the one below at once.
+  */
+  @media (max-width: 599px) {
+    .hero-identity {
+      row-gap: var(--space-1);
+    }
+
+    .social-row {
+      flex-basis: 100%;
+      top: 0;
+    }
+  }
+
   .social-link {
     display: inline-flex;
     align-items: center;
