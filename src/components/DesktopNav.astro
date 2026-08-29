@@ -36,124 +36,136 @@ function isActive(href: string): boolean {
   @use "../styles/mixins" as *;
 
   .desktop-nav {
-    display: none;
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 10;
+    padding: var(--space-4) var(--space-6);
+    transform: translateY(0);
+    transition: transform var(--duration-reveal) var(--ease-decelerate);
+    /* No background here on purpose — only the bar itself should be opaque.
+       A full-width opaque wrapper would cover page content scrolling behind
+       the empty space around it too. */
   }
 
-  @media (min-width: 768px) {
-    .desktop-nav {
-      display: flex;
-      justify-content: center;
-      position: fixed;
-      top: 0;
-      left: 0;
-      right: 0;
-      z-index: 10;
-      padding: var(--space-4) var(--space-6);
-      transform: translateY(0);
-      transition: transform var(--duration-reveal) var(--ease-decelerate);
-      /* No background here on purpose — only the bar itself should be opaque.
-         A full-width opaque wrapper would cover page content scrolling behind
-         the empty space around it too. */
-    }
+  /* Brushed-metal shell with a recessed groove — the spec's segmented control */
+  .desktop-nav-bar {
+    @include brushed-dark;
+    display: flex;
+    width: 100%;
+    max-width: 760px;
+    border-radius: var(--radius-pill);
+    overflow: hidden;
+    border: var(--border-hairline-width) solid var(--color-chrome-border);
+    box-shadow: var(--shadow-inset-highlight-soft), var(--shadow-raised);
+  }
 
-    /* Brushed-metal shell with a recessed groove — the spec's segmented control */
-    .desktop-nav-bar {
-      @include brushed-dark;
-      display: flex;
-      width: 100%;
-      max-width: 760px;
-      border-radius: var(--radius-pill);
-      overflow: hidden;
-      border: var(--border-hairline-width) solid var(--color-chrome-border);
-      box-shadow: var(--shadow-inset-highlight-soft), var(--shadow-raised);
-    }
+  /*
+    With a single destination the segments have nothing to divide, and a
+    full-width bar holding one permanently-active label reads as broken. Let
+    it hug its content instead. Reverts on its own once a second nav item
+    exists, so this needs no undoing later.
+  */
+  .desktop-nav-bar.is-single {
+    width: auto;
+  }
 
+  .desktop-nav-bar.is-single .desktop-nav-segment {
+    flex: 0 0 auto;
+    padding-inline: var(--space-9);
+  }
+
+  .desktop-nav-segment {
+    @include chrome-label(var(--font-size-nav-title));
+    position: relative;
+    overflow: hidden;
+    /* Stacking context so the ripple canvas's z-index: -1 lands above the
+       segment's own fill rather than behind it */
+    isolation: isolate;
+    /* The segment is brushed aluminium and reflects like it */
+    @include material-metal;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 44px;
+    padding-inline: var(--space-6);
+    color: var(--color-chrome-text);
+    text-shadow: var(--text-shadow-on-chrome);
+    font-family: var(--font-system);
+    font-size: var(--font-size-small);
+    white-space: nowrap;
+    text-decoration: none;
+    /* Beveled seam: dark line + light catch, mimicking a machined edge */
+    box-shadow:
+      inset -1px 0 0 var(--color-chrome-divider),
+      inset -2px 0 0 var(--color-chrome-divider-highlight);
     /*
-      With a single destination the segments have nothing to divide, and a
-      full-width bar holding one permanently-active label reads as broken. Let
-      it hug its content instead. Reverts on its own once a second nav item
-      exists, so this needs no undoing later.
+      Ambient term of the same lighting model as the ripple, so it rises with
+      the light instead of snapping on 250ms before any light exists.
     */
-    .desktop-nav-bar.is-single {
-      width: auto;
-    }
-
-    .desktop-nav-bar.is-single .desktop-nav-segment {
-      flex: 0 0 auto;
-      padding-inline: var(--space-9);
-    }
-
-    .desktop-nav-segment {
-      @include chrome-label(var(--font-size-nav-title));
-      position: relative;
-      overflow: hidden;
-      /* Stacking context so the ripple canvas's z-index: -1 lands above the
-         segment's own fill rather than behind it */
-      isolation: isolate;
-      /* The segment is brushed aluminium and reflects like it */
-      @include material-metal;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex: 1;
-      height: 44px;
-      padding-inline: var(--space-6);
-      color: var(--color-chrome-text);
-      text-shadow: var(--text-shadow-on-chrome);
-      font-family: var(--font-system);
-      font-size: var(--font-size-small);
-      white-space: nowrap;
-      text-decoration: none;
-      /* Beveled seam: dark line + light catch, mimicking a machined edge */
-      box-shadow:
-        inset -1px 0 0 var(--color-chrome-divider),
-        inset -2px 0 0 var(--color-chrome-divider-highlight);
-      /*
-        Ambient term of the same lighting model as the ripple, so it rises with
-        the light instead of snapping on 250ms before any light exists.
-      */
-      transition: background var(--fx-rise) var(--ease-decelerate);
-    }
-
-    .desktop-nav-segment:last-child {
-      box-shadow: none;
-    }
-
-    /* Traveling glint, same recipe as the buttons — and, like it, only exists
-       when the shader is not the one lighting the surface. */
-    :root:not(.fx-ripple) .desktop-nav-segment::after {
-      @include glint-band($alpha: 0.5);
-    }
-
-    /* CSS sweep is the fallback; the shader takes over when it initialises.
-       The active segment is excluded on both paths. */
-    :root:not(.fx-ripple) .desktop-nav-segment:not([aria-current="page"]):hover::after {
-      @include glint-sweep;
-    }
-
-    .desktop-nav-segment:hover {
-      background: rgba(255, 255, 255, var(--fx-ambient));
-      color: var(--color-chrome-text);
-      text-decoration: none;
-    }
-
-    .desktop-nav-segment:active {
-      background: rgba(0, 0, 0, 0.25);
-    }
-
-    .desktop-nav-segment[aria-current="page"] {
-      background: var(--gradient-chrome-active);
-      box-shadow: var(--shadow-chrome-active-inset);
-    }
-
-    .desktop-nav-segment[aria-current="page"]:hover {
-      background: var(--gradient-chrome-active);
-    }
-
-    .desktop-nav.nav-hidden {
-      transform: translateY(-130%);
-    }
+    transition: background var(--fx-rise) var(--ease-decelerate);
   }
+
+  .desktop-nav-segment:last-child {
+    box-shadow: none;
+  }
+
+  /* Traveling glint, same recipe as the buttons — and, like it, only exists
+     when the shader is not the one lighting the surface. */
+  :root:not(.fx-ripple) .desktop-nav-segment::after {
+    @include glint-band($alpha: 0.5);
+  }
+
+  /* CSS sweep is the fallback; the shader takes over when it initialises.
+     The active segment is excluded on both paths. */
+  :root:not(.fx-ripple) .desktop-nav-segment:not([aria-current="page"]):hover::after {
+    @include glint-sweep;
+  }
+
+  .desktop-nav-segment:hover {
+    background: rgba(255, 255, 255, var(--fx-ambient));
+    color: var(--color-chrome-text);
+    text-decoration: none;
+  }
+
+  .desktop-nav-segment:active {
+    background: rgba(0, 0, 0, 0.25);
+  }
+
+  .desktop-nav-segment[aria-current="page"] {
+    background: var(--gradient-chrome-active);
+    box-shadow: var(--shadow-chrome-active-inset);
+  }
+
+  .desktop-nav-segment[aria-current="page"]:hover {
+    background: var(--gradient-chrome-active);
+  }
+
+  .desktop-nav.nav-hidden {
+    transform: translateY(-130%);
+  }
+
+/*
+  The pill is the nav at every width — the bottom tab bar it replaced was a
+  different object entirely, and having two meant the site changed identity at
+  768px. Small screens get the same control, just tighter: the segments already
+  flex, so only the breathing room needs to come in.
+*/
+@media (max-width: 767px) {
+  .desktop-nav {
+    padding: var(--space-2) var(--space-3);
+  }
+
+  .desktop-nav-segment {
+    padding-inline: var(--space-2);
+    /* 44px is the tap-target floor, so height is held and only padding gives. */
+    font-size: var(--font-size-caption, var(--font-size-small));
+  }
+}
 </style>
 
 <script>

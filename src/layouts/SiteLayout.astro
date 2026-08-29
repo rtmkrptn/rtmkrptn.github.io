@@ -1,7 +1,6 @@
 ---
 import BaseLayout from "./BaseLayout.astro";
 import DesktopNav from "../components/DesktopNav.astro";
-import MobileTabBar from "../components/MobileTabBar.astro";
 
 interface Props {
   title: string;
@@ -21,7 +20,6 @@ const { title, description } = Astro.props;
       </div>
     </div>
   </main>
-  <MobileTabBar />
 </BaseLayout>
 
 <style>
@@ -36,8 +34,14 @@ const { title, description } = Astro.props;
     flex: 1;
     min-height: 100vh;
     background: var(--gradient-surface);
-    padding-block: var(--space-8)
-      calc(var(--space-8) + var(--tap-target-min) + env(safe-area-inset-bottom, 0px));
+    /*
+      The nav is fixed at every width now, so the sheet reserves its clearance
+      at every width too. The old bottom padding held a tap target's worth of
+      space for the bottom tab bar; with that gone there is nothing down there
+      to clear but the safe-area inset.
+    */
+    padding-block: calc(var(--nav-height-compact) + var(--space-5))
+      calc(var(--space-8) + env(safe-area-inset-bottom, 0px));
   }
 
   @media (min-width: 768px) {

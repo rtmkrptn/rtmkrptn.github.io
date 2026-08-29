@@ -242,6 +242,8 @@
   --tap-target-min: 44px;
   /* Measured: 32px wrapper padding + 44px segment + 2px border */
   --desktop-nav-height: 78px;
+  /* Same pill, tighter padding below 768px — see DesktopNav's compact block. */
+  --nav-height-compact: 62px;
 
   /* ============ Motion (spec: motion & timing) ============ */
   --duration-press: 120ms; /* spec: list-row press flash */
