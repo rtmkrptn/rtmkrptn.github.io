@@ -40,8 +40,8 @@ const { title, description } = Astro.props;
       space for the bottom tab bar; with that gone there is nothing down there
       to clear but the safe-area inset.
     */
-    padding-block: calc(var(--nav-height-compact) + var(--space-5))
-      calc(var(--space-8) + env(safe-area-inset-bottom, 0px));
+    padding-block: var(--space-8)
+      calc(var(--nav-height-compact) + var(--space-5) + env(safe-area-inset-bottom, 0px));
   }
 
   @media (min-width: 768px) {

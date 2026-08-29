@@ -156,8 +156,20 @@ function isActive(href: string): boolean {
   flex, so only the breathing room needs to come in.
 */
 @media (max-width: 767px) {
+  /*
+    On a phone the nav belongs where the thumb is. It is the same pill, just
+    anchored to the bottom edge instead of the top, and it hides downward off
+    the same edge it lives on rather than travelling the height of the screen.
+  */
   .desktop-nav {
+    top: auto;
+    bottom: 0;
     padding: var(--space-2) var(--space-3);
+    padding-bottom: calc(var(--space-2) + env(safe-area-inset-bottom, 0px));
+  }
+
+  .desktop-nav.nav-hidden {
+    transform: translateY(130%);
   }
 
   .desktop-nav-segment {

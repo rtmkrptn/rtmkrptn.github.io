@@ -21,6 +21,22 @@
   font-display: swap;
 }
 
+/*
+  Same arrangement for the headings: Helvetica Neue and Helvetica sit ahead of
+  it, so Apple platforms never fetch this. Inter rather than a metric clone of
+  Arial because the headings are set at 200 and 300 — Arimo and Liberation Sans
+  only carry 400 upward, so they cannot render this type at all.
+*/
+@font-face {
+  font-family: "Inter";
+  src:
+    local("Inter"),
+    url("/fonts/inter-latin.woff2") format("woff2");
+  font-weight: 200 700;
+  font-style: normal;
+  font-display: swap;
+}
+
 @font-face {
   font-family: "Open Sans";
   src:
