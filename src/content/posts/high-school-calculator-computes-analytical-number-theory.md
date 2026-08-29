@@ -29,7 +29,7 @@ $Z(x)$ is an "is this an integer" detector, built entirely out of trigonometry a
 
 $$d(x,y) = Z(y) \cdot Z\!\left(\frac{x}{y}\right)$$
 
-This says: $y$ is an integer, *and* $x/y$ is an integer. If both hold, $y$ divides $x$ cleanly. We just built a divisibility test without a single modulo operator. Interestingly, a third factor, $Z(x)$, is unnecessary. If $y$ and $x/y$ are both integers, $x = y \cdot (x/y)$ has to be too because an integer times another integer is just an integer.
+This says: $y$ is an integer, *and* $x/y$ is an integer. If both hold, $y$ divides $x$ cleanly. We just built a divisibility test without a single modulo operator. Interestingly, a third factor, $Z(x)$, is unnecessary. If $y$ and $x/y$ are both integers, $x = y \cdot (x/y)$ has to be an integer too.
 
 ## How Many?
 
