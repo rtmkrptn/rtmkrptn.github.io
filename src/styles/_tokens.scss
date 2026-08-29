@@ -242,6 +242,9 @@
 
   /* ============ Interaction ============ */
   --tap-target-min: 44px;
+  /* Glyph size inside a social link's tap target — must match the size prop
+     BrandIcon is given on the home page. */
+  --social-icon-size: 18px;
   /* Measured: 32px wrapper padding + 44px segment + 2px border */
   --desktop-nav-height: 78px;
   /* Same pill, tighter padding below 768px — see DesktopNav's compact block. */

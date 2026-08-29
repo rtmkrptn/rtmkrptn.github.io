@@ -100,28 +100,55 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
     drop below the name rather than squeezing it.
   */
   .hero-identity {
+    /*
+      A social link is a 44px tap target around an 18px glyph, so its box
+      overhangs the glyph by 13px on every side. Pulling the row left by that
+      overhang puts the first icon's glyph on the name's left edge instead of
+      13px inside it — which is what "aligned" means to the eye. The gap gets
+      the same amount back, so the spacing beside the name is unchanged.
+    */
+    --social-tap-inset: calc((var(--tap-target-min) - var(--social-icon-size)) / 2);
+
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    column-gap: var(--space-7);
+    column-gap: calc(var(--space-7) + var(--social-tap-inset));
     row-gap: var(--space-2);
   }
 
   .social-row {
     display: flex;
     gap: var(--space-2);
-    /*
-      .social-link is a 44px tap target around an 18px glyph, so the row is far
-      taller than the icons look; these negative margins collapse that back.
+    margin-left: calc(-1 * var(--social-tap-inset));
 
-      They are asymmetric on purpose. Centring on the flex line puts the icons
-      on the name's cap-height centre, but the name's visual mass sits in the
-      lowercase x-height band, which is lower — so true centring reads as
-      riding high. The extra 4px on top drops them onto the text's optical
-      centre. Margins still sum to -16px, so the line's height is unchanged.
+    /*
+      Centring on the flex line puts the icons on the name's cap-height centre,
+      but the name's visual mass sits lower, in the x-height band, so true
+      centring reads as riding high. This drops them onto the text's optical
+      centre.
+
+      A relative offset rather than the negative margins this used to carry:
+      margins shrink the box the icons sit in, which is invisible while the row
+      shares a line with the name but pulls the tagline up into it once the row
+      wraps onto its own line — the identity block lost 16px on a phone, and
+      the tagline ended up 8px inside the icons. A relative offset moves what
+      you see without moving what anything else is positioned against.
     */
-    margin-top: calc(var(--space-1) - var(--space-2));
-    margin-bottom: calc(-1 * var(--space-1) - var(--space-2));
+    position: relative;
+    /*
+      Flexbox centres the margin box, so the margin-bottom below shifts the
+      icons up by half of it. The nudge carries that back, keeping the glyphs
+      the same 4px under the name's centre they were tuned to.
+    */
+    top: calc(var(--space-1) + var(--space-1) / 2);
+
+    /*
+      Breathing room before the tagline, which was the tightest gap in the hero
+      once the row wrapped onto its own line. Beside the name this costs
+      nothing: the row is 44px against the name's 48px line box, so 4px of
+      margin is absorbed by slack that is already there.
+    */
+    margin-bottom: var(--space-1);
   }
 
   .social-link {
