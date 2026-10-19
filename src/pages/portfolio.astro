@@ -102,16 +102,19 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   .pf-card {
     width: 100%;
-    max-width: 340px;
+    max-width: 320px;
     display: flex;
     flex-direction: column;
-    align-items: center;
     text-align: center;
-    gap: var(--space-4);
+  }
+
+  /* Even padding on all four sides; beats .panel's regardless of load order. */
+  #pf-gate .pf-card {
+    padding: var(--space-7);
   }
 
   .pf-sub {
-    margin: 0;
+    margin: 0 0 var(--space-5) 0;
     font-family: var(--font-ui);
     font-size: var(--font-size-small);
     color: var(--color-text-secondary);
@@ -119,22 +122,40 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   .pf-field {
     width: 100%;
+    margin: 0 0 var(--space-4) 0;
   }
 
   #pf-gate .btn {
     width: 100%;
   }
 
-  /* Reserve the line so a wrong-password message does not shift the card. */
+  /*
+    No reserved height. The message is the last element in the card, so showing
+    it grows the card downward rather than shifting the controls, and when it is
+    empty it collapses completely — which is what keeps the resting card
+    symmetric top-to-bottom instead of carrying dead space under the button.
+  */
   .pf-error {
-    min-height: 1.25em;
-    margin: 0;
+    margin: var(--space-3) 0 0 0;
     font-family: var(--font-ui);
     font-size: var(--font-size-small);
     color: var(--red-glossy-dark);
   }
   .pf-error:empty {
-    visibility: hidden;
+    margin: 0;
+  }
+
+  /*
+    Wrong password turns the field itself red — border and focus ring, not only
+    the message below. Cleared the instant the visitor edits the field; see the
+    input handler in the script.
+  */
+  .pf-card.is-wrong .input {
+    border-color: var(--red-glossy-dark);
+  }
+  .pf-card.is-wrong .input:focus-visible,
+  .pf-card.is-wrong .input:focus {
+    outline-color: var(--red-glossy);
   }
 
   .pf-card.is-wrong {
@@ -253,9 +274,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     input?.select();
   }
 
-  // Clear the error as soon as the visitor edits the field.
+  // Clear the error — message and the red field — as soon as the visitor edits.
   input?.addEventListener("input", () => {
     if (error) error.textContent = "";
+    card?.classList.remove("is-wrong");
   });
 
   form?.addEventListener("submit", async (event) => {
