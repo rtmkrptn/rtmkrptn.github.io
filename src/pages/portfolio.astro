@@ -23,18 +23,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
 <BaseLayout title="Portfolio" description="Private.">
   <meta slot="head" name="robots" content="noindex, nofollow" />
-  {/* Reveal an already-unlocked session before first paint, so a returning
-      visitor never sees the gate flash. Runs in <head>, before <body> parses. */}
-  <script is:inline slot="head">
-    try {
-      if (sessionStorage.getItem("pf-unlocked") === "1") {
-        document.documentElement.classList.add("is-unlocked");
-      }
-    } catch (e) {
-      /* private mode / blocked storage — fall through to the locked gate */
-    }
-  </script>
-
   {/* ========================= Lock gate ========================= */}
   <section id="pf-gate" class="pf-gate" aria-label="Password required">
     <form id="pf-form" class="pf-card panel" novalidate>
@@ -333,8 +321,13 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     outline: none;
   }
 
+  /* A raised white sheet like the article pages — the content sits on a
+     surface over the page's grey ground, not directly on it. */
   .pf-content {
-    padding-block: var(--space-section-mobile);
+    min-height: 100vh;
+    min-height: 100svh;
+    background: var(--gradient-surface);
+    padding-block: var(--space-8);
   }
 
   html.is-unlocked .pf-content {
@@ -443,7 +436,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   @media (min-width: 768px) {
     .pf-content {
-      padding-block: var(--space-section-desktop);
+      max-width: 1180px;
+      margin-inline: auto;
+      border-inline: var(--border-hairline-width) solid var(--color-hairline);
+      box-shadow: var(--shadow-panel);
+      padding-block: var(--space-10);
     }
   }
 
@@ -507,15 +504,10 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
   }
 
-  function unlock(persist: boolean) {
+  // Reveals the content for this view only. Nothing is persisted, so every load
+  // — a reload included — starts locked and asks for the password again.
+  function unlock() {
     root.classList.add("is-unlocked");
-    if (persist) {
-      try {
-        sessionStorage.setItem("pf-unlocked", "1");
-      } catch (e) {
-        /* storage blocked — the page stays unlocked for this view regardless */
-      }
-    }
     // Move focus into the revealed content so keyboard users land in the page.
     content?.focus();
   }
@@ -544,7 +536,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     try {
       const hex = await sha256Hex(value);
       if (hex === DIGEST) {
-        unlock(true);
+        unlock();
       } else {
         reject();
       }
@@ -556,7 +548,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     }
   });
 
-  // Focus the field on load when still locked (autofocus does not fire for
-  // elements that scripts may have hidden, and skips an already-unlocked view).
-  if (!root.classList.contains("is-unlocked")) input?.focus();
+  // The page always loads locked now, so focus the field for immediate typing.
+  input?.focus();
 </script>
