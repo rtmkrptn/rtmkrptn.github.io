@@ -101,6 +101,7 @@ import DesktopNav from "../components/DesktopNav.astro";
 
       <section class="cv-section" aria-labelledby="cv-work">
         <h2 id="cv-work" class="cv-h">What I have built</h2>
+
         <div class="cv-item">
           <div class="cv-row">
             <h3>Discrete Layer Algebra</h3>
@@ -108,7 +109,8 @@ import DesktopNav from "../components/DesktopNav.astro";
           </div>
           <p>
             An original algebraic theory of oriented, transparent, stacked layers, machine-verified in Lean 4.
-            Begun from my own intuition about rotation of complex numbers and developed over many months.
+            Begun in winter 2026 from my own intuition about rotation of complex numbers and developed over many months,
+            on breaks and in free periods. I taught myself group theory and Lean 4 to formalise it.
           </p>
           <ul class="cv-list">
             <li>
@@ -126,10 +128,26 @@ import DesktopNav from "../components/DesktopNav.astro";
             </li>
             <li>All results are formally proven in Lean 4, not argued informally.</li>
             <li>
-              External review: Prof. Nathan Carter (Bentley University, author of <em>Visual Group Theory</em>)
-              confirmed the formalisation contained no mathematical errors and proposed extending it to continuous blend modes.
+              External review: I sent an early version of the paper to Prof. Nathan Carter (Bentley University, author of
+              <em>Visual Group Theory</em>). On a first reading he replied that it had “absolutely zero typos, grammar
+              mistakes, or mathematical errors” and accurately captured the ideas. He suggested extending it to
+              sliding-scale transparency (blend modes). The theory has developed since that version.
+            </li>
+            <li>
+              Mentor: Mikhail Goubko, informally, as a research guide on what to read and where to tighten or expand.
+              The paper is in final edits; an arXiv preprint will follow.
             </li>
           </ul>
+          <figure class="cv-media">
+            <img src="/portfolio/layer-structure-map.png" alt="Map of the structures in the theory: layers, canvases, and the maps between them" width="2000" height="1097" loading="lazy" decoding="async" />
+          </figure>
+          <figure class="cv-media">
+            <img src="/portfolio/layer-overdraw.png" alt="Two canvases A and B and their override A ⊔ B" width="2000" height="654" loading="lazy" decoding="async" />
+          </figure>
+          <div class="cv-grid cv-grid-fit">
+            <img src="/portfolio/layer-d4-orbit.png" alt="The orbit of a picture under the dihedral group D4" width="2000" height="1089" loading="lazy" decoding="async" />
+            <img src="/portfolio/layer-operations.png" alt="Two pictures A and B with A ⊔ B, A − B and A ⊗ B" width="2000" height="1437" loading="lazy" decoding="async" />
+          </div>
           <p class="cv-note">
             Authorship, disclosed: conceived and directed by me, developed with AI assistance, and credited as
             “Artemii Karapetian and Anthropic”. I supplied the idea and direction and judged and corrected the formal content.
@@ -139,39 +157,37 @@ import DesktopNav from "../components/DesktopNav.astro";
             <a href="https://rtmkrptn.github.io/discrete-layer-algebra">Interactive demo</a>
           </p>
         </div>
+
         <div class="cv-item">
           <div class="cv-row">
             <h3>Smooth fractal explorer</h3>
             <a class="cv-when" href="https://rtmkrptn.github.io/make-your-fractal">Live</a>
           </div>
-          <p>Recursion over complex numbers with automatic differentiation via dual numbers. Built with AI assistance.</p>
-        </div>
-        <div class="cv-item">
-          <div class="cv-row">
-            <h3>Layer algebra demo</h3>
-            <a class="cv-when" href="https://rtmkrptn.github.io/discrete-layer-algebra">Live</a>
+          <p>
+            An interactive Julia and Mandelbrot explorer where you write the iteration formula yourself (z² + c,
+            sin(z)·w + c, and so on), drag the Julia constant c, set the iteration count and palette, zoom and pan
+            smoothly, and export a PNG. Recursion over complex numbers with automatic differentiation via dual numbers.
+            Built with AI assistance.
+          </p>
+          <figure class="cv-media">
+            <video
+              src="/portfolio/fractal-explorer.mp4"
+              poster="/portfolio/fractal-explorer-poster.jpg"
+              aria-label="Screen recording of the fractal explorer in use"
+              muted
+              loop
+              playsinline
+              autoplay
+              preload="metadata"></video>
+          </figure>
+          <div class="cv-grid">
+            <img src="/portfolio/fractal-explorer-1.jpg" alt="Fractal render" width="1600" height="1187" loading="lazy" decoding="async" />
+            <img src="/portfolio/fractal-explorer-2.jpg" alt="Fractal render" width="1600" height="1032" loading="lazy" decoding="async" />
+            <img src="/portfolio/fractal-explorer-3.jpg" alt="Fractal render" width="1600" height="1032" loading="lazy" decoding="async" />
+            <img src="/portfolio/fractal-explorer-4.jpg" alt="Fractal render" width="1600" height="1032" loading="lazy" decoding="async" />
           </div>
-          <p>Applies the research above: a puzzle solved by greedy best-first search in the space of layers. Built with AI assistance.</p>
         </div>
-        <div class="cv-item">
-          <div class="cv-row">
-            <h3>Mathematical modelling</h3>
-            <a class="cv-when" href="https://github.com/rtmkrptn/cool-math-things">Repository</a>
-          </div>
-          <p>Monte Carlo simulations, an Euler-method ODE solver and a few machine-learning algorithms.</p>
-        </div>
-        <div class="cv-item">
-          <div class="cv-row">
-            <h3>XOR neural network</h3>
-          </div>
-          <p>Built and trained by hand in NumPy to learn the fundamentals of backpropagation.</p>
-        </div>
-        <div class="cv-item">
-          <div class="cv-row">
-            <h3>Desmos</h3>
-          </div>
-          <p>Recreational mathematics: complex numbers, linear maps, random variables, number theory.</p>
-        </div>
+
         <div class="cv-item">
           <div class="cv-row">
             <h3>Non-random sampling in small local communities</h3>
@@ -190,32 +206,93 @@ import DesktopNav from "../components/DesktopNav.astro";
             optimality theorem guarantees low variance, not proximity to a reference.
           </p>
         </div>
+
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>Minecraft reinforcement-learning agent</h3>
+            <span class="cv-when">Fabric mod, Java</span>
+          </div>
+          <p>
+            A working Fabric mod for Minecraft 1.20.1 that spawns a learning bot driven by continual (lifetime)
+            reinforcement learning with internal behaviour state. It runs in-game and logs the agent’s live state:
+            steps, HP and a “panic” signal. Written directly in Java.
+          </p>
+          <figure class="cv-media">
+            <video
+              src="/portfolio/minecraft-rl.mp4"
+              poster="/portfolio/minecraft-rl-poster.jpg"
+              aria-label="Screen recording of the mod running in Minecraft"
+              muted
+              loop
+              playsinline
+              autoplay
+              preload="metadata"></video>
+          </figure>
+        </div>
+
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>Stochastic market simulator</h3>
+            <span class="cv-when">Desmos</span>
+          </div>
+          <p>
+            A geometric Brownian motion price path, pₜ = pₜ₋₁·exp(drift + Gaussian shock), with regime-switching drift
+            and volatility, and an N-day moving average of returns plotted beneath. Regimes are shaded: green for an
+            uptrend, red for a downtrend and blue for a crisis, when volatility spikes and the returns average swings
+            far more. Animated step by step with Desmos’s tick action.
+          </p>
+          <figure class="cv-media">
+            <img src="/portfolio/financial-model.jpg" alt="The market simulator in Desmos, with shaded regimes" width="1568" height="780" loading="lazy" decoding="async" />
+          </figure>
+          <p class="cv-links">
+            <a href="https://www.desmos.com/calculator/zjskflmhw4">Simulator</a>
+            <a href="https://www.desmos.com/calculator/lsyjzxch4f">Multi-regime variant</a>
+          </p>
+        </div>
+
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>p-trigonometry</h3>
+            <a class="cv-when" href="https://www.desmos.com/calculator/rbxouw3cyk">Desmos</a>
+          </div>
+          <p>
+            Trigonometry generalised to the Lₚ unit circle: sine- and cosine-like functions defined as the coordinates
+            of a point traversing the p-norm unit “circle” (a squircle when p &gt; 2), with the complex-plane
+            construction cos x + i·sin x and the rounded, flattened waves that result. Recreational mathematics on how
+            trigonometry changes when the norm does.
+          </p>
+        </div>
+
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>Mathematical modelling</h3>
+            <a class="cv-when" href="https://github.com/rtmkrptn/cool-math-things">Repository</a>
+          </div>
+          <p>Monte Carlo simulations, an Euler-method ODE solver and a few machine-learning algorithms.</p>
+        </div>
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>XOR neural network</h3>
+          </div>
+          <p>Built and trained by hand in NumPy, with no framework, to learn backpropagation from first principles.</p>
+        </div>
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>Recreational Desmos</h3>
+          </div>
+          <p>Complex numbers, linear maps, random variables, number theory.</p>
+        </div>
+      </section>
+
+      <section class="cv-section" aria-labelledby="cv-writing">
+        <h2 id="cv-writing" class="cv-h">Writing</h2>
         <div class="cv-item">
           <div class="cv-row">
             <h3>A prime-generating function without <code>if</code>, <code>mod</code> or <code>gcd</code></h3>
             <a class="cv-when" href="https://rtmkrptn.github.io/posts/high-school-calculator-computes-analytical-number-theory">Blog post</a>
           </div>
+          <p>Analytic number theory on a graphing calculator.</p>
         </div>
-        <p class="cv-note">
-          Skills: I write Python (NumPy) and LaTeX myself, and direct AI-assisted development in TypeScript,
-          WebGL2/GLSL and Lean 4.
-        </p>
-      </section>
-
-      <section class="cv-section" aria-labelledby="cv-study">
-        <h2 id="cv-study" class="cv-h">Self-directed learning</h2>
-        <ul class="cv-list">
-          <li>
-            <strong>DelftX Probability Theory</strong> (online), taken ahead of the Year 12 syllabus: random variables,
-            and the notation and limitations of the Poisson, Bernoulli and Binomial distributions.
-          </li>
-          <li><strong>deep-ml.com</strong>, calculus for ML: 22 problems solved.</li>
-          <li>
-            <strong>Textbooks:</strong> Herstein, <em>Topics in Algebra</em>; Vinberg (algebra); Feder, <em>Fractals</em>;
-            Stewart (multivariable calculus); <em>Statistics: A Very Short Introduction</em>.
-          </li>
-          <li><strong>UX/UI design:</strong> a one-year, 490-hour online course (2023) on user psychology, cognition and prototyping software logic.</li>
-        </ul>
       </section>
 
       <section class="cv-section" aria-labelledby="cv-edu">
@@ -249,12 +326,36 @@ import DesktopNav from "../components/DesktopNav.astro";
           </div>
           <p class="cv-sub">IELTS 7.5</p>
         </div>
-              <div class="cv-item">
+        <div class="cv-item">
           <div class="cv-row">
             <h3>Senior UKMT (UK Mathematics Trust)</h3>
             <span class="cv-when">2025, 2026</span>
           </div>
         </div>
+      </section>
+
+      <section class="cv-section" aria-labelledby="cv-skills">
+        <h2 id="cv-skills" class="cv-h">Technical skills</h2>
+        <p>
+          I write Python (NumPy) and LaTeX myself, and direct AI-assisted development in TypeScript,
+          WebGL2/GLSL and Lean 4.
+        </p>
+      </section>
+
+      <section class="cv-section" aria-labelledby="cv-study">
+        <h2 id="cv-study" class="cv-h">Self-directed learning</h2>
+        <ul class="cv-list">
+          <li>
+            <strong>DelftX Probability Theory</strong> (online), taken ahead of the Year 12 syllabus: random variables,
+            and the notation and limitations of the Poisson, Bernoulli and Binomial distributions.
+          </li>
+          <li><strong>deep-ml.com</strong>, calculus for ML: 22 problems solved.</li>
+          <li>
+            <strong>Textbooks:</strong> Herstein, <em>Topics in Algebra</em>; Vinberg (algebra); Feder, <em>Fractals</em>;
+            Stewart (multivariable calculus); <em>Statistics: A Very Short Introduction</em>.
+          </li>
+          <li><strong>UX/UI design:</strong> a one-year, 490-hour online course (2023) on user psychology, cognition and prototyping software logic.</li>
+        </ul>
       </section>
 
       <section class="cv-section" aria-labelledby="cv-more">
@@ -454,6 +555,37 @@ import DesktopNav from "../components/DesktopNav.astro";
     color: var(--color-text);
   }
 
+  .cv-media {
+    margin: var(--space-4) 0 0;
+  }
+  .cv-media video,
+  .cv-media img,
+  .cv-grid img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    border: var(--border-hairline-width) solid var(--color-hairline);
+    background: var(--color-separator);
+  }
+  .cv-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+  }
+  .cv-grid img {
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+  }
+  .cv-grid-fit {
+    align-items: center;
+  }
+  .cv-grid-fit img {
+    aspect-ratio: auto;
+    object-fit: contain;
+  }
+
   @media print {
     .cv-section {
       break-inside: avoid;
@@ -580,6 +712,15 @@ import DesktopNav from "../components/DesktopNav.astro";
       reject();
     }
   });
+
+  // Screen recordings loop silently; with reduced motion they wait for a click instead.
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    document.querySelectorAll<HTMLVideoElement>(".cv-media video").forEach((v) => {
+      v.autoplay = false;
+      v.pause();
+      v.controls = true;
+    });
+  }
 
   // The page always loads locked now, so focus the field for immediate typing.
   input?.focus();
