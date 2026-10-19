@@ -88,8 +88,8 @@ import DesktopNav from "../components/DesktopNav.astro";
       <header class="cv-head">
         <h1 class="text-letterpress">Artemii Karapetian</h1>
         <p class="cv-lede">
-          I build mathematical theory and the software that makes it real: a Lean 4 verified algebraic theory,
-          a fractal sandbox, an AI agent inside Minecraft, statistical research.
+          I build mathematical theory and the software that makes it real: a Lean 4–verified algebraic theory,
+          a fractal sandbox, an AI agent inside Minecraft, and statistical research.
         </p>
         <p class="cv-meta">
           Athens, Greece ·
@@ -103,7 +103,7 @@ import DesktopNav from "../components/DesktopNav.astro";
 
         <div class="cv-item">
           <div class="cv-row">
-            <h3>Algebraic theory of oriented transparent layers</h3>
+            <h3>Algebraic theory of oriented, transparent layers</h3>
           </div>
           <figure class="cv-media cv-media-lead">
             <img src="/portfolio/layer-structure-map.png" alt="Map of the structures in the theory: layers, canvases, and the maps between them" width="2000" height="1097" loading="lazy" decoding="async" />
@@ -111,47 +111,45 @@ import DesktopNav from "../components/DesktopNav.astro";
           <p>
             An algebraic theory of oriented, transparent layers verified in Lean 4. Started in winter 2026 from my
             intuition about rotation of complex numbers and developed over many months. I have committed to it and
-            spent my breaks and free periods to develop it. Along the way, I taught myself abstract algebra to develop
+            spent my breaks and free periods developing it. Along the way, I taught myself abstract algebra to develop
             my ideas.
           </p>
           <p>
             My interest arose from the meeting of two operations with different natures: an
             override<sup><a href="https://www.sciencedirect.com/science/article/pii/S0022404920302334" target="_blank" rel="noopener noreferrer">[1]</a></sup> and a
             permutation. Override is lossy, while permutations are by design bijective and preserve all the data. In
-            simpler terms, my research investigates how these two operations work together with respect to an image.
+            simpler terms, my research investigates how these two operations work together with respect to images and their stacking.
           </p>
           <figure class="cv-media">
             <img src="/portfolio/layer-overdraw.png" alt="Two canvases A and B and their override A ⊔ B" width="2000" height="654" loading="lazy" decoding="async" />
           </figure>
-          <ul class="cv-list">
-            <li>
-              A canvas is a partial function P → F⊥ with a lossy override operator ⊔ (a left regular band with identity);
-              position permutation is a lossless group action.
-            </li>
-            <li>
-              A layer is a pair (canvas M, state g ∈ G), with g acting on positions through φ: G → Perm(P).
-              Rendering loses exactly the state; stacking discards states and gives a semigroup without identity
-              when G is non-trivial.
-            </li>
-            <li>
-              Further results: a quotient isomorphic to a monoid of pictures, inflation and automorphism results,
-              and D4 acting on the square.
-            </li>
-            <li>All results are formally proven in Lean 4, not argued informally.</li>
-            <li>
-              External review: I sent an early version of the paper to Prof. Nathan Carter (Bentley University, author of
-              <em>Visual Group Theory</em>). On a first reading he replied that it had “absolutely zero typos, grammar
-              mistakes, or mathematical errors” and accurately captured the ideas. He suggested extending it to
-              sliding-scale transparency (blend modes). The theory has developed since that version.
-            </li>
-            <li>
-              Mentor: Mikhail Goubko, informally, as a research guide on what to read and where to tighten or expand.
-              The paper is in final edits; an arXiv preprint will follow.
-            </li>
-          </ul>
+          <p>
+            A picture is a function from positions to colors and a transparent element. Overriding two pictures means
+            stacking one on top of the other. A layer is a pair of a picture and a lossless symmetry action (e.g.,
+            rotating a picture by 90°).
+          </p>
+          <p>
+            In plain English, here is what is proven. When a layer can be turned in more than one way, stacking layers
+            has no “do-nothing” element and no inverses.
+          </p>
+          <p>
+            If all layers that show the same picture are considered as one object, a “do-nothing” element appears. The
+            price for that is that it discards everything about layers up to visual equality, so it behaves exactly like
+            pictures under override.
+          </p>
+          <p>
+            In a finite case, the number of ways to rename all layers such that stacking works as before is
+            ((|G| − 1)!)<sup>|Canvas|</sup> · |Aut(Canvas, ⊔)|.
+          </p>
+          <p>
+            I sent an early version of the paper to Prof. Nathan Carter (Bentley University, author of
+            <em>Visual Group Theory</em>). On a first reading he replied that it had “absolutely zero typos, grammar
+            mistakes, or mathematical errors” and accurately captured the ideas. He suggested extending it to
+            sliding-scale transparency (blend modes). The theory has developed since that version.
+          </p>
           <p class="cv-note">
-            Authorship, disclosed: conceived and directed by me, developed with AI assistance, and credited as
-            “Artemii Karapetian and Anthropic”. I supplied the idea and direction and judged and corrected the formal content.
+            Authorship disclosure: conceived and directed by me, developed with AI assistance, and credited as
+            “Artemii Karapetian and Anthropic.” I supplied the idea and direction and judged and corrected the formal content.
           </p>
           <figure class="cv-media">
             <img src="/portfolio/layer-d4-orbit.png" alt="The orbit of a picture under the dihedral group D4" width="2000" height="1089" loading="lazy" decoding="async" />
@@ -164,8 +162,8 @@ import DesktopNav from "../components/DesktopNav.astro";
           </p>
           <figure class="cv-media">
             <video
-              src="/portfolio/layer-demo.mp4"
-              poster="/portfolio/layer-demo-poster.jpg"
+              src="/portfolio/layer-demo-tight.mp4"
+              poster="/portfolio/layer-demo-tight-poster.jpg"
               aria-label="Screen recording of the puzzle solver finding a stack of tiles"
               muted
               loop
@@ -221,7 +219,7 @@ import DesktopNav from "../components/DesktopNav.astro";
             drawing the samples.
           </p>
           <p>
-            Both sub-hypotheses were falsified, for the same structural reason: each rested on an untested assumption.
+            Both sub-hypotheses were falsified for the same structural reason: each rested on an untested assumption.
             I expected quota sampling to distort the estimate most because its gender quota was unbalanced, but gender
             proved independent of opinion. I expected Neyman allocation to sit closest to the baseline, but its
             optimality theorem guarantees low variance, not proximity to a reference.
@@ -234,7 +232,7 @@ import DesktopNav from "../components/DesktopNav.astro";
           </div>
           <p>
             A working Fabric mod for Minecraft 1.20.1 that spawns a learning bot driven by continual (lifetime)
-            reinforcement learning with internal behaviour state. It runs in-game and logs the agent’s live state:
+            reinforcement learning with internal behavior state. It runs in-game and logs the agent’s live state:
             steps, HP and a “panic” signal. Written directly in Java.
           </p>
           <figure class="cv-media">
@@ -274,7 +272,7 @@ import DesktopNav from "../components/DesktopNav.astro";
             <h3>p-trigonometry</h3>
           </div>
           <p>
-            Trigonometry generalised to the Lₚ unit circle: sine- and cosine-like functions defined as the coordinates
+            Trigonometry generalized to the Lₚ unit circle: sine- and cosine-like functions defined as the coordinates
             of a point traversing the p-norm unit “circle” (a squircle when p &gt; 2), with the complex-plane
             construction cos x + i·sin x and the rounded, flattened waves that result. Recreational mathematics on how
             trigonometry changes when the norm does.
@@ -289,7 +287,7 @@ import DesktopNav from "../components/DesktopNav.astro";
 
         <div class="cv-item">
           <div class="cv-row">
-            <h3>Mathematical modelling</h3>
+            <h3>Mathematical modeling</h3>
           </div>
           <p>Monte Carlo simulations, an Euler-method ODE solver and a few machine-learning algorithms.</p>
           <p class="cv-links">
@@ -370,7 +368,7 @@ import DesktopNav from "../components/DesktopNav.astro";
         <h2 id="cv-study" class="cv-h">Self-directed learning</h2>
         <ul class="cv-list">
           <li>
-            DelftX Probability Theory (online), taken ahead of the Year 12 syllabus: random variables,
+            DelftX Probability Theory (online), taken ahead of the Year 12 syllabus: random variables
             and the notation and limitations of the Poisson, Bernoulli and Binomial distributions.
           </li>
           <li>deep-ml.com, calculus for ML: 22 problems solved.</li>
