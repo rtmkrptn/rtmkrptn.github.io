@@ -470,80 +470,54 @@ import DesktopNav from "../components/DesktopNav.astro";
 
   /* ---- CV ---- */
   /*
-    Type and rhythm for a long reading page. Scale (mobile / desktop):
-      h2 28 / 36 · h3 22 / 26 · body 17 / 19 (site) · secondary 16 · line-height 1.65.
-    Secondary lines are 16px, not the site's 13px chrome size, which read as tiny
-    beside the body copy. Spacing is a 2:1 ladder so the structure reads from air
-    alone: 80/112px between sections, 48/56px between items inside one, and
-    tighter steps (12 title→text, 16 text→links, 24 text→figure) inside an item.
+    Same type and rhythm as the article pages (prose.scss): 16/18px text, the
+    site's own h2/h3 sizes, 24px between blocks, 8px between list items, 48px
+    above a heading. Secondary lines sit one step below the text.
   */
   .cv {
-    --cv-small: 16px;
-    --cv-gap-section: 80px;
-    --cv-gap-item: 48px;
-    --cv-gap-heading: 28px;
+    font-size: var(--font-size-prose-mobile);
+    --cv-small: 14px;
   }
-  .cv .cv-h {
-    font-size: 28px;
-    line-height: 1.15;
-    text-wrap: balance;
-  }
+  .cv h2,
   .cv h3 {
-    font-size: 22px;
-    line-height: 1.25;
-    text-wrap: balance;
-  }
-  .cv p,
-  .cv-list li {
-    line-height: 1.65;
+    font-weight: var(--font-weight-light);
+    letter-spacing: var(--letter-spacing-display);
   }
   @media (min-width: 768px) {
     .cv {
-      --cv-gap-section: 112px;
-      --cv-gap-item: 56px;
-      --cv-gap-heading: 36px;
-    }
-    .cv .cv-h {
-      font-size: 36px;
-    }
-    .cv h3 {
-      font-size: 26px;
+      font-size: var(--font-size-prose-desktop);
+      --cv-small: 16px;
     }
   }
   .cv-head {
-    margin-bottom: var(--cv-gap-section);
+    margin-bottom: var(--space-10);
   }
   .cv-lede {
-    margin: var(--space-4) 0 0;
-    font-size: 21px;
-    line-height: 1.5;
+    margin: var(--space-3) 0 0;
     color: var(--color-text-secondary);
   }
   .cv-meta {
-    margin: var(--space-5) 0 0;
+    margin: var(--space-4) 0 0;
     font-family: var(--font-ui);
     font-size: var(--cv-small);
     color: var(--color-text-secondary);
   }
   /* Air carries the structure, not rules or boxes. */
   .cv-section {
-    margin-bottom: var(--cv-gap-section);
+    margin-bottom: var(--space-10);
   }
   .cv-h {
-    margin-bottom: var(--cv-gap-heading);
+    margin-bottom: var(--space-6);
   }
   .cv-item {
-    margin-bottom: var(--cv-gap-item);
+    margin-bottom: var(--space-9);
   }
   .cv-item:last-child {
     margin-bottom: 0;
   }
   .cv-item p,
   .cv-list {
-    margin: var(--space-3) 0 0;
-  }
-  .cv-item p + p {
-    margin-top: var(--space-4);
+    margin: var(--space-4) 0 0;
   }
   .cv-row {
     display: flex;
@@ -569,10 +543,7 @@ import DesktopNav from "../components/DesktopNav.astro";
     list-style: disc;
   }
   .cv-list li + li {
-    margin-top: var(--space-3);
-  }
-  .cv-note {
-    line-height: 1.55;
+    margin-top: var(--space-2);
   }
   .cv-links {
     display: flex;
@@ -605,7 +576,7 @@ import DesktopNav from "../components/DesktopNav.astro";
     margin: var(--space-6) 0 0;
   }
   .cv-media-lead {
-    margin: var(--space-4) 0 var(--space-5);
+    margin: var(--space-4) 0 var(--space-6);
   }
   .cv-media video,
   .cv-media img,
