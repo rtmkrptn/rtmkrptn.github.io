@@ -108,9 +108,6 @@ import DesktopNav from "../components/DesktopNav.astro";
           <figure class="cv-media cv-media-lead">
             <img src="/portfolio/layer-structure-map.png" alt="Map of the structures in the theory: layers, canvases, and the maps between them" width="2000" height="1097" loading="lazy" decoding="async" />
           </figure>
-          <figure class="cv-media">
-            <img src="/portfolio/layer-overdraw.png" alt="Two canvases A and B and their override A ⊔ B" width="2000" height="654" loading="lazy" decoding="async" />
-          </figure>
           <p>
             An algebraic theory of oriented, transparent layers verified in Lean 4. Started in winter 2026 from my
             intuition about rotation of complex numbers and developed over many months. I have committed to it and
@@ -119,10 +116,13 @@ import DesktopNav from "../components/DesktopNav.astro";
           </p>
           <p>
             My interest arose from the meeting of two operations with different natures: an
-            override<a href="https://www.sciencedirect.com/science/article/pii/S0022404920302334">[1]</a> and a
+            override<sup><a href="https://www.sciencedirect.com/science/article/pii/S0022404920302334" target="_blank" rel="noopener noreferrer">[1]</a></sup> and a
             permutation. Override is lossy, while permutations are by design bijective and preserve all the data. In
             simpler terms, my research investigates how these two operations work together with respect to an image.
           </p>
+          <figure class="cv-media">
+            <img src="/portfolio/layer-overdraw.png" alt="Two canvases A and B and their override A ⊔ B" width="2000" height="654" loading="lazy" decoding="async" />
+          </figure>
           <ul class="cv-list">
             <li>
               A canvas is a partial function P → F⊥ with a lossy override operator ⊔ (a left regular band with identity);
@@ -596,6 +596,9 @@ import DesktopNav from "../components/DesktopNav.astro";
     color: var(--color-text);
   }
 
+  .cv sup {
+    line-height: 0;
+  }
   .cv-media {
     margin: var(--space-6) 0 0;
   }
