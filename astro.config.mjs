@@ -15,9 +15,9 @@ export default defineConfig({
   base: '/',
   integrations: [
     mdx(),
-    // /styleguide is an internal reference and /portfolio is a private,
-    // password-gated page — keep both out of the sitemap so search engines are
-    // not pointed at them. (/portfolio also carries meta robots noindex.)
+    // /styleguide is an internal reference and /portfolio is an unlisted page
+    // (open to anyone with the link) — keep both out of the sitemap so search
+    // engines are not pointed at them. Both also carry meta robots noindex.
     sitemap({
       filter: (page) => !page.includes('/styleguide') && !page.includes('/portfolio'),
     }),

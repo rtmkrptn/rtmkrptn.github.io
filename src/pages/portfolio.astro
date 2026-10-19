@@ -1,89 +1,30 @@
 ---
 /*
-  Private portfolio page.
+  Portfolio page: open to anyone with the link, but kept out of search.
 
   CV / portfolio content, from the profile dossier.
 
-  Privacy, in two independent layers:
-    1. Search exclusion — <meta robots noindex,nofollow> below, plus this route
-       is filtered out of the sitemap in astro.config.mjs (same as /styleguide).
-       Not linked from anywhere (nav, home, posts), so nothing points a crawler
-       at it either.
-    2. Password gate — a client-side ("for now, js") lock. The entered password
-       is SHA-256'd and compared to a stored digest, so the literal password is
-       not sitting in the source. IMPORTANT: this gates *display*, not *access*.
-       Anything rendered below the gate still ships inside this HTML, so once
-       real content is added, a reader can see it via view-source regardless of
-       the password. Treat this as "keep it out of search + a soft lock"; it is
-       not real access control. For that, the content has to not be sent until
-       the server has authenticated the request.
+  Search exclusion, in two layers: <meta robots noindex,nofollow> below, and this
+  route is filtered out of the sitemap in astro.config.mjs (same as /styleguide).
+  It is linked from the site nav, so a crawler can find it; noindex is what keeps
+  it out of results. (Do not also disallow it in robots.txt — a crawler that is
+  blocked from fetching the page never sees the noindex.)
 */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DesktopNav from "../components/DesktopNav.astro";
 ---
 
-<BaseLayout title="Portfolio" description="Private.">
+<BaseLayout title="Portfolio" description="Artemii Karapetian: portfolio.">
   <meta slot="head" name="robots" content="noindex, nofollow" />
-  {/*
-    Unlock survives in-session navigation but not a refresh. Runs in <head>,
-    before <body> paints, so an already-unlocked page never flashes the gate.
-      - A reload always re-locks (clears the flag), so refreshing asks again.
-      - Any other arrival (a link, back/forward) reveals the content if this tab
-        unlocked it earlier. sessionStorage is per-tab and dies with the tab, so
-        a closed-and-reopened tab starts locked too.
-  */}
-  <script is:inline slot="head">
-    try {
-      var entry = performance.getEntriesByType("navigation")[0];
-      if (entry && entry.type === "reload") {
-        sessionStorage.removeItem("pf-unlocked");
-      } else if (sessionStorage.getItem("pf-unlocked") === "1") {
-        document.documentElement.classList.add("is-unlocked");
-      }
-    } catch (e) {
-      /* blocked storage or no timing API — fall through to the locked gate */
-    }
-  </script>
-  {/* ========================= Lock gate ========================= */}
-  <section id="pf-gate" class="pf-gate" aria-label="Password required">
-    <form id="pf-form" class="pf-card panel" novalidate>
-      <p class="pf-sub">Enter the password to continue.</p>
-
-      <label class="pf-field">
-        <span class="visually-hidden">Password</span>
-        <input
-          id="pf-input"
-          class="input"
-          type="text"
-          name="password"
-          autocomplete="off"
-          autocapitalize="none"
-          autocorrect="off"
-          spellcheck="false"
-          placeholder="Password"
-          autofocus
-        />
-      </label>
-
-      <button id="pf-submit" class="btn" type="submit">Unlock</button>
-
-      <noscript>
-        <p class="pf-sub">This page needs JavaScript to unlock.</p>
-      </noscript>
-    </form>
-  </section>
-
-  {/* The site nav, shown over the gate as well as the unlocked page, so the
-      lock screen itself offers the way out (Home) — no separate back link. A
-      sibling of the content, not a child, so the content's reveal transform
-      never becomes its positioning context. */}
+  {/* The site nav. A sibling of the content, not a child, so it stays positioned
+      against the page rather than the content sheet. */}
   <DesktopNav />
 
-  {/* ===================== Protected content =====================
+  {/* ============================ Content ============================
       Written for The Academy SF (proof of work over grades): what I have built
       comes first, then self-directed learning, then qualifications. Facts are from the profile dossier
       (19 Oct 2026); A2 grades are predicted, not achieved. */}
-  <main id="pf-content" class="pf-content" tabindex="-1" aria-label="Portfolio">
+  <main class="pf-content" aria-label="Portfolio">
     <div class="reading-column cv">
       <header class="cv-head">
         <h1 class="text-letterpress">Artemii Karapetian</h1>
@@ -394,80 +335,7 @@ import DesktopNav from "../components/DesktopNav.astro";
 </BaseLayout>
 
 <style is:global>
-  /* ---- State toggle (class lives on <html>) ---- */
-  #pf-content {
-    display: none;
-  }
-  html.is-unlocked #pf-gate {
-    display: none;
-  }
-  html.is-unlocked #pf-content {
-    display: block;
-  }
-
-  /* ---- Lock gate ---- */
-  #pf-gate.pf-gate {
-    min-height: 100vh;
-    min-height: 100svh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: var(--space-6);
-  }
-
-  .pf-card {
-    width: 100%;
-    max-width: 320px;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-  }
-
-  /* Even padding on all four sides; beats .panel's regardless of load order. */
-  #pf-gate .pf-card {
-    padding: var(--space-7);
-  }
-
-  .pf-sub {
-    margin: 0 0 var(--space-5) 0;
-    font-family: var(--font-ui);
-    font-size: var(--font-size-small);
-    color: var(--color-text-secondary);
-  }
-
-  .pf-field {
-    width: 100%;
-    margin: 0 0 var(--space-4) 0;
-  }
-
-  #pf-gate .btn {
-    width: 100%;
-  }
-
-  /*
-    Wrong password turns the field red — a red ring in place of the blue focus
-    one, plus a red border. There is no text message: the password is either
-    right or wrong, and the red says so on its own. Cleared the instant the
-    field is edited (see the input handler in the script).
-  */
-  .pf-card.is-wrong .input {
-    border-color: var(--red-glossy-dark);
-    box-shadow: var(--shadow-inset-track), 0 0 0 2px var(--red-glossy);
-  }
-  .pf-card.is-wrong .input:focus-visible,
-  .pf-card.is-wrong .input:focus {
-    outline: none;
-  }
-
-  .pf-card.is-wrong {
-    animation: pf-shake var(--duration-fast) var(--ease-standard);
-  }
-
   /* ---- Content ---- */
-  #pf-content:focus {
-    outline: none;
-  }
-
   /* A raised white sheet like the article pages — the content sits on a
      surface over the page's grey ground, not directly on it. The bottom
      padding clears the fixed nav, which sits at the bottom on phones. */
@@ -477,10 +345,6 @@ import DesktopNav from "../components/DesktopNav.astro";
     background: var(--gradient-surface);
     padding-block: var(--space-8)
       calc(var(--nav-height-compact) + var(--space-5) + env(safe-area-inset-bottom, 0px));
-  }
-
-  html.is-unlocked .pf-content {
-    animation: pf-reveal var(--duration-reveal) var(--ease-decelerate);
   }
 
   /* ---- CV ---- */
@@ -655,118 +519,9 @@ import DesktopNav from "../components/DesktopNav.astro";
       padding-block: calc(var(--desktop-nav-height) + var(--space-7)) var(--space-10);
     }
   }
-
-  @keyframes pf-shake {
-    0%,
-    100% {
-      transform: translateX(0);
-    }
-    20% {
-      transform: translateX(-6px);
-    }
-    40% {
-      transform: translateX(6px);
-    }
-    60% {
-      transform: translateX(-4px);
-    }
-    80% {
-      transform: translateX(4px);
-    }
-  }
-
-  @keyframes pf-reveal {
-    from {
-      opacity: 0;
-      transform: translateY(6px);
-    }
-    to {
-      opacity: 1;
-      transform: none;
-    }
-  }
-
-  @media (prefers-reduced-motion: reduce) {
-    .pf-card.is-wrong,
-    html.is-unlocked .pf-content {
-      animation: none;
-    }
-  }
 </style>
 
 <script>
-  /*
-    Client-side gate. The password is never stored in source — only the SHA-256
-    digest of it is, and the entered value is hashed and compared. See the note
-    at the top of this file for why this guards display, not access.
-  */
-  const DIGEST = "1ded682b0c236a7f95479c065ac1a8d400fbcef44ea582d82687d1175c0060c7";
-
-  const root = document.documentElement;
-  const form = document.getElementById("pf-form") as HTMLFormElement | null;
-  const input = document.getElementById("pf-input") as HTMLInputElement | null;
-  // The form element itself carries the .pf-card class, so the wrong-password
-  // state (red field + shake) is toggled directly on it.
-  const card = form;
-  const content = document.getElementById("pf-content");
-
-  async function sha256Hex(text: string): Promise<string> {
-    const bytes = new TextEncoder().encode(text);
-    const digest = await crypto.subtle.digest("SHA-256", bytes);
-    return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
-  }
-
-  // Reveals the content and remembers it for this tab, so navigating around the
-  // site and back does not ask again. A refresh and a closed tab both forget —
-  // see the head script and sessionStorage's per-tab lifetime.
-  function unlock() {
-    root.classList.add("is-unlocked");
-    try {
-      sessionStorage.setItem("pf-unlocked", "1");
-    } catch (e) {
-      /* storage blocked — unlocked for this view regardless */
-    }
-    // Move focus into the revealed content so keyboard users land in the page.
-    content?.focus();
-  }
-
-  function reject() {
-    // The red field plus the shake is the whole message — no text is shown.
-    card?.classList.remove("is-wrong");
-    // Reflow so the animation restarts on repeated wrong attempts.
-    void card?.offsetWidth;
-    card?.classList.add("is-wrong");
-    input?.select();
-  }
-
-  // Clear the red state as soon as the visitor edits the field.
-  input?.addEventListener("input", () => {
-    card?.classList.remove("is-wrong");
-  });
-
-  form?.addEventListener("submit", async (event) => {
-    event.preventDefault();
-    // Trimmed: a stray space from typing or pasting should not read as a wrong password.
-    const value = (input?.value ?? "").trim();
-    if (!value) {
-      reject();
-      return;
-    }
-    try {
-      const hex = await sha256Hex(value);
-      if (hex === DIGEST) {
-        unlock();
-      } else {
-        reject();
-      }
-    } catch (e) {
-      // SubtleCrypto needs a secure context (https or localhost). If it is
-      // unavailable we cannot verify, so treat it as a failed attempt.
-      console.warn("Password check unavailable (needs https):", e);
-      reject();
-    }
-  });
-
   // Screen recordings loop silently; with reduced motion they wait for a click instead.
   if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
     document.querySelectorAll<HTMLVideoElement>(".cv-media video").forEach((v) => {
@@ -775,7 +530,4 @@ import DesktopNav from "../components/DesktopNav.astro";
       v.controls = true;
     });
   }
-
-  // The page always loads locked now, so focus the field for immediate typing.
-  input?.focus();
 </script>
