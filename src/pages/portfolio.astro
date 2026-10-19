@@ -2,7 +2,7 @@
 /*
   Private portfolio page.
 
-  Facilities set up here; the content is intentionally empty (no data yet).
+  CV / portfolio content, from the profile dossier.
 
   Privacy, in two independent layers:
     1. Search exclusion — <meta robots noindex,nofollow> below, plus this route
@@ -49,14 +49,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
           name="password"
           autocomplete="current-password"
           placeholder="Password"
-          aria-describedby="pf-error"
           autofocus
         />
       </label>
 
       <button id="pf-submit" class="btn" type="submit">Unlock</button>
-
-      <p id="pf-error" class="pf-error" role="alert" aria-live="assertive"></p>
 
       <noscript>
         <p class="pf-sub">This page needs JavaScript to unlock.</p>
@@ -65,15 +62,198 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   </section>
 
   {/* ===================== Protected content =====================
-      Intentionally empty — the page and its facilities are set up; the
-      portfolio content is yours to add. Put it inside .reading-column below. */}
+      Ordered by weight: identity, qualifications, flagship research, projects,
+      the EPQ, then the lighter material. Facts are from the profile dossier
+      (19 Oct 2026); A2 grades are predicted, not achieved. */}
   <main id="pf-content" class="pf-content" tabindex="-1" aria-label="Portfolio">
-    <div class="reading-column">
-      <!-- PORTFOLIO CONTENT GOES HERE -->
-      <p class="pf-placeholder" role="note">
-        <span class="kicker">Private · scaffold</span>
-        Portfolio content goes here.
-      </p>
+    <div class="reading-column cv">
+      <header class="cv-head">
+        <h1 class="text-letterpress">Artemii Karapetian</h1>
+        <p class="cv-lede">
+          Applying for BSc Mathematics / Computer Science, September 2027 entry.
+        </p>
+        <p class="cv-meta">
+          Athens, Greece ·
+          <a href="mailto:rtmkrptn@gmail.com">rtmkrptn@gmail.com</a> ·
+          <a href="https://github.com/rtmkrptn">github.com/rtmkrptn</a> ·
+          <a href="https://rtmkrptn.github.io">rtmkrptn.github.io</a>
+        </p>
+      </header>
+
+      <section class="cv-section" aria-labelledby="cv-edu">
+        <h2 id="cv-edu" class="cv-h">Education</h2>
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>Byron College, Athens</h3>
+            <span class="cv-when">2025 – 2027</span>
+          </div>
+          <p class="cv-sub">Pearson Edexcel International A-Level, final year 2026–27 · results August 2027</p>
+          <table class="cv-table">
+            <thead>
+              <tr><th scope="col">Subject</th><th scope="col">AS (achieved)</th><th scope="col">A2 (predicted)</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Mathematics</th><td>A</td><td>A*</td></tr>
+              <tr><th scope="row">Further Mathematics</th><td>A</td><td>A*</td></tr>
+              <tr><th scope="row">Computer Science</th><td>A</td><td>A*</td></tr>
+              <tr><th scope="row">Extended Project (EPQ)</th><td>A</td><td>—</td></tr>
+            </tbody>
+          </table>
+          <p class="cv-note">
+            Predicted grades are school-certified (Byron College, October 2026) and will be sat in June 2027.
+            Mathematics and Further Mathematics cover six distinct units with no overlap.
+          </p>
+        </div>
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>English</h3>
+            <span class="cv-when">June 2026</span>
+          </div>
+          <p class="cv-sub">IELTS 7.5</p>
+        </div>
+      </section>
+
+      <section class="cv-section" aria-labelledby="cv-research">
+        <h2 id="cv-research" class="cv-h">Research</h2>
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>Discrete Layer Algebra</h3>
+            <span class="cv-when">2026</span>
+          </div>
+          <p>
+            An original algebraic theory of oriented, transparent, stacked layers, machine-verified in Lean 4.
+            Begun from my own intuition about rotation of complex numbers and developed over many months.
+          </p>
+          <ul class="cv-list">
+            <li>
+              A canvas is a partial function P → F⊥ with a lossy override operator ⊔ (a left regular band with identity);
+              position permutation is a lossless group action.
+            </li>
+            <li>
+              A layer is a pair (canvas M, state g ∈ G), with g acting on positions through φ: G → Perm(P).
+              Rendering loses exactly the state; stacking discards states and gives a semigroup without identity
+              when G is non-trivial.
+            </li>
+            <li>
+              Further results: a quotient isomorphic to a monoid of pictures, inflation and automorphism results,
+              and D4 acting on the square.
+            </li>
+            <li>All results are formally proven in Lean 4, not argued informally.</li>
+            <li>
+              To do it I taught myself the group theory and the Lean toolchain needed to understand and verify every step.
+            </li>
+          </ul>
+          <p class="cv-note">
+            Authorship, disclosed: conceived and directed by me, developed with AI assistance, and credited as
+            “Artemii Karapetian and Anthropic”. I supplied the idea and direction and judged and corrected the formal content.
+          </p>
+          <p class="cv-links">
+            <a href="https://github.com/rtmkrptn/discrete-layer-algebra">Repository</a>
+            <a href="https://rtmkrptn.github.io/discrete-layer-algebra">Interactive demo</a>
+          </p>
+        </div>
+      </section>
+
+      <section class="cv-section" aria-labelledby="cv-epq">
+        <h2 id="cv-epq" class="cv-h">Extended Project Qualification</h2>
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>Non-random sampling in small local communities</h3>
+            <span class="cv-when">Grade A</span>
+          </div>
+          <p>
+            A statistics investigation built on an original survey of a heterogeneous population with clear,
+            mutually exclusive groups. Simple random sampling was the baseline against which five sampling methods
+            were compared on how well they estimated central tendency and spread, with Monte Carlo simulation
+            drawing the samples.
+          </p>
+          <p>
+            Both sub-hypotheses were falsified, for the same structural reason: each rested on an untested assumption.
+            I expected quota sampling to distort the estimate most because its gender quota was unbalanced, but gender
+            proved independent of opinion. I expected Neyman allocation to sit closest to the baseline, but its
+            optimality theorem guarantees low variance, not proximity to a reference.
+          </p>
+        </div>
+      </section>
+
+      <section class="cv-section" aria-labelledby="cv-projects">
+        <h2 id="cv-projects" class="cv-h">Projects</h2>
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>Smooth fractal explorer</h3>
+            <a class="cv-when" href="https://rtmkrptn.github.io/make-your-fractal">Live</a>
+          </div>
+          <p>Recursion over complex numbers with automatic differentiation via dual numbers. Built with AI assistance.</p>
+        </div>
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>Layer algebra demo</h3>
+            <a class="cv-when" href="https://rtmkrptn.github.io/discrete-layer-algebra">Live</a>
+          </div>
+          <p>Applies the research above: a puzzle solved by greedy best-first search in the space of layers. Built with AI assistance.</p>
+        </div>
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>Mathematical modelling</h3>
+            <a class="cv-when" href="https://github.com/rtmkrptn/cool-math-things">Repository</a>
+          </div>
+          <p>Monte Carlo simulations, an Euler-method ODE solver and a few machine-learning algorithms.</p>
+        </div>
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>XOR neural network</h3>
+          </div>
+          <p>Built and trained by hand in NumPy to learn the fundamentals of backpropagation.</p>
+        </div>
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>Desmos</h3>
+          </div>
+          <p>Recreational mathematics: complex numbers, linear maps, random variables, number theory.</p>
+        </div>
+        <p class="cv-note">
+          Skills: I write Python (NumPy) and LaTeX myself, and direct AI-assisted development in TypeScript,
+          WebGL2/GLSL and Lean 4.
+        </p>
+      </section>
+
+      <section class="cv-section" aria-labelledby="cv-study">
+        <h2 id="cv-study" class="cv-h">Self-study</h2>
+        <ul class="cv-list">
+          <li>
+            <strong>DelftX Probability Theory</strong> (online), taken ahead of the Year 12 syllabus: random variables,
+            and the notation and limitations of the Poisson, Bernoulli and Binomial distributions.
+          </li>
+          <li><strong>deep-ml.com</strong>, calculus for ML: 22 problems solved.</li>
+          <li>
+            <strong>Textbooks:</strong> Herstein, <em>Topics in Algebra</em>; Vinberg (algebra); Feder, <em>Fractals</em>;
+            Stewart (multivariable calculus); <em>Statistics: A Very Short Introduction</em>.
+          </li>
+          <li><strong>UX/UI design:</strong> a one-year, 490-hour online course (2023) on user psychology, cognition and prototyping software logic.</li>
+        </ul>
+      </section>
+
+      <section class="cv-section" aria-labelledby="cv-writing">
+        <h2 id="cv-writing" class="cv-h">Writing and competitions</h2>
+        <ul class="cv-list">
+          <li>
+            Blog post:
+            <a href="https://rtmkrptn.github.io/posts/high-school-calculator-computes-analytical-number-theory">a prime-generating function with no <code>if</code>, <code>mod</code> or <code>gcd</code></a>.
+          </li>
+          <li>Senior UKMT (UK Mathematics Trust): participant, 2025 and 2026.</li>
+        </ul>
+      </section>
+
+      <section class="cv-section" aria-labelledby="cv-more">
+        <h2 id="cv-more" class="cv-h">Other</h2>
+        <ul class="cv-list">
+          <li>Volunteering for Breast Cancer Awareness Month: made ribbons (2026) and sold them (2025).</li>
+          <li>
+            Reading on design and startups: <em>What Makes Great Design</em>, <em>Laws of UX</em>, <em>SETTERS</em>,
+            <em>Zero to One</em>; currently <em>Bauhaus</em> and <em>Design Is Storytelling</em>.
+          </li>
+        </ul>
+      </section>
     </div>
   </main>
 </BaseLayout>
@@ -130,32 +310,18 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   }
 
   /*
-    No reserved height. The message is the last element in the card, so showing
-    it grows the card downward rather than shifting the controls, and when it is
-    empty it collapses completely — which is what keeps the resting card
-    symmetric top-to-bottom instead of carrying dead space under the button.
-  */
-  .pf-error {
-    margin: var(--space-3) 0 0 0;
-    font-family: var(--font-ui);
-    font-size: var(--font-size-small);
-    color: var(--red-glossy-dark);
-  }
-  .pf-error:empty {
-    margin: 0;
-  }
-
-  /*
-    Wrong password turns the field itself red — border and focus ring, not only
-    the message below. Cleared the instant the visitor edits the field; see the
-    input handler in the script.
+    Wrong password turns the field red — a red ring in place of the blue focus
+    one, plus a red border. There is no text message: the password is either
+    right or wrong, and the red says so on its own. Cleared the instant the
+    field is edited (see the input handler in the script).
   */
   .pf-card.is-wrong .input {
     border-color: var(--red-glossy-dark);
+    box-shadow: var(--shadow-inset-track), 0 0 0 2px var(--red-glossy);
   }
   .pf-card.is-wrong .input:focus-visible,
   .pf-card.is-wrong .input:focus {
-    outline-color: var(--red-glossy);
+    outline: none;
   }
 
   .pf-card.is-wrong {
@@ -175,16 +341,104 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     animation: pf-reveal var(--duration-reveal) var(--ease-decelerate);
   }
 
-  .pf-placeholder {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-2);
-    padding: var(--space-6);
-    border: 1px dashed var(--color-hairline-strong);
-    border-radius: var(--radius-md);
-    color: var(--color-text-tertiary);
+  /* ---- CV ---- */
+  .cv-head {
+    margin-bottom: var(--space-9);
+  }
+  .cv-lede {
+    margin: var(--space-3) 0 0;
+    color: var(--color-text-secondary);
+  }
+  .cv-meta {
+    margin: var(--space-2) 0 0;
     font-family: var(--font-ui);
     font-size: var(--font-size-small);
+    color: var(--color-text-secondary);
+  }
+  .cv-section {
+    margin-bottom: var(--space-9);
+  }
+  .cv-h {
+    margin-bottom: var(--space-5);
+    padding-bottom: var(--space-2);
+    border-bottom: 1px solid var(--color-separator);
+    font-family: var(--font-ui);
+    font-size: var(--font-size-chrome);
+    font-weight: 600;
+    letter-spacing: var(--letter-spacing-kicker);
+    text-transform: uppercase;
+    color: var(--color-text-secondary);
+  }
+  .cv-item {
+    margin-bottom: var(--space-6);
+  }
+  .cv-item p,
+  .cv-list {
+    margin: var(--space-2) 0 0;
+  }
+  .cv-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    column-gap: var(--space-4);
+  }
+  .cv-row h3 {
+    font-size: var(--font-size-h3-mobile);
+  }
+  .cv-when {
+    font-family: var(--font-ui);
+    font-size: var(--font-size-small);
+    color: var(--color-text-secondary);
+    white-space: nowrap;
+  }
+  a.cv-when {
+    color: var(--color-accent-solid);
+  }
+  .cv-sub,
+  .cv-note {
+    font-family: var(--font-ui);
+    font-size: var(--font-size-small);
+    color: var(--color-text-secondary);
+  }
+  .cv-list {
+    padding-left: var(--space-5);
+    list-style: disc;
+  }
+  .cv-list li + li {
+    margin-top: var(--space-2);
+  }
+  .cv-links {
+    display: flex;
+    gap: var(--space-5);
+    font-family: var(--font-ui);
+    font-size: var(--font-size-small);
+  }
+  .cv-table {
+    width: 100%;
+    margin-top: var(--space-3);
+    border-collapse: collapse;
+    font-family: var(--font-ui);
+    font-size: var(--font-size-small);
+  }
+  .cv-table th,
+  .cv-table td {
+    padding: var(--space-2) var(--space-3) var(--space-2) 0;
+    text-align: left;
+    font-weight: 400;
+    border-bottom: 1px solid var(--color-separator);
+  }
+  .cv-table thead th {
+    color: var(--color-text-secondary);
+  }
+  .cv-table tbody th {
+    color: var(--color-text);
+  }
+
+  @media print {
+    .cv-section {
+      break-inside: avoid;
+    }
   }
 
   @media (min-width: 768px) {
@@ -242,8 +496,9 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   const root = document.documentElement;
   const form = document.getElementById("pf-form") as HTMLFormElement | null;
   const input = document.getElementById("pf-input") as HTMLInputElement | null;
-  const card = form?.querySelector<HTMLElement>(".pf-card") ?? null;
-  const error = document.getElementById("pf-error");
+  // The form element itself carries the .pf-card class, so the wrong-password
+  // state (red field + shake) is toggled directly on it.
+  const card = form;
   const content = document.getElementById("pf-content");
 
   async function sha256Hex(text: string): Promise<string> {
@@ -266,7 +521,7 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   }
 
   function reject() {
-    if (error) error.textContent = "Incorrect password.";
+    // The red field plus the shake is the whole message — no text is shown.
     card?.classList.remove("is-wrong");
     // Reflow so the animation restarts on repeated wrong attempts.
     void card?.offsetWidth;
@@ -274,9 +529,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     input?.select();
   }
 
-  // Clear the error — message and the red field — as soon as the visitor edits.
+  // Clear the red state as soon as the visitor edits the field.
   input?.addEventListener("input", () => {
-    if (error) error.textContent = "";
     card?.classList.remove("is-wrong");
   });
 
@@ -290,15 +544,15 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     try {
       const hex = await sha256Hex(value);
       if (hex === DIGEST) {
-        if (error) error.textContent = "";
         unlock(true);
       } else {
         reject();
       }
     } catch (e) {
       // SubtleCrypto needs a secure context (https or localhost). If it is
-      // unavailable, say so rather than failing silently.
-      if (error) error.textContent = "Cannot verify here — open over https.";
+      // unavailable we cannot verify, so treat it as a failed attempt.
+      console.warn("Password check unavailable (needs https):", e);
+      reject();
     }
   });
 
