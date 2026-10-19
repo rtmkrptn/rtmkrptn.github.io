@@ -20,7 +20,6 @@
 */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DesktopNav from "../components/DesktopNav.astro";
-import { withBase } from "../lib/base";
 ---
 
 <BaseLayout title="Portfolio" description="Private.">
@@ -48,19 +47,16 @@ import { withBase } from "../lib/base";
 
       <button id="pf-submit" class="btn" type="submit">Unlock</button>
 
-      {/* A quiet way back to the site for anyone who reached the gate and has
-          no password. */}
-      <a class="pf-back" href={withBase("/")}>back</a>
-
       <noscript>
         <p class="pf-sub">This page needs JavaScript to unlock.</p>
       </noscript>
     </form>
   </section>
 
-  {/* The site nav, hidden by CSS while the gate is up so the lock screen stays
-      bare, and shown once unlocked. A sibling of the content, not a child, so
-      the content's reveal transform never becomes its positioning context. */}
+  {/* The site nav, shown over the gate as well as the unlocked page, so the
+      lock screen itself offers the way out (Home) — no separate back link. A
+      sibling of the content, not a child, so the content's reveal transform
+      never becomes its positioning context. */}
   <DesktopNav />
 
   {/* ===================== Protected content =====================
@@ -272,11 +268,6 @@ import { withBase } from "../lib/base";
     display: block;
   }
 
-  /* The nav belongs to the unlocked page, not the lock screen. */
-  html:not(.is-unlocked) .desktop-nav {
-    display: none;
-  }
-
   /* ---- Lock gate ---- */
   #pf-gate.pf-gate {
     min-height: 100vh;
@@ -314,19 +305,6 @@ import { withBase } from "../lib/base";
 
   #pf-gate .btn {
     width: 100%;
-  }
-
-  /* Quiet grey link back to the site, centred under the button. */
-  .pf-back {
-    align-self: center;
-    margin-top: var(--space-4);
-    font-family: var(--font-ui);
-    font-size: var(--font-size-small);
-    color: var(--color-text-tertiary);
-  }
-  .pf-back:hover {
-    color: var(--color-text-secondary);
-    text-decoration: none;
   }
 
   /*
