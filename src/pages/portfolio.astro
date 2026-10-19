@@ -182,15 +182,15 @@ import DesktopNav from "../components/DesktopNav.astro";
             Julia and Mandelbrot sets are just two of the presets. Zoom and pan smoothly, and export a PNG.
             Automatic differentiation via dual numbers. Built with AI assistance.
           </p>
-          <p class="cv-links">
-            <a href="https://rtmkrptn.github.io/make-your-fractal">Try it here</a>
-          </p>
           <div class="cv-grid">
             <img src="/portfolio/fractal-explorer-1.jpg" alt="Fractal render" width="1600" height="1187" loading="lazy" decoding="async" />
             <img src="/portfolio/fractal-explorer-2.jpg" alt="Fractal render" width="1600" height="1032" loading="lazy" decoding="async" />
             <img src="/portfolio/fractal-explorer-3.jpg" alt="Fractal render" width="1600" height="1032" loading="lazy" decoding="async" />
             <img src="/portfolio/fractal-explorer-4.jpg" alt="Fractal render" width="1600" height="1032" loading="lazy" decoding="async" />
           </div>
+          <p class="cv-links">
+            <a href="https://rtmkrptn.github.io/make-your-fractal">Try it here</a>
+          </p>
         </div>
 
         <div class="cv-item">
@@ -263,7 +263,7 @@ import DesktopNav from "../components/DesktopNav.astro";
             trigonometry changes when the norm does.
           </p>
           <figure class="cv-media">
-            <img src="/portfolio/ptrig-1.jpg" alt="The p-norm unit circle with the sine- and cosine-like waves traced from it" width="1200" height="800" loading="lazy" decoding="async" />
+            <img src="/portfolio/ptrig-cropped.jpg" alt="The p-norm unit circle with the sine- and cosine-like waves traced from it" width="1200" height="570" loading="lazy" decoding="async" />
           </figure>
           <p class="cv-links">
             <a href="https://www.desmos.com/calculator/rbxouw3cyk">Try it here</a>
@@ -474,9 +474,14 @@ import DesktopNav from "../components/DesktopNav.astro";
     site's own h2/h3 sizes, 24px between blocks, 8px between list items, 48px
     above a heading. Secondary lines sit one step below the text.
   */
+  /* The size goes on the children, not on .cv itself: .cv is the reading column,
+     whose 68ch width is measured in its own font size. Shrinking that would make
+     the column narrower than every other page's and knock it off the shared grid. */
   .cv {
-    font-size: var(--font-size-prose-mobile);
     --cv-small: 14px;
+  }
+  .cv > * {
+    font-size: var(--font-size-prose-mobile);
   }
   .cv h2,
   .cv h3 {
@@ -485,8 +490,10 @@ import DesktopNav from "../components/DesktopNav.astro";
   }
   @media (min-width: 768px) {
     .cv {
-      font-size: var(--font-size-prose-desktop);
       --cv-small: 16px;
+    }
+    .cv > * {
+      font-size: var(--font-size-prose-desktop);
     }
   }
   .cv-head {
