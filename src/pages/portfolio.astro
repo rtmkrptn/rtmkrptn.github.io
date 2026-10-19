@@ -94,8 +94,7 @@ import DesktopNav from "../components/DesktopNav.astro";
         <p class="cv-meta">
           Athens, Greece ·
           <a href="mailto:rtmkrptn@gmail.com">rtmkrptn@gmail.com</a> ·
-          <a href="https://github.com/rtmkrptn">github.com/rtmkrptn</a> ·
-          <a href="https://rtmkrptn.github.io">rtmkrptn.github.io</a>
+          <a href="https://github.com/rtmkrptn">github.com/rtmkrptn</a>
         </p>
       </header>
 
@@ -103,12 +102,12 @@ import DesktopNav from "../components/DesktopNav.astro";
         <h2 id="cv-work" class="cv-h">What I have built</h2>
 
         <div class="cv-item">
-          <figure class="cv-media cv-media-lead">
-            <img src="/portfolio/layer-structure-map.png" alt="Map of the structures in the theory: layers, canvases, and the maps between them" width="2000" height="1097" loading="lazy" decoding="async" />
-          </figure>
           <div class="cv-row">
             <h3>Algebraic theory of oriented transparent layers</h3>
           </div>
+          <figure class="cv-media cv-media-lead">
+            <img src="/portfolio/layer-structure-map.png" alt="Map of the structures in the theory: layers, canvases, and the maps between them" width="2000" height="1097" loading="lazy" decoding="async" />
+          </figure>
           <p>
             An original algebraic theory of oriented, transparent, stacked layers, machine-verified in Lean 4.
             Begun in winter 2026 from my own intuition about rotation of complex numbers and developed over many months,
@@ -158,11 +157,14 @@ import DesktopNav from "../components/DesktopNav.astro";
             Built with AI assistance.
           </p>
           <p class="cv-links">
-            <a href="https://rtmkrptn.github.io/discrete-layer-algebra">Puzzle solver demo</a>
+            <a href="https://rtmkrptn.github.io/discrete-layer-algebra">Try it here</a>
           </p>
         </div>
 
         <div class="cv-item">
+          <div class="cv-row">
+            <h3>Web-based smooth fractal sandbox</h3>
+          </div>
           <figure class="cv-media cv-media-lead">
             <video
               src="/portfolio/fractal-explorer.mp4"
@@ -174,9 +176,6 @@ import DesktopNav from "../components/DesktopNav.astro";
               autoplay
               preload="metadata"></video>
           </figure>
-          <div class="cv-row">
-            <h3>Web-based smooth fractal sandbox</h3>
-          </div>
           <p>
             A sandbox for iterating any recursion over the complex plane: you write the iteration step, the escape
             condition and the starting value yourself, drag the constant c, and set the iteration count and palette.
@@ -184,7 +183,7 @@ import DesktopNav from "../components/DesktopNav.astro";
             Automatic differentiation via dual numbers. Built with AI assistance.
           </p>
           <p class="cv-links">
-            <a href="https://rtmkrptn.github.io/make-your-fractal">Live app</a>
+            <a href="https://rtmkrptn.github.io/make-your-fractal">Try it here</a>
           </p>
           <div class="cv-grid">
             <img src="/portfolio/fractal-explorer-1.jpg" alt="Fractal render" width="1600" height="1187" loading="lazy" decoding="async" />
@@ -249,7 +248,7 @@ import DesktopNav from "../components/DesktopNav.astro";
             <img src="/portfolio/market-2.jpg" alt="Another simulated price path, with a crisis regime in blue" width="1200" height="800" loading="lazy" decoding="async" />
           </div>
           <p class="cv-links">
-            <a href="https://www.desmos.com/calculator/zjskflmhw4">Desmos</a>
+            <a href="https://www.desmos.com/calculator/zjskflmhw4">Try it here</a>
           </p>
         </div>
 
@@ -263,11 +262,11 @@ import DesktopNav from "../components/DesktopNav.astro";
             construction cos x + i·sin x and the rounded, flattened waves that result. Recreational mathematics on how
             trigonometry changes when the norm does.
           </p>
-          <div class="cv-grid cv-grid-fit">
-            <img src="/portfolio/ptrig-1.jpg" alt="A squircle, with the rounded sine and cosine waves traced from it" width="800" height="800" loading="lazy" decoding="async" />
-          </div>
+          <figure class="cv-media">
+            <img src="/portfolio/ptrig-1.jpg" alt="The p-norm unit circle with the sine- and cosine-like waves traced from it" width="1200" height="800" loading="lazy" decoding="async" />
+          </figure>
           <p class="cv-links">
-            <a href="https://www.desmos.com/calculator/rbxouw3cyk">Desmos</a>
+            <a href="https://www.desmos.com/calculator/rbxouw3cyk">Try it here</a>
           </p>
         </div>
 
@@ -277,7 +276,7 @@ import DesktopNav from "../components/DesktopNav.astro";
           </div>
           <p>Monte Carlo simulations, an Euler-method ODE solver and a few machine-learning algorithms.</p>
           <p class="cv-links">
-            <a href="https://github.com/rtmkrptn/cool-math-things">Repository</a>
+            <a href="https://github.com/rtmkrptn/cool-math-things">See the code</a>
           </p>
         </div>
         <div class="cv-item">
@@ -300,7 +299,6 @@ import DesktopNav from "../components/DesktopNav.astro";
           <h3>
             <a href="https://rtmkrptn.github.io/posts/high-school-calculator-computes-analytical-number-theory">A prime-generating function without if, mod or gcd</a>
           </h3>
-          <p>Analytic number theory on a graphing calculator.</p>
         </div>
       </section>
 
@@ -471,19 +469,40 @@ import DesktopNav from "../components/DesktopNav.astro";
   }
 
   /* ---- CV ---- */
-  /* Secondary lines (dates, notes, links, table) at 16px; the site's 13px "small"
-     is chrome-sized and read as tiny beside 19px body copy here. */
+  /*
+    Type and rhythm for a long reading page. Scale (mobile / desktop):
+      h2 28 / 36 · h3 22 / 26 · body 17 / 19 (site) · secondary 16 · line-height 1.65.
+    Secondary lines are 16px, not the site's 13px chrome size, which read as tiny
+    beside the body copy. Spacing is a 2:1 ladder so the structure reads from air
+    alone: 80/112px between sections, 48/56px between items inside one, and
+    tighter steps (12 title→text, 16 text→links, 24 text→figure) inside an item.
+  */
   .cv {
     --cv-small: 16px;
+    --cv-gap-section: 80px;
+    --cv-gap-item: 48px;
+    --cv-gap-heading: 28px;
   }
-  /* Section and item headings, a step up from the site's 26/20px. */
   .cv .cv-h {
     font-size: 28px;
+    line-height: 1.15;
+    text-wrap: balance;
   }
   .cv h3 {
     font-size: 22px;
+    line-height: 1.25;
+    text-wrap: balance;
+  }
+  .cv p,
+  .cv-list li {
+    line-height: 1.65;
   }
   @media (min-width: 768px) {
+    .cv {
+      --cv-gap-section: 112px;
+      --cv-gap-item: 56px;
+      --cv-gap-heading: 36px;
+    }
     .cv .cv-h {
       font-size: 36px;
     }
@@ -492,41 +511,39 @@ import DesktopNav from "../components/DesktopNav.astro";
     }
   }
   .cv-head {
-    margin-bottom: var(--space-10);
+    margin-bottom: var(--cv-gap-section);
   }
   .cv-lede {
-    margin: var(--space-3) 0 0;
+    margin: var(--space-4) 0 0;
+    font-size: 21px;
+    line-height: 1.5;
     color: var(--color-text-secondary);
   }
   .cv-meta {
-    margin: var(--space-4) 0 0;
+    margin: var(--space-5) 0 0;
     font-family: var(--font-ui);
     font-size: var(--cv-small);
     color: var(--color-text-secondary);
   }
-  /*
-    Air carries the structure, not rules or boxes. 64px between sections, which
-    collapses with the last item's margin so it stays a clean single gap.
-  */
+  /* Air carries the structure, not rules or boxes. */
   .cv-section {
-    margin-bottom: var(--space-10);
+    margin-bottom: var(--cv-gap-section);
   }
-  /*
-    Section headings sit at the top of the hierarchy: the site's own h2 (22/26px)
-    on its own line, dominant over the item titles (h3, 18/20px) and the body
-    beneath. The old rule set them in 12px uppercase — SMALLER than the text they
-    introduced, which is the inversion this removes. No underline: the whitespace
-    above each one already marks the break.
-  */
   .cv-h {
-    margin-bottom: var(--space-5);
+    margin-bottom: var(--cv-gap-heading);
   }
   .cv-item {
-    margin-bottom: var(--space-7);
+    margin-bottom: var(--cv-gap-item);
+  }
+  .cv-item:last-child {
+    margin-bottom: 0;
   }
   .cv-item p,
   .cv-list {
-    margin: var(--space-2) 0 0;
+    margin: var(--space-3) 0 0;
+  }
+  .cv-item p + p {
+    margin-top: var(--space-4);
   }
   .cv-row {
     display: flex;
@@ -552,24 +569,27 @@ import DesktopNav from "../components/DesktopNav.astro";
     list-style: disc;
   }
   .cv-list li + li {
-    margin-top: var(--space-2);
+    margin-top: var(--space-3);
+  }
+  .cv-note {
+    line-height: 1.55;
   }
   .cv-links {
     display: flex;
-    gap: var(--space-5);
+    gap: var(--space-6);
     font-family: var(--font-ui);
     font-size: var(--cv-small);
   }
   .cv-table {
     width: 100%;
-    margin-top: var(--space-3);
+    margin-top: var(--space-4);
     border-collapse: collapse;
     font-family: var(--font-ui);
     font-size: var(--cv-small);
   }
   .cv-table th,
   .cv-table td {
-    padding: var(--space-2) var(--space-3) var(--space-2) 0;
+    padding: var(--space-3) var(--space-3) var(--space-3) 0;
     text-align: left;
     font-weight: 400;
     border-bottom: 1px solid var(--color-separator);
@@ -582,10 +602,10 @@ import DesktopNav from "../components/DesktopNav.astro";
   }
 
   .cv-media {
-    margin: var(--space-4) 0 0;
+    margin: var(--space-6) 0 0;
   }
   .cv-media-lead {
-    margin: 0 0 var(--space-4);
+    margin: var(--space-4) 0 var(--space-5);
   }
   .cv-media video,
   .cv-media img,
@@ -600,8 +620,8 @@ import DesktopNav from "../components/DesktopNav.astro";
   .cv-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: var(--space-3);
-    margin-top: var(--space-3);
+    gap: var(--space-4);
+    margin-top: var(--space-4);
   }
   .cv-grid img {
     aspect-ratio: 4 / 3;
