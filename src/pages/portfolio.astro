@@ -1,0 +1,318 @@
+---
+/*
+  Private portfolio page.
+
+  Facilities set up here; the content is intentionally empty (no data yet).
+
+  Privacy, in two independent layers:
+    1. Search exclusion — <meta robots noindex,nofollow> below, plus this route
+       is filtered out of the sitemap in astro.config.mjs (same as /styleguide).
+       Not linked from anywhere (nav, home, posts), so nothing points a crawler
+       at it either.
+    2. Password gate — a client-side ("for now, js") lock. The entered password
+       is SHA-256'd and compared to a stored digest, so the literal password is
+       not sitting in the source. IMPORTANT: this gates *display*, not *access*.
+       Anything rendered below the gate still ships inside this HTML, so once
+       real content is added, a reader can see it via view-source regardless of
+       the password. Treat this as "keep it out of search + a soft lock"; it is
+       not real access control. For that, the content has to not be sent until
+       the server has authenticated the request.
+*/
+import BaseLayout from "../layouts/BaseLayout.astro";
+---
+
+<BaseLayout title="Portfolio" description="Private.">
+  <meta slot="head" name="robots" content="noindex, nofollow" />
+  {/* Reveal an already-unlocked session before first paint, so a returning
+      visitor never sees the gate flash. Runs in <head>, before <body> parses. */}
+  <script is:inline slot="head">
+    try {
+      if (sessionStorage.getItem("pf-unlocked") === "1") {
+        document.documentElement.classList.add("is-unlocked");
+      }
+    } catch (e) {
+      /* private mode / blocked storage — fall through to the locked gate */
+    }
+  </script>
+
+  {/* ========================= Lock gate ========================= */}
+  <section id="pf-gate" class="pf-gate" aria-label="Password required">
+    <form id="pf-form" class="pf-card panel" novalidate>
+      <div class="pf-lock" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75"
+          stroke-linecap="round" stroke-linejoin="round">
+          <rect x="4.5" y="10.5" width="15" height="9.5" rx="2.2"></rect>
+          <path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"></path>
+          <circle cx="12" cy="15" r="1.15" fill="currentColor" stroke="none"></circle>
+        </svg>
+      </div>
+
+      <h1 class="pf-title">Private</h1>
+      <p class="pf-sub">Enter the password to continue.</p>
+
+      <label class="pf-field">
+        <span class="visually-hidden">Password</span>
+        <input
+          id="pf-input"
+          class="input"
+          type="password"
+          name="password"
+          autocomplete="current-password"
+          placeholder="Password"
+          aria-describedby="pf-error"
+          autofocus
+        />
+      </label>
+
+      <button id="pf-submit" class="btn" type="submit">Unlock</button>
+
+      <p id="pf-error" class="pf-error" role="alert" aria-live="assertive"></p>
+
+      <noscript>
+        <p class="pf-sub">This page needs JavaScript to unlock.</p>
+      </noscript>
+    </form>
+  </section>
+
+  {/* ===================== Protected content =====================
+      Intentionally empty — the page and its facilities are set up; the
+      portfolio content is yours to add. Put it inside .reading-column below. */}
+  <main id="pf-content" class="pf-content" tabindex="-1" aria-label="Portfolio">
+    <div class="reading-column">
+      <!-- PORTFOLIO CONTENT GOES HERE -->
+      <p class="pf-placeholder" role="note">
+        <span class="kicker">Private · scaffold</span>
+        Portfolio content goes here.
+      </p>
+    </div>
+  </main>
+</BaseLayout>
+
+<style is:global>
+  /* ---- State toggle (class lives on <html>) ---- */
+  #pf-content {
+    display: none;
+  }
+  html.is-unlocked #pf-gate {
+    display: none;
+  }
+  html.is-unlocked #pf-content {
+    display: block;
+  }
+
+  /* ---- Lock gate ---- */
+  #pf-gate.pf-gate {
+    min-height: 100vh;
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-6);
+  }
+
+  .pf-card {
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: var(--space-4);
+  }
+
+  .pf-lock {
+    display: grid;
+    place-items: center;
+    width: 54px;
+    height: 54px;
+    border-radius: var(--radius-pill);
+    background: var(--gradient-metal);
+    border: var(--border-hairline-width) solid var(--color-hairline-strong);
+    box-shadow: var(--shadow-inset-highlight), var(--shadow-surface);
+    color: var(--graphite-800);
+  }
+
+  .pf-lock svg {
+    width: 26px;
+    height: 26px;
+  }
+
+  .pf-title {
+    margin: 0;
+    font-size: var(--font-size-h3-desktop);
+  }
+
+  .pf-sub {
+    margin: 0;
+    font-family: var(--font-ui);
+    font-size: var(--font-size-small);
+    color: var(--color-text-secondary);
+  }
+
+  .pf-field {
+    width: 100%;
+  }
+
+  #pf-gate .btn {
+    width: 100%;
+  }
+
+  /* Reserve the line so a wrong-password message does not shift the card. */
+  .pf-error {
+    min-height: 1.25em;
+    margin: 0;
+    font-family: var(--font-ui);
+    font-size: var(--font-size-small);
+    color: var(--red-glossy-dark);
+  }
+  .pf-error:empty {
+    visibility: hidden;
+  }
+
+  .pf-card.is-wrong {
+    animation: pf-shake var(--duration-fast) var(--ease-standard);
+  }
+
+  /* ---- Content ---- */
+  #pf-content:focus {
+    outline: none;
+  }
+
+  .pf-content {
+    padding-block: var(--space-section-mobile);
+  }
+
+  html.is-unlocked .pf-content {
+    animation: pf-reveal var(--duration-reveal) var(--ease-decelerate);
+  }
+
+  .pf-placeholder {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-6);
+    border: 1px dashed var(--color-hairline-strong);
+    border-radius: var(--radius-md);
+    color: var(--color-text-tertiary);
+    font-family: var(--font-ui);
+    font-size: var(--font-size-small);
+  }
+
+  @media (min-width: 768px) {
+    .pf-content {
+      padding-block: var(--space-section-desktop);
+    }
+  }
+
+  @keyframes pf-shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    20% {
+      transform: translateX(-6px);
+    }
+    40% {
+      transform: translateX(6px);
+    }
+    60% {
+      transform: translateX(-4px);
+    }
+    80% {
+      transform: translateX(4px);
+    }
+  }
+
+  @keyframes pf-reveal {
+    from {
+      opacity: 0;
+      transform: translateY(6px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .pf-card.is-wrong,
+    html.is-unlocked .pf-content {
+      animation: none;
+    }
+  }
+</style>
+
+<script>
+  /*
+    Client-side gate. The password is never stored in source — only the SHA-256
+    digest of it is, and the entered value is hashed and compared. See the note
+    at the top of this file for why this guards display, not access.
+  */
+  const DIGEST = "1ded682b0c236a7f95479c065ac1a8d400fbcef44ea582d82687d1175c0060c7";
+
+  const root = document.documentElement;
+  const form = document.getElementById("pf-form") as HTMLFormElement | null;
+  const input = document.getElementById("pf-input") as HTMLInputElement | null;
+  const card = form?.querySelector<HTMLElement>(".pf-card") ?? null;
+  const error = document.getElementById("pf-error");
+  const content = document.getElementById("pf-content");
+
+  async function sha256Hex(text: string): Promise<string> {
+    const bytes = new TextEncoder().encode(text);
+    const digest = await crypto.subtle.digest("SHA-256", bytes);
+    return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
+  }
+
+  function unlock(persist: boolean) {
+    root.classList.add("is-unlocked");
+    if (persist) {
+      try {
+        sessionStorage.setItem("pf-unlocked", "1");
+      } catch (e) {
+        /* storage blocked — the page stays unlocked for this view regardless */
+      }
+    }
+    // Move focus into the revealed content so keyboard users land in the page.
+    content?.focus();
+  }
+
+  function reject() {
+    if (error) error.textContent = "Incorrect password.";
+    card?.classList.remove("is-wrong");
+    // Reflow so the animation restarts on repeated wrong attempts.
+    void card?.offsetWidth;
+    card?.classList.add("is-wrong");
+    input?.select();
+  }
+
+  // Clear the error as soon as the visitor edits the field.
+  input?.addEventListener("input", () => {
+    if (error) error.textContent = "";
+  });
+
+  form?.addEventListener("submit", async (event) => {
+    event.preventDefault();
+    const value = input?.value ?? "";
+    if (!value) {
+      reject();
+      return;
+    }
+    try {
+      const hex = await sha256Hex(value);
+      if (hex === DIGEST) {
+        if (error) error.textContent = "";
+        unlock(true);
+      } else {
+        reject();
+      }
+    } catch (e) {
+      // SubtleCrypto needs a secure context (https or localhost). If it is
+      // unavailable, say so rather than failing silently.
+      if (error) error.textContent = "Cannot verify here — open over https.";
+    }
+  });
+
+  // Focus the field on load when still locked (autofocus does not fire for
+  // elements that scripts may have hidden, and skips an already-unlocked view).
+  if (!root.classList.contains("is-unlocked")) input?.focus();
+</script>

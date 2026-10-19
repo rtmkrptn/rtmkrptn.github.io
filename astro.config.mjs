@@ -15,9 +15,12 @@ export default defineConfig({
   base: '/',
   integrations: [
     mdx(),
-    // /styleguide is an internal reference, not content — keep it out of
-    // the sitemap so search engines are not pointed at it.
-    sitemap({ filter: (page) => !page.includes('/styleguide') }),
+    // /styleguide is an internal reference and /portfolio is a private,
+    // password-gated page — keep both out of the sitemap so search engines are
+    // not pointed at them. (/portfolio also carries meta robots noindex.)
+    sitemap({
+      filter: (page) => !page.includes('/styleguide') && !page.includes('/portfolio'),
+    }),
   ],
   markdown: {
     shikiConfig: {
