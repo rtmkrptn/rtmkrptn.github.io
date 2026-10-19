@@ -20,6 +20,7 @@
 */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DesktopNav from "../components/DesktopNav.astro";
+import { withBase } from "../lib/base";
 ---
 
 <BaseLayout title="Portfolio" description="Private.">
@@ -46,6 +47,10 @@ import DesktopNav from "../components/DesktopNav.astro";
       </label>
 
       <button id="pf-submit" class="btn" type="submit">Unlock</button>
+
+      {/* A quiet way back to the site for anyone who reached the gate and has
+          no password. */}
+      <a class="pf-back" href={withBase("/")}>back</a>
 
       <noscript>
         <p class="pf-sub">This page needs JavaScript to unlock.</p>
@@ -309,6 +314,19 @@ import DesktopNav from "../components/DesktopNav.astro";
 
   #pf-gate .btn {
     width: 100%;
+  }
+
+  /* Quiet grey link back to the site, centred under the button. */
+  .pf-back {
+    align-self: center;
+    margin-top: var(--space-4);
+    font-family: var(--font-ui);
+    font-size: var(--font-size-small);
+    color: var(--color-text-tertiary);
+  }
+  .pf-back:hover {
+    color: var(--color-text-secondary);
+    text-decoration: none;
   }
 
   /*
