@@ -33,9 +33,12 @@ import BaseLayout from "../layouts/BaseLayout.astro";
         <input
           id="pf-input"
           class="input"
-          type="password"
+          type="text"
           name="password"
-          autocomplete="current-password"
+          autocomplete="off"
+          autocapitalize="none"
+          autocorrect="off"
+          spellcheck="false"
           placeholder="Password"
           autofocus
         />
@@ -336,34 +339,37 @@ import BaseLayout from "../layouts/BaseLayout.astro";
 
   /* ---- CV ---- */
   .cv-head {
-    margin-bottom: var(--space-9);
+    margin-bottom: var(--space-10);
   }
   .cv-lede {
     margin: var(--space-3) 0 0;
     color: var(--color-text-secondary);
   }
   .cv-meta {
-    margin: var(--space-2) 0 0;
+    margin: var(--space-4) 0 0;
     font-family: var(--font-ui);
     font-size: var(--font-size-small);
     color: var(--color-text-secondary);
   }
+  /*
+    Air carries the structure, not rules or boxes. 64px between sections, which
+    collapses with the last item's margin so it stays a clean single gap.
+  */
   .cv-section {
-    margin-bottom: var(--space-9);
+    margin-bottom: var(--space-10);
   }
+  /*
+    Section headings sit at the top of the hierarchy: the site's own h2 (22/26px)
+    on its own line, dominant over the item titles (h3, 18/20px) and the body
+    beneath. The old rule set them in 12px uppercase — SMALLER than the text they
+    introduced, which is the inversion this removes. No underline: the whitespace
+    above each one already marks the break.
+  */
   .cv-h {
     margin-bottom: var(--space-5);
-    padding-bottom: var(--space-2);
-    border-bottom: 1px solid var(--color-separator);
-    font-family: var(--font-ui);
-    font-size: var(--font-size-chrome);
-    font-weight: 600;
-    letter-spacing: var(--letter-spacing-kicker);
-    text-transform: uppercase;
-    color: var(--color-text-secondary);
   }
   .cv-item {
-    margin-bottom: var(--space-6);
+    margin-bottom: var(--space-7);
   }
   .cv-item p,
   .cv-list {
@@ -375,9 +381,6 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     align-items: baseline;
     justify-content: space-between;
     column-gap: var(--space-4);
-  }
-  .cv-row h3 {
-    font-size: var(--font-size-h3-mobile);
   }
   .cv-when {
     font-family: var(--font-ui);
