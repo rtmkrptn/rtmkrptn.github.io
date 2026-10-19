@@ -105,7 +105,6 @@ import DesktopNav from "../components/DesktopNav.astro";
         <div class="cv-item">
           <div class="cv-row">
             <h3>Discrete Layer Algebra</h3>
-            <span class="cv-when">2026</span>
           </div>
           <p>
             An original algebraic theory of oriented, transparent, stacked layers, machine-verified in Lean 4.
@@ -152,22 +151,29 @@ import DesktopNav from "../components/DesktopNav.astro";
             Authorship, disclosed: conceived and directed by me, developed with AI assistance, and credited as
             “Artemii Karapetian and Anthropic”. I supplied the idea and direction and judged and corrected the formal content.
           </p>
+          <p>
+            Application: a solver for the puzzle <em>Color Code</em> (SmartGames). Given a target picture and a fixed set
+            of transparent tiles, it finds which tiles to stack, how to rotate them and in what order. It runs a greedy
+            best-first search over a composite similarity measure, with no pretrained model and no per-target training.
+            Built with AI assistance.
+          </p>
           <p class="cv-links">
-            <a href="https://github.com/rtmkrptn/discrete-layer-algebra">Repository</a>
-            <a href="https://rtmkrptn.github.io/discrete-layer-algebra">Interactive demo</a>
+            <a href="https://rtmkrptn.github.io/discrete-layer-algebra">Puzzle solver demo</a>
           </p>
         </div>
 
         <div class="cv-item">
           <div class="cv-row">
             <h3>Smooth fractal explorer</h3>
-            <a class="cv-when" href="https://rtmkrptn.github.io/make-your-fractal">Live</a>
           </div>
           <p>
             An interactive Julia and Mandelbrot explorer where you write the iteration formula yourself (z² + c,
             sin(z)·w + c, and so on), drag the Julia constant c, set the iteration count and palette, zoom and pan
             smoothly, and export a PNG. Recursion over complex numbers with automatic differentiation via dual numbers.
             Built with AI assistance.
+          </p>
+          <p class="cv-links">
+            <a href="https://rtmkrptn.github.io/make-your-fractal">Live app</a>
           </p>
           <figure class="cv-media">
             <video
@@ -191,10 +197,9 @@ import DesktopNav from "../components/DesktopNav.astro";
         <div class="cv-item">
           <div class="cv-row">
             <h3>Non-random sampling in small local communities</h3>
-            <span class="cv-when">EPQ, graded A</span>
           </div>
           <p>
-            A statistics investigation built on an original survey of a heterogeneous population with clear,
+            Extended Project Qualification, graded A. A statistics investigation built on an original survey of a heterogeneous population with clear,
             mutually exclusive groups. Simple random sampling was the baseline against which five sampling methods
             were compared on how well they estimated central tendency and spread, with Monte Carlo simulation
             drawing the samples.
@@ -210,7 +215,6 @@ import DesktopNav from "../components/DesktopNav.astro";
         <div class="cv-item">
           <div class="cv-row">
             <h3>Minecraft reinforcement-learning agent</h3>
-            <span class="cv-when">Fabric mod, Java</span>
           </div>
           <p>
             A working Fabric mod for Minecraft 1.20.1 that spawns a learning bot driven by continual (lifetime)
@@ -233,7 +237,6 @@ import DesktopNav from "../components/DesktopNav.astro";
         <div class="cv-item">
           <div class="cv-row">
             <h3>Stochastic market simulator</h3>
-            <span class="cv-when">Desmos</span>
           </div>
           <p>
             A geometric Brownian motion price path, pₜ = pₜ₋₁·exp(drift + Gaussian shock), with regime-switching drift
@@ -241,19 +244,18 @@ import DesktopNav from "../components/DesktopNav.astro";
             uptrend, red for a downtrend and blue for a crisis, when volatility spikes and the returns average swings
             far more. Animated step by step with Desmos’s tick action.
           </p>
-          <figure class="cv-media">
-            <img src="/portfolio/financial-model.jpg" alt="The market simulator in Desmos, with shaded regimes" width="1568" height="780" loading="lazy" decoding="async" />
-          </figure>
+          <div class="cv-grid cv-grid-fit">
+            <img src="/portfolio/market-1.jpg" alt="A simulated price path with shaded regimes" width="1800" height="1200" loading="lazy" decoding="async" />
+            <img src="/portfolio/market-2.jpg" alt="Another simulated price path, with a crisis regime in blue" width="1200" height="800" loading="lazy" decoding="async" />
+          </div>
           <p class="cv-links">
-            <a href="https://www.desmos.com/calculator/zjskflmhw4">Simulator</a>
-            <a href="https://www.desmos.com/calculator/lsyjzxch4f">Multi-regime variant</a>
+            <a href="https://www.desmos.com/calculator/zjskflmhw4">Desmos</a>
           </p>
         </div>
 
         <div class="cv-item">
           <div class="cv-row">
             <h3>p-trigonometry</h3>
-            <a class="cv-when" href="https://www.desmos.com/calculator/rbxouw3cyk">Desmos</a>
           </div>
           <p>
             Trigonometry generalised to the Lₚ unit circle: sine- and cosine-like functions defined as the coordinates
@@ -261,14 +263,23 @@ import DesktopNav from "../components/DesktopNav.astro";
             construction cos x + i·sin x and the rounded, flattened waves that result. Recreational mathematics on how
             trigonometry changes when the norm does.
           </p>
+          <div class="cv-grid cv-grid-fit">
+            <img src="/portfolio/ptrig-1.jpg" alt="A squircle, with the rounded sine and cosine waves traced from it" width="800" height="800" loading="lazy" decoding="async" />
+            <img src="/portfolio/ptrig-2.jpg" alt="The unit circle in the complex plane, with cos x and i sin x" width="800" height="800" loading="lazy" decoding="async" />
+          </div>
+          <p class="cv-links">
+            <a href="https://www.desmos.com/calculator/rbxouw3cyk">Desmos</a>
+          </p>
         </div>
 
         <div class="cv-item">
           <div class="cv-row">
             <h3>Mathematical modelling</h3>
-            <a class="cv-when" href="https://github.com/rtmkrptn/cool-math-things">Repository</a>
           </div>
           <p>Monte Carlo simulations, an Euler-method ODE solver and a few machine-learning algorithms.</p>
+          <p class="cv-links">
+            <a href="https://github.com/rtmkrptn/cool-math-things">Repository</a>
+          </p>
         </div>
         <div class="cv-item">
           <div class="cv-row">
@@ -289,9 +300,11 @@ import DesktopNav from "../components/DesktopNav.astro";
         <div class="cv-item">
           <div class="cv-row">
             <h3>A prime-generating function without <code>if</code>, <code>mod</code> or <code>gcd</code></h3>
-            <a class="cv-when" href="https://rtmkrptn.github.io/posts/high-school-calculator-computes-analytical-number-theory">Blog post</a>
           </div>
           <p>Analytic number theory on a graphing calculator.</p>
+          <p class="cv-links">
+            <a href="https://rtmkrptn.github.io/posts/high-school-calculator-computes-analytical-number-theory">Blog post</a>
+          </p>
         </div>
       </section>
 
@@ -346,15 +359,15 @@ import DesktopNav from "../components/DesktopNav.astro";
         <h2 id="cv-study" class="cv-h">Self-directed learning</h2>
         <ul class="cv-list">
           <li>
-            <strong>DelftX Probability Theory</strong> (online), taken ahead of the Year 12 syllabus: random variables,
+            DelftX Probability Theory (online), taken ahead of the Year 12 syllabus: random variables,
             and the notation and limitations of the Poisson, Bernoulli and Binomial distributions.
           </li>
-          <li><strong>deep-ml.com</strong>, calculus for ML: 22 problems solved.</li>
+          <li>deep-ml.com, calculus for ML: 22 problems solved.</li>
           <li>
-            <strong>Textbooks:</strong> Herstein, <em>Topics in Algebra</em>; Vinberg (algebra); Feder, <em>Fractals</em>;
+            Textbooks: Herstein, <em>Topics in Algebra</em>; Vinberg (algebra); Feder, <em>Fractals</em>;
             Stewart (multivariable calculus); <em>Statistics: A Very Short Introduction</em>.
           </li>
-          <li><strong>UX/UI design:</strong> a one-year, 490-hour online course (2023) on user psychology, cognition and prototyping software logic.</li>
+          <li>UX/UI design: a one-year, 490-hour online course (2023) on user psychology, cognition and prototyping software logic.</li>
         </ul>
       </section>
 
@@ -511,9 +524,6 @@ import DesktopNav from "../components/DesktopNav.astro";
     font-size: var(--font-size-small);
     color: var(--color-text-secondary);
     white-space: nowrap;
-  }
-  a.cv-when {
-    color: var(--color-accent-solid);
   }
   .cv-sub,
   .cv-note {
