@@ -108,6 +108,9 @@ import DesktopNav from "../components/DesktopNav.astro";
           <figure class="cv-media cv-media-lead">
             <img src="/portfolio/layer-structure-map.png" alt="Map of the structures in the theory: layers, canvases, and the maps between them" width="2000" height="1097" loading="lazy" decoding="async" />
           </figure>
+          <figure class="cv-media">
+            <img src="/portfolio/layer-overdraw.png" alt="Two canvases A and B and their override A ⊔ B" width="2000" height="654" loading="lazy" decoding="async" />
+          </figure>
           <p>
             An original algebraic theory of oriented, transparent, stacked layers, machine-verified in Lean 4.
             Begun in winter 2026 from my own intuition about rotation of complex numbers and developed over many months,
@@ -139,23 +142,30 @@ import DesktopNav from "../components/DesktopNav.astro";
               The paper is in final edits; an arXiv preprint will follow.
             </li>
           </ul>
-          <figure class="cv-media">
-            <img src="/portfolio/layer-overdraw.png" alt="Two canvases A and B and their override A ⊔ B" width="2000" height="654" loading="lazy" decoding="async" />
-          </figure>
-          <div class="cv-grid cv-grid-fit">
-            <img src="/portfolio/layer-d4-orbit.png" alt="The orbit of a picture under the dihedral group D4" width="2000" height="1089" loading="lazy" decoding="async" />
-            <img src="/portfolio/layer-operations.png" alt="Two pictures A and B with A ⊔ B, A − B and A ⊗ B" width="2000" height="1437" loading="lazy" decoding="async" />
-          </div>
           <p class="cv-note">
             Authorship, disclosed: conceived and directed by me, developed with AI assistance, and credited as
             “Artemii Karapetian and Anthropic”. I supplied the idea and direction and judged and corrected the formal content.
           </p>
+          <figure class="cv-media">
+            <img src="/portfolio/layer-d4-orbit.png" alt="The orbit of a picture under the dihedral group D4" width="2000" height="1089" loading="lazy" decoding="async" />
+          </figure>
           <p>
             Application: a solver for the puzzle <em>Color Code</em> (SmartGames). Given a target picture and a fixed set
             of transparent tiles, it finds which tiles to stack, how to rotate them and in what order. It runs a greedy
             best-first search over a composite similarity measure, with no pretrained model and no per-target training.
             Built with AI assistance.
           </p>
+          <figure class="cv-media">
+            <video
+              src="/portfolio/layer-demo.mp4"
+              poster="/portfolio/layer-demo-poster.jpg"
+              aria-label="Screen recording of the puzzle solver finding a stack of tiles"
+              muted
+              loop
+              playsinline
+              autoplay
+              preload="metadata"></video>
+          </figure>
           <p class="cv-links">
             <a href="https://rtmkrptn.github.io/discrete-layer-algebra">Try it here</a>
           </p>
