@@ -24,6 +24,26 @@ import DesktopNav from "../components/DesktopNav.astro";
 
 <BaseLayout title="Portfolio" description="Private.">
   <meta slot="head" name="robots" content="noindex, nofollow" />
+  {/*
+    Unlock survives in-session navigation but not a refresh. Runs in <head>,
+    before <body> paints, so an already-unlocked page never flashes the gate.
+      - A reload always re-locks (clears the flag), so refreshing asks again.
+      - Any other arrival (a link, back/forward) reveals the content if this tab
+        unlocked it earlier. sessionStorage is per-tab and dies with the tab, so
+        a closed-and-reopened tab starts locked too.
+  */}
+  <script is:inline slot="head">
+    try {
+      var entry = performance.getEntriesByType("navigation")[0];
+      if (entry && entry.type === "reload") {
+        sessionStorage.removeItem("pf-unlocked");
+      } else if (sessionStorage.getItem("pf-unlocked") === "1") {
+        document.documentElement.classList.add("is-unlocked");
+      }
+    } catch (e) {
+      /* blocked storage or no timing API — fall through to the locked gate */
+    }
+  </script>
   {/* ========================= Lock gate ========================= */}
   <section id="pf-gate" class="pf-gate" aria-label="Password required">
     <form id="pf-form" class="pf-card panel" novalidate>
@@ -60,15 +80,16 @@ import DesktopNav from "../components/DesktopNav.astro";
   <DesktopNav />
 
   {/* ===================== Protected content =====================
-      Ordered by weight: identity, qualifications, flagship research, projects,
-      the EPQ, then the lighter material. Facts are from the profile dossier
+      Written for The Academy SF (proof of work over grades): what I have built
+      comes first, then self-directed learning, then qualifications. Facts are from the profile dossier
       (19 Oct 2026); A2 grades are predicted, not achieved. */}
   <main id="pf-content" class="pf-content" tabindex="-1" aria-label="Portfolio">
     <div class="reading-column cv">
       <header class="cv-head">
         <h1 class="text-letterpress">Artemii Karapetian</h1>
         <p class="cv-lede">
-          Applying for BSc Mathematics / Computer Science, September 2027 entry.
+          I build mathematical theory and the software that makes it visible: a Lean 4–verified algebra of layers,
+          a fractal explorer, and original statistical research.
         </p>
         <p class="cv-meta">
           Athens, Greece ·
@@ -78,41 +99,8 @@ import DesktopNav from "../components/DesktopNav.astro";
         </p>
       </header>
 
-      <section class="cv-section" aria-labelledby="cv-edu">
-        <h2 id="cv-edu" class="cv-h">Education</h2>
-        <div class="cv-item">
-          <div class="cv-row">
-            <h3>Byron College, Athens</h3>
-            <span class="cv-when">2025 – 2027</span>
-          </div>
-          <p class="cv-sub">Pearson Edexcel International A-Level, final year 2026–27 · results August 2027</p>
-          <table class="cv-table">
-            <thead>
-              <tr><th scope="col">Subject</th><th scope="col">AS (achieved)</th><th scope="col">A2 (predicted)</th></tr>
-            </thead>
-            <tbody>
-              <tr><th scope="row">Mathematics</th><td>A</td><td>A*</td></tr>
-              <tr><th scope="row">Further Mathematics</th><td>A</td><td>A*</td></tr>
-              <tr><th scope="row">Computer Science</th><td>A</td><td>A*</td></tr>
-              <tr><th scope="row">Extended Project (EPQ)</th><td>A</td><td>—</td></tr>
-            </tbody>
-          </table>
-          <p class="cv-note">
-            Predicted grades are school-certified (Byron College, October 2026) and will be sat in June 2027.
-            Mathematics and Further Mathematics cover six distinct units with no overlap.
-          </p>
-        </div>
-        <div class="cv-item">
-          <div class="cv-row">
-            <h3>English</h3>
-            <span class="cv-when">June 2026</span>
-          </div>
-          <p class="cv-sub">IELTS 7.5</p>
-        </div>
-      </section>
-
-      <section class="cv-section" aria-labelledby="cv-research">
-        <h2 id="cv-research" class="cv-h">Research</h2>
+      <section class="cv-section" aria-labelledby="cv-work">
+        <h2 id="cv-work" class="cv-h">What I have built</h2>
         <div class="cv-item">
           <div class="cv-row">
             <h3>Discrete Layer Algebra</h3>
@@ -151,32 +139,6 @@ import DesktopNav from "../components/DesktopNav.astro";
             <a href="https://rtmkrptn.github.io/discrete-layer-algebra">Interactive demo</a>
           </p>
         </div>
-      </section>
-
-      <section class="cv-section" aria-labelledby="cv-epq">
-        <h2 id="cv-epq" class="cv-h">Extended Project Qualification</h2>
-        <div class="cv-item">
-          <div class="cv-row">
-            <h3>Non-random sampling in small local communities</h3>
-            <span class="cv-when">Grade A</span>
-          </div>
-          <p>
-            A statistics investigation built on an original survey of a heterogeneous population with clear,
-            mutually exclusive groups. Simple random sampling was the baseline against which five sampling methods
-            were compared on how well they estimated central tendency and spread, with Monte Carlo simulation
-            drawing the samples.
-          </p>
-          <p>
-            Both sub-hypotheses were falsified, for the same structural reason: each rested on an untested assumption.
-            I expected quota sampling to distort the estimate most because its gender quota was unbalanced, but gender
-            proved independent of opinion. I expected Neyman allocation to sit closest to the baseline, but its
-            optimality theorem guarantees low variance, not proximity to a reference.
-          </p>
-        </div>
-      </section>
-
-      <section class="cv-section" aria-labelledby="cv-projects">
-        <h2 id="cv-projects" class="cv-h">Projects</h2>
         <div class="cv-item">
           <div class="cv-row">
             <h3>Smooth fractal explorer</h3>
@@ -210,6 +172,30 @@ import DesktopNav from "../components/DesktopNav.astro";
           </div>
           <p>Recreational mathematics: complex numbers, linear maps, random variables, number theory.</p>
         </div>
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>Non-random sampling in small local communities</h3>
+            <span class="cv-when">EPQ, graded A</span>
+          </div>
+          <p>
+            A statistics investigation built on an original survey of a heterogeneous population with clear,
+            mutually exclusive groups. Simple random sampling was the baseline against which five sampling methods
+            were compared on how well they estimated central tendency and spread, with Monte Carlo simulation
+            drawing the samples.
+          </p>
+          <p>
+            Both sub-hypotheses were falsified, for the same structural reason: each rested on an untested assumption.
+            I expected quota sampling to distort the estimate most because its gender quota was unbalanced, but gender
+            proved independent of opinion. I expected Neyman allocation to sit closest to the baseline, but its
+            optimality theorem guarantees low variance, not proximity to a reference.
+          </p>
+        </div>
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>A prime-generating function without <code>if</code>, <code>mod</code> or <code>gcd</code></h3>
+            <a class="cv-when" href="https://rtmkrptn.github.io/posts/high-school-calculator-computes-analytical-number-theory">Blog post</a>
+          </div>
+        </div>
         <p class="cv-note">
           Skills: I write Python (NumPy) and LaTeX myself, and direct AI-assisted development in TypeScript,
           WebGL2/GLSL and Lean 4.
@@ -217,7 +203,7 @@ import DesktopNav from "../components/DesktopNav.astro";
       </section>
 
       <section class="cv-section" aria-labelledby="cv-study">
-        <h2 id="cv-study" class="cv-h">Self-study</h2>
+        <h2 id="cv-study" class="cv-h">Self-directed learning</h2>
         <ul class="cv-list">
           <li>
             <strong>DelftX Probability Theory</strong> (online), taken ahead of the Year 12 syllabus: random variables,
@@ -232,15 +218,43 @@ import DesktopNav from "../components/DesktopNav.astro";
         </ul>
       </section>
 
-      <section class="cv-section" aria-labelledby="cv-writing">
-        <h2 id="cv-writing" class="cv-h">Writing and competitions</h2>
-        <ul class="cv-list">
-          <li>
-            Blog post:
-            <a href="https://rtmkrptn.github.io/posts/high-school-calculator-computes-analytical-number-theory">a prime-generating function with no <code>if</code>, <code>mod</code> or <code>gcd</code></a>.
-          </li>
-          <li>Senior UKMT (UK Mathematics Trust): participant, 2025 and 2026.</li>
-        </ul>
+      <section class="cv-section" aria-labelledby="cv-edu">
+        <h2 id="cv-edu" class="cv-h">Education</h2>
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>Byron College, Athens</h3>
+            <span class="cv-when">2025 – 2027</span>
+          </div>
+          <p class="cv-sub">Pearson Edexcel International A-Level, final year 2026–27 · results August 2027</p>
+          <table class="cv-table">
+            <thead>
+              <tr><th scope="col">Subject</th><th scope="col">AS (achieved)</th><th scope="col">A2 (predicted)</th></tr>
+            </thead>
+            <tbody>
+              <tr><th scope="row">Mathematics</th><td>A</td><td>A*</td></tr>
+              <tr><th scope="row">Further Mathematics</th><td>A</td><td>A*</td></tr>
+              <tr><th scope="row">Computer Science</th><td>A</td><td>A*</td></tr>
+              <tr><th scope="row">Extended Project (EPQ)</th><td>A</td><td>—</td></tr>
+            </tbody>
+          </table>
+          <p class="cv-note">
+            Predicted grades are school-certified (Byron College, October 2026) and will be sat in June 2027.
+            Mathematics and Further Mathematics cover six distinct units with no overlap.
+          </p>
+        </div>
+        <div class="cv-item">
+          <div class="cv-row">
+            <h3>English</h3>
+            <span class="cv-when">June 2026</span>
+          </div>
+          <p class="cv-sub">IELTS 7.5</p>
+        </div>
+              <div class="cv-item">
+          <div class="cv-row">
+            <h3>Senior UKMT (UK Mathematics Trust)</h3>
+            <span class="cv-when">2025, 2026</span>
+          </div>
+        </div>
       </section>
 
       <section class="cv-section" aria-labelledby="cv-more">
@@ -517,10 +531,16 @@ import DesktopNav from "../components/DesktopNav.astro";
     return [...new Uint8Array(digest)].map((b) => b.toString(16).padStart(2, "0")).join("");
   }
 
-  // Reveals the content for this view only. Nothing is persisted, so every load
-  // — a reload included — starts locked and asks for the password again.
+  // Reveals the content and remembers it for this tab, so navigating around the
+  // site and back does not ask again. A refresh and a closed tab both forget —
+  // see the head script and sessionStorage's per-tab lifetime.
   function unlock() {
     root.classList.add("is-unlocked");
+    try {
+      sessionStorage.setItem("pf-unlocked", "1");
+    } catch (e) {
+      /* storage blocked — unlocked for this view regardless */
+    }
     // Move focus into the revealed content so keyboard users land in the page.
     content?.focus();
   }
