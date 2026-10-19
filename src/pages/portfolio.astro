@@ -730,7 +730,8 @@ import DesktopNav from "../components/DesktopNav.astro";
 
   form?.addEventListener("submit", async (event) => {
     event.preventDefault();
-    const value = input?.value ?? "";
+    // Trimmed: a stray space from typing or pasting should not read as a wrong password.
+    const value = (input?.value ?? "").trim();
     if (!value) {
       reject();
       return;
