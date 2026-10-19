@@ -89,7 +89,7 @@ import DesktopNav from "../components/DesktopNav.astro";
         <h1 class="text-letterpress">Artemii Karapetian</h1>
         <p class="cv-lede">
           I build mathematical theory and the software that makes it visible: a Lean 4–verified algebra of layers,
-          a fractal explorer, and original statistical research.
+          a fractal sandbox, and original statistical research.
         </p>
         <p class="cv-meta">
           Athens, Greece ·
@@ -103,8 +103,11 @@ import DesktopNav from "../components/DesktopNav.astro";
         <h2 id="cv-work" class="cv-h">What I have built</h2>
 
         <div class="cv-item">
+          <figure class="cv-media cv-media-lead">
+            <img src="/portfolio/layer-structure-map.png" alt="Map of the structures in the theory: layers, canvases, and the maps between them" width="2000" height="1097" loading="lazy" decoding="async" />
+          </figure>
           <div class="cv-row">
-            <h3>Discrete Layer Algebra</h3>
+            <h3>Algebraic theory of oriented transparent layers</h3>
           </div>
           <p>
             An original algebraic theory of oriented, transparent, stacked layers, machine-verified in Lean 4.
@@ -138,9 +141,6 @@ import DesktopNav from "../components/DesktopNav.astro";
             </li>
           </ul>
           <figure class="cv-media">
-            <img src="/portfolio/layer-structure-map.png" alt="Map of the structures in the theory: layers, canvases, and the maps between them" width="2000" height="1097" loading="lazy" decoding="async" />
-          </figure>
-          <figure class="cv-media">
             <img src="/portfolio/layer-overdraw.png" alt="Two canvases A and B and their override A ⊔ B" width="2000" height="654" loading="lazy" decoding="async" />
           </figure>
           <div class="cv-grid cv-grid-fit">
@@ -163,29 +163,29 @@ import DesktopNav from "../components/DesktopNav.astro";
         </div>
 
         <div class="cv-item">
-          <div class="cv-row">
-            <h3>Smooth fractal explorer</h3>
-          </div>
-          <p>
-            An interactive Julia and Mandelbrot explorer where you write the iteration formula yourself (z² + c,
-            sin(z)·w + c, and so on), drag the Julia constant c, set the iteration count and palette, zoom and pan
-            smoothly, and export a PNG. Recursion over complex numbers with automatic differentiation via dual numbers.
-            Built with AI assistance.
-          </p>
-          <p class="cv-links">
-            <a href="https://rtmkrptn.github.io/make-your-fractal">Live app</a>
-          </p>
-          <figure class="cv-media">
+          <figure class="cv-media cv-media-lead">
             <video
               src="/portfolio/fractal-explorer.mp4"
               poster="/portfolio/fractal-explorer-poster.jpg"
-              aria-label="Screen recording of the fractal explorer in use"
+              aria-label="Screen recording of the fractal sandbox in use"
               muted
               loop
               playsinline
               autoplay
               preload="metadata"></video>
           </figure>
+          <div class="cv-row">
+            <h3>Web-based smooth fractal sandbox</h3>
+          </div>
+          <p>
+            A sandbox for iterating any recursion over the complex plane: you write the iteration step, the escape
+            condition and the starting value yourself, drag the constant c, and set the iteration count and palette.
+            Julia and Mandelbrot sets are just two of the presets. Zoom and pan smoothly, and export a PNG.
+            Automatic differentiation via dual numbers. Built with AI assistance.
+          </p>
+          <p class="cv-links">
+            <a href="https://rtmkrptn.github.io/make-your-fractal">Live app</a>
+          </p>
           <div class="cv-grid">
             <img src="/portfolio/fractal-explorer-1.jpg" alt="Fractal render" width="1600" height="1187" loading="lazy" decoding="async" />
             <img src="/portfolio/fractal-explorer-2.jpg" alt="Fractal render" width="1600" height="1032" loading="lazy" decoding="async" />
@@ -265,7 +265,6 @@ import DesktopNav from "../components/DesktopNav.astro";
           </p>
           <div class="cv-grid cv-grid-fit">
             <img src="/portfolio/ptrig-1.jpg" alt="A squircle, with the rounded sine and cosine waves traced from it" width="800" height="800" loading="lazy" decoding="async" />
-            <img src="/portfolio/ptrig-2.jpg" alt="The unit circle in the complex plane, with cos x and i sin x" width="800" height="800" loading="lazy" decoding="async" />
           </div>
           <p class="cv-links">
             <a href="https://www.desmos.com/calculator/rbxouw3cyk">Desmos</a>
@@ -298,13 +297,10 @@ import DesktopNav from "../components/DesktopNav.astro";
       <section class="cv-section" aria-labelledby="cv-writing">
         <h2 id="cv-writing" class="cv-h">Writing</h2>
         <div class="cv-item">
-          <div class="cv-row">
-            <h3>A prime-generating function without <code>if</code>, <code>mod</code> or <code>gcd</code></h3>
-          </div>
+          <h3>
+            <a href="https://rtmkrptn.github.io/posts/high-school-calculator-computes-analytical-number-theory">A prime-generating function without if, mod or gcd</a>
+          </h3>
           <p>Analytic number theory on a graphing calculator.</p>
-          <p class="cv-links">
-            <a href="https://rtmkrptn.github.io/posts/high-school-calculator-computes-analytical-number-theory">Blog post</a>
-          </p>
         </div>
       </section>
 
@@ -475,6 +471,26 @@ import DesktopNav from "../components/DesktopNav.astro";
   }
 
   /* ---- CV ---- */
+  /* Secondary lines (dates, notes, links, table) at 16px; the site's 13px "small"
+     is chrome-sized and read as tiny beside 19px body copy here. */
+  .cv {
+    --cv-small: 16px;
+  }
+  /* Section and item headings, a step up from the site's 26/20px. */
+  .cv .cv-h {
+    font-size: 28px;
+  }
+  .cv h3 {
+    font-size: 22px;
+  }
+  @media (min-width: 768px) {
+    .cv .cv-h {
+      font-size: 36px;
+    }
+    .cv h3 {
+      font-size: 26px;
+    }
+  }
   .cv-head {
     margin-bottom: var(--space-10);
   }
@@ -485,7 +501,7 @@ import DesktopNav from "../components/DesktopNav.astro";
   .cv-meta {
     margin: var(--space-4) 0 0;
     font-family: var(--font-ui);
-    font-size: var(--font-size-small);
+    font-size: var(--cv-small);
     color: var(--color-text-secondary);
   }
   /*
@@ -521,14 +537,14 @@ import DesktopNav from "../components/DesktopNav.astro";
   }
   .cv-when {
     font-family: var(--font-ui);
-    font-size: var(--font-size-small);
+    font-size: var(--cv-small);
     color: var(--color-text-secondary);
     white-space: nowrap;
   }
   .cv-sub,
   .cv-note {
     font-family: var(--font-ui);
-    font-size: var(--font-size-small);
+    font-size: var(--cv-small);
     color: var(--color-text-secondary);
   }
   .cv-list {
@@ -542,14 +558,14 @@ import DesktopNav from "../components/DesktopNav.astro";
     display: flex;
     gap: var(--space-5);
     font-family: var(--font-ui);
-    font-size: var(--font-size-small);
+    font-size: var(--cv-small);
   }
   .cv-table {
     width: 100%;
     margin-top: var(--space-3);
     border-collapse: collapse;
     font-family: var(--font-ui);
-    font-size: var(--font-size-small);
+    font-size: var(--cv-small);
   }
   .cv-table th,
   .cv-table td {
@@ -567,6 +583,9 @@ import DesktopNav from "../components/DesktopNav.astro";
 
   .cv-media {
     margin: var(--space-4) 0 0;
+  }
+  .cv-media-lead {
+    margin: 0 0 var(--space-4);
   }
   .cv-media video,
   .cv-media img,
