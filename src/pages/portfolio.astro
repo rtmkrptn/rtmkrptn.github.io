@@ -19,6 +19,7 @@
        the server has authenticated the request.
 */
 import BaseLayout from "../layouts/BaseLayout.astro";
+import DesktopNav from "../components/DesktopNav.astro";
 ---
 
 <BaseLayout title="Portfolio" description="Private.">
@@ -51,6 +52,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       </noscript>
     </form>
   </section>
+
+  {/* The site nav, hidden by CSS while the gate is up so the lock screen stays
+      bare, and shown once unlocked. A sibling of the content, not a child, so
+      the content's reveal transform never becomes its positioning context. */}
+  <DesktopNav />
 
   {/* ===================== Protected content =====================
       Ordered by weight: identity, qualifications, flagship research, projects,
@@ -261,6 +267,11 @@ import BaseLayout from "../layouts/BaseLayout.astro";
     display: block;
   }
 
+  /* The nav belongs to the unlocked page, not the lock screen. */
+  html:not(.is-unlocked) .desktop-nav {
+    display: none;
+  }
+
   /* ---- Lock gate ---- */
   #pf-gate.pf-gate {
     min-height: 100vh;
@@ -325,12 +336,14 @@ import BaseLayout from "../layouts/BaseLayout.astro";
   }
 
   /* A raised white sheet like the article pages — the content sits on a
-     surface over the page's grey ground, not directly on it. */
+     surface over the page's grey ground, not directly on it. The bottom
+     padding clears the fixed nav, which sits at the bottom on phones. */
   .pf-content {
     min-height: 100vh;
     min-height: 100svh;
     background: var(--gradient-surface);
-    padding-block: var(--space-8);
+    padding-block: var(--space-8)
+      calc(var(--nav-height-compact) + var(--space-5) + env(safe-area-inset-bottom, 0px));
   }
 
   html.is-unlocked .pf-content {
@@ -443,7 +456,8 @@ import BaseLayout from "../layouts/BaseLayout.astro";
       margin-inline: auto;
       border-inline: var(--border-hairline-width) solid var(--color-hairline);
       box-shadow: var(--shadow-panel);
-      padding-block: var(--space-10);
+      /* On desktop the nav sits at the top, so the sheet clears it there. */
+      padding-block: calc(var(--desktop-nav-height) + var(--space-7)) var(--space-10);
     }
   }
 

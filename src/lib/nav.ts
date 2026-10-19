@@ -18,6 +18,9 @@ export interface NavItem {
 */
 export const navItems: NavItem[] = [
   { href: "/", label: "Home", icon: "home" },
+  // Private: password-gated and noindexed. Linked here on purpose so the people
+  // who should find it can, without the page entering search.
+  { href: "/portfolio", label: "Portfolio", icon: "cv" },
   { href: "/cv", label: "CV", icon: "cv", hidden: true },
   { href: "/gallery", label: "Gallery", icon: "gallery", hidden: true },
 ];
