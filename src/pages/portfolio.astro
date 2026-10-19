@@ -514,9 +514,17 @@ import DesktopNav from "../components/DesktopNav.astro";
   .cv-head {
     margin-bottom: var(--space-10);
   }
+  /* Same as the home page's bio: body size and colour, 60ch measure. */
   .cv-lede {
-    margin: var(--space-3) 0 0;
-    color: var(--color-text-secondary);
+    margin: var(--space-4) 0 0;
+    max-width: 60ch;
+    font-size: var(--font-size-body-mobile);
+    color: var(--color-text);
+  }
+  @media (min-width: 768px) {
+    .cv-lede {
+      font-size: var(--font-size-body-desktop);
+    }
   }
   .cv-meta {
     margin: var(--space-4) 0 0;
