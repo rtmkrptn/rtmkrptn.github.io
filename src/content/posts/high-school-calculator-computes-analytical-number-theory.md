@@ -1,5 +1,5 @@
 ---
-title: High School Calculator Computes Analytical Number Theory
+title: High School Calculator Computes Analytic Number Theory
 description: Prime generating function without explicit if-statements,
   conditional functions, and advanced functions like mod, gcd
 date: 2026-08-29
