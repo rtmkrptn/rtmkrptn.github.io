@@ -6,18 +6,55 @@
   Lucida Sans Unicode and Lucida Grande, so Windows and macOS resolve their own
   native face and never touch this file — a webfont is fetched only when a glyph
   actually needs it. Android has neither Lucida and was falling all the way
-  through to Roboto, which shares none of their proportions.
+  through to Roboto, which shares none of their proportions. iOS has no Lucida
+  either.
 
-  local() first, so anyone who already has Open Sans installed spends no bytes
-  either. Latin subset, variable weight, so one file covers the whole range.
+  DejaVu Sans (Bitstream Vera underneath) rather than Open Sans: set side by
+  side with Lucida Grande it is the only free face with the same width, the
+  same tall x-height and the same open, slightly blunt letterforms. Open Sans
+  is narrower and read as a generic system font. Like the Lucidas it comes in
+  regular and bold only, which is all the body text asks for.
+
+  local() first, so Linux, where it is usually installed, spends no bytes
+  either. Latin subset.
 */
 @font-face {
-  font-family: "Open Sans";
+  font-family: "DejaVu Sans";
   src:
-    local("Open Sans"),
-    url("/fonts/open-sans-latin.woff2") format("woff2");
-  font-weight: 300 700;
+    local("DejaVu Sans"),
+    url("/fonts/dejavu-sans-latin-400-normal.woff2") format("woff2");
+  font-weight: 400;
   font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  src:
+    local("DejaVu Sans Bold"),
+    url("/fonts/dejavu-sans-latin-700-normal.woff2") format("woff2");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  src:
+    local("DejaVu Sans Oblique"),
+    url("/fonts/dejavu-sans-latin-400-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "DejaVu Sans";
+  src:
+    local("DejaVu Sans Bold Oblique"),
+    url("/fonts/dejavu-sans-latin-700-italic.woff2") format("woff2");
+  font-weight: 700;
+  font-style: italic;
   font-display: swap;
 }
 
@@ -50,16 +87,6 @@
   size-adjust: 93%;
   ascent-override: 102.2%;
   descent-override: 22.6%;
-}
-
-@font-face {
-  font-family: "Open Sans";
-  src:
-    local("Open Sans Italic"),
-    url("/fonts/open-sans-latin-italic.woff2") format("woff2");
-  font-weight: 300 700;
-  font-style: italic;
-  font-display: swap;
 }
 
 *,
