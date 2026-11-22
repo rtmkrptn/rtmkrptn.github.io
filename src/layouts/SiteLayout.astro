@@ -5,12 +5,15 @@ import DesktopNav from "../components/DesktopNav.astro";
 interface Props {
   title: string;
   description?: string;
+  image?: string;
+  published?: Date;
+  shareTitle?: string;
 }
 
-const { title, description } = Astro.props;
+const { title, description, image, published, shareTitle } = Astro.props;
 ---
 
-<BaseLayout title={title} description={description}>
+<BaseLayout title={title} description={description} image={image} published={published} shareTitle={shareTitle}>
   <slot name="head" slot="head" />
   <DesktopNav />
   <main class="site-main">

@@ -1,15 +1,18 @@
 ---
 import SiteLayout from "./SiteLayout.astro";
 import "../styles/prose.scss";
+import Icon from "../components/Icon.astro";
 import { withBase } from "../lib/base";
 
 interface Props {
   title: string;
   description: string;
   date: Date;
+  /** Names the preview card generated at /og/<slug>.png. */
+  slug: string;
 }
 
-const { title, description, date } = Astro.props;
+const { title, description, date, slug } = Astro.props;
 
 const formattedDate = date.toLocaleDateString("en-US", {
   year: "numeric",
@@ -18,11 +21,28 @@ const formattedDate = date.toLocaleDateString("en-US", {
 });
 ---
 
-<SiteLayout title={`${title} — Artemii Karapetian`} description={description}>
+<SiteLayout
+  title={`${title} — Artemii Karapetian`}
+  shareTitle={title}
+  description={description}
+  image={`/og/${slug}.png`}
+  published={date}
+>
   <link slot="head" rel="stylesheet" href={withBase("/katex/katex.min.css")} />
   <article>
     <header class="post-header">
-      <p class="post-date tabular-nums">{formattedDate}</p>
+      <div class="post-meta">
+        <p class="post-date tabular-nums">{formattedDate}</p>
+        {/*
+          Opens the system share sheet where there is one (phones, Safari);
+          elsewhere copies the link and confirms with the same check as the
+          code-block copy buttons.
+        */}
+        <button type="button" class="copy-btn share-btn" aria-label="Share" data-title={title}>
+          <span class="copy-icon-default"><Icon name="share" size={18} /></span>
+          <span class="copy-icon-check"><Icon name="check" size={18} /></span>
+        </button>
+      </div>
       <h1>{title}</h1>
     </header>
     <div class="prose">
@@ -32,11 +52,27 @@ const formattedDate = date.toLocaleDateString("en-US", {
 </SiteLayout>
 
 <style>
+  .post-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-4);
+    margin-bottom: var(--space-2);
+  }
+
+  /* The copy button's look, but sitting in the row instead of pinned to a corner.
+     The negative margin keeps the 44px tap target without pushing the row taller
+     or the glyph off the column's right edge. */
+  .share-btn {
+    position: static;
+    margin: calc((var(--tap-target-min) - 18px) / -2);
+  }
+
   .post-date {
     font-family: var(--font-ui);
     color: var(--color-text-secondary);
     font-size: var(--font-size-small);
-    margin-bottom: var(--space-2);
+    margin: 0;
   }
 </style>
 
@@ -75,6 +111,31 @@ const formattedDate = date.toLocaleDateString("en-US", {
       }
     });
   }
+
+  const share = document.querySelector<HTMLButtonElement>(".share-btn");
+  share?.addEventListener("click", async () => {
+    const url = document.querySelector<HTMLLinkElement>('link[rel="canonical"]')?.href ?? location.href;
+    const data = { title: share.dataset.title, url };
+    if (navigator.share && navigator.canShare?.(data) !== false) {
+      try {
+        await navigator.share(data);
+      } catch {
+        // Dismissing the sheet rejects too — nothing to do either way.
+      }
+      return;
+    }
+    try {
+      await navigator.clipboard.writeText(url);
+      share.dataset.copied = "true";
+      share.setAttribute("aria-label", "Link copied");
+      setTimeout(() => {
+        delete share.dataset.copied;
+        share.setAttribute("aria-label", "Share");
+      }, 1500);
+    } catch {
+      // Clipboard API unavailable (e.g. insecure context) — silently no-op.
+    }
+  });
 
   document.querySelectorAll(".prose pre").forEach((pre) => {
     wireCopy(pre, "Copy code", () => pre.querySelector("code")?.textContent ?? pre.textContent ?? "");
