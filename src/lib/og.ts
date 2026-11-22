@@ -44,20 +44,22 @@ const h = (type: string, style: Record<string, unknown>, ...children: (Node | st
   props: { style, children },
 });
 
-/** Long titles step down so they still fit in three lines. */
+/** Long titles step down so they still fit beside the description. */
 function titleSize(title: string) {
-  if (title.length <= 40) return 76;
-  if (title.length <= 70) return 64;
-  return 54;
+  if (title.length <= 40) return 68;
+  if (title.length <= 70) return 58;
+  return 50;
 }
 
 interface Card {
   title: string;
   /** Shown above the title — the post date, or nothing on the home card. */
   kicker?: string;
+  /** Set under the title — the post's description. */
+  description?: string;
 }
 
-export async function renderOgImage({ title, kicker }: Card): Promise<Buffer> {
+export async function renderOgImage({ title, kicker, description }: Card): Promise<Buffer> {
   const tree = h(
     "div",
     {
@@ -79,7 +81,7 @@ export async function renderOgImage({ title, kicker }: Card): Promise<Buffer> {
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
-        padding: "64px 72px",
+        padding: "56px 72px",
         borderRadius: 12,
         border: `1px solid ${C.hairline}`,
         backgroundImage: C.surface,
@@ -102,6 +104,23 @@ export async function renderOgImage({ title, kicker }: Card): Promise<Buffer> {
           },
           title,
         ),
+        ...(description
+          ? [
+              h(
+                "div",
+                {
+                  display: "block",
+                  marginTop: 24,
+                  fontSize: 30,
+                  fontWeight: 400,
+                  lineHeight: 1.4,
+                  color: C.secondary,
+                  lineClamp: 3,
+                },
+                description,
+              ),
+            ]
+          : []),
       ),
       h(
         "div",

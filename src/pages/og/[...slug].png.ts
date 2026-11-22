@@ -14,6 +14,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
       params: { slug: post.id },
       props: {
         title: post.data.title,
+        description: post.data.description,
         kicker: post.data.date.toLocaleDateString("en-US", {
           year: "numeric",
           month: "long",
@@ -25,6 +26,6 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const GET: APIRoute = async ({ props }) => {
-  const png = await renderOgImage(props as { title: string; kicker?: string });
+  const png = await renderOgImage(props as { title: string; kicker?: string; description?: string });
   return new Response(new Uint8Array(png), { headers: { "Content-Type": "image/png" } });
 };
