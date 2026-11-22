@@ -9,11 +9,11 @@
   offline reader or a rate-limited key costs the reader nothing they had before.
 */
 
-// The demo key published in the v1.10 docs. v1.13 is current but no longer
-// publishes one, and inventing or committing a private key is out of the
-// question — so this is the version whose public key is actually documented.
+// Our own key (desmos.com/api-team, "Personal website API"). Desmos keys are
+// client-side by design — they ship in every page anyway — so it is fine here.
+// It is a trial key, so the calculator shows a small notice until a plan is set.
 const API_SRC =
-  "https://www.desmos.com/api/v1.10/calculator.js?apiKey=dcb31709b452b1cf9dc26972add0fda6";
+  "https://www.desmos.com/api/v1.12/calculator.js?apiKey=2b0bb0464d7f47b0ab316cede793eae7";
 
 interface Calculator {
   setExpression(state: { id?: string; latex: string }): void;
