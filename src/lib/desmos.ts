@@ -15,8 +15,14 @@
 const API_SRC =
   "https://www.desmos.com/api/v1.12/calculator.js?apiKey=2b0bb0464d7f47b0ab316cede793eae7";
 
+// Half the span of the graph's shorter side, in graph units, when it first
+// appears. Desmos opens at ±10, which leaves the small curves these posts draw
+// (bells, 0/1 switches) as a sliver in the middle; ±3 frames them.
+const INITIAL_HALF_SPAN = 3;
+
 interface Calculator {
   setExpression(state: { id?: string; latex: string }): void;
+  setMathBounds(bounds: { left: number; right: number; bottom: number; top: number }): void;
   destroy(): void;
 }
 declare global {
@@ -76,6 +82,20 @@ async function hydrate(figure: HTMLElement) {
   });
 
   expressions.forEach((latex, i) => calculator.setExpression({ id: `e${i}`, latex }));
+
+  // Keep units square: the shorter side gets ±INITIAL_HALF_SPAN and the longer
+  // one stretches with the box, so a wide desktop and a tall phone both open
+  // equally close in.
+  const { clientWidth: w, clientHeight: h } = mount;
+  if (w && h) {
+    const unit = INITIAL_HALF_SPAN / Math.min(w, h);
+    calculator.setMathBounds({
+      left: -w * unit,
+      right: w * unit,
+      bottom: -h * unit,
+      top: h * unit,
+    });
+  }
   figure.classList.add("is-live");
 }
 
