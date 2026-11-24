@@ -29,5 +29,4 @@ export const socialLinks: SocialLink[] = [
   { href: "https://x.com/rtmkrptn_", label: "X", icon: "x" },
   { href: "https://youtube.com/@rtmkrptn", label: "YouTube", icon: "youtube" },
   { copy: "wizared", label: "Discord", icon: "discord" },
-  { href: "https://www.instagram.com/i.love.being.abused", label: "Instagram", icon: "instagram" },
 ];
