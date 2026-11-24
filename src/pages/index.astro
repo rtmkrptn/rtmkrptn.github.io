@@ -8,6 +8,33 @@ import { socialLinks } from "../data/social";
 const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf()
 );
+
+/*
+  Hand-picked entry points, in reading order. Two are standalone demos served
+  from their own repos under the same domain; the rest are posts.
+*/
+const startHere: { title: string; href: string; description?: string }[] = [
+  {
+    title: "Layer Algebra",
+    href: "https://rtmkrptn.github.io/discrete-layer-algebra/",
+    description: "A small algebra of stacked transparent pictures.",
+  },
+  {
+    title: "High School Calculator Computes Analytic Number Theory",
+    href: withBase("/posts/high-school-calculator-computes-analytical-number-theory"),
+    description: "A prime generator built on a graphing calculator.",
+  },
+  {
+    title: "From the Gaussian Integral to the Gamma Function",
+    href: withBase("/posts/from-the-gaussian-integral-to-the-gamma-function"),
+    description: "The bell-curve trick, pushed until it gives Γ(1/2) = √π.",
+  },
+  {
+    title: "Make Your Fractal",
+    href: "https://rtmkrptn.github.io/make-your-fractal/",
+    description: "A fractal explorer you edit live.",
+  },
+];
 ---
 
 <SiteLayout title="Artemii Karapetian">
@@ -54,17 +81,35 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
     </div>
     <p class="tagline">Mathematics, personal stories, puzzles.</p>
     <p class="bio">
-      Hi there, I am an aspiring applied math student. Here I write about
-      things I care about and things I have made myself.
+      I'm Artemii, a maths student in Athens. I love maths because of its
+      logicality; it's almost like an addictive drug to me. In other leisure
+      activities like puzzles, storytelling, or gaming, I explore them using the
+      scientific method of hypotheses, trials, and building some logic.
     </p>
   </header>
 
-  <section class="posts-section">
+  <section class="start-section" aria-labelledby="start-heading">
+    <h2 class="list-heading kicker" id="start-heading">Start here</h2>
+    <div class="track-list">
+      {
+        startHere.map((item) => (
+          <a class="track-row start-row" href={item.href}>
+            <span class="track-title">{item.title}</span>
+            {item.description && <span class="start-desc">{item.description}</span>}
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="posts-section" aria-labelledby="writing-heading">
+    <h2 class="list-heading kicker" id="writing-heading">Writing</h2>
     <div class="track-list">
       <div class="track-list-header" aria-hidden="true">
         <span class="track-col track-col-sorted">Date</span>
         <span class="track-col">Title</span>
-        <span class="track-col track-col-compact">Writing</span>
+        {/* The section is already headed "Writing", so the stacked phone layout labels its one column by the sort key. */}
+        <span class="track-col track-col-compact track-col-sorted">Date</span>
       </div>
       {
         posts.map((post) => (
@@ -102,6 +147,36 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
     .hero {
       margin-bottom: var(--space-section-desktop);
     }
+  }
+
+  .start-section {
+    margin-bottom: var(--space-section-mobile);
+  }
+
+  @media (min-width: 768px) {
+    .start-section {
+      margin-bottom: var(--space-section-desktop);
+    }
+  }
+
+  .list-heading {
+    margin-bottom: var(--space-3);
+  }
+
+  /* No date column here: title over its one-line description, at every width. */
+  .start-row {
+    grid-template-columns: 1fr;
+    gap: var(--space-1);
+  }
+
+  .start-desc {
+    font-size: var(--font-size-small);
+    color: var(--color-text-secondary);
+  }
+
+  a.start-row:active .start-desc {
+    color: var(--color-white);
+    text-shadow: var(--text-shadow-on-accent);
   }
 
   .tagline {
