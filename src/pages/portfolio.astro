@@ -12,6 +12,8 @@
 */
 import BaseLayout from "../layouts/BaseLayout.astro";
 import DesktopNav from "../components/DesktopNav.astro";
+import Hero from "../components/Hero.astro";
+import { contactLinks } from "../data/social";
 ---
 
 <BaseLayout title="Portfolio" description="Artemii Karapetian: portfolio.">
@@ -26,18 +28,7 @@ import DesktopNav from "../components/DesktopNav.astro";
       (19 Oct 2026); A2 grades are predicted, not achieved. */}
   <main class="pf-content" aria-label="Portfolio">
     <div class="reading-column cv">
-      <header class="cv-head">
-        <h1 class="text-letterpress">Artemii Karapetian</h1>
-        <p class="cv-lede">
-          I build mathematical theory and the software that makes it real: a Lean 4–verified algebraic theory,
-          a fractal sandbox, an AI agent inside Minecraft, and statistical research.
-        </p>
-        <p class="cv-meta">
-          Athens, Greece ·
-          <a href="mailto:rtmkrptn@gmail.com">rtmkrptn@gmail.com</a> ·
-          <a href="https://github.com/rtmkrptn">github.com/rtmkrptn</a>
-        </p>
-      </header>
+      <Hero links={contactLinks} />
 
       <section class="cv-section" aria-labelledby="cv-work">
         <h2 id="cv-work" class="cv-h">What I have built</h2>
@@ -374,27 +365,6 @@ import DesktopNav from "../components/DesktopNav.astro";
     .cv > * {
       font-size: var(--font-size-prose-desktop);
     }
-  }
-  .cv-head {
-    margin-bottom: var(--space-10);
-  }
-  /* Same as the home page's bio: body size and colour, 60ch measure. */
-  .cv-lede {
-    margin: var(--space-4) 0 0;
-    max-width: 60ch;
-    font-size: var(--font-size-body-mobile);
-    color: var(--color-text);
-  }
-  @media (min-width: 768px) {
-    .cv-lede {
-      font-size: var(--font-size-body-desktop);
-    }
-  }
-  .cv-meta {
-    margin: var(--space-4) 0 0;
-    font-family: var(--font-ui);
-    font-size: var(--cv-small);
-    color: var(--color-text-secondary);
   }
   /* Air carries the structure, not rules or boxes. */
   .cv-section {

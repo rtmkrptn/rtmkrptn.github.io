@@ -1,0 +1,296 @@
+---
+/*
+  The name, link icons, tagline and bio that open the home page and the
+  portfolio. One component so the two stay word-for-word identical; only the
+  icons differ, passed in as `links`. Web links open in a new tab; a mailto:
+  link hands off to the mail app.
+*/
+import BrandIcon from "./BrandIcon.astro";
+import type { SocialLink } from "../data/social";
+
+interface Props {
+  links: SocialLink[];
+}
+
+const { links } = Astro.props;
+---
+
+<header class="hero">
+  <div class="hero-identity">
+    <h1 class="text-letterpress">Artemii Karapetian</h1>
+    <ul class="social-row">
+      {
+        links.map((link) =>
+          link.copy ? (
+            /*
+              Discord: a handle to paste into Add Friend, not a destination.
+              A button rather than a link, because nothing is navigated to.
+            */
+            <li>
+              <button
+                type="button"
+                class="social-link social-copy pressable"
+                data-copy={link.copy}
+                aria-label={`Copy ${link.label} username, ${link.copy}`}
+                title={link.copy}
+              >
+                <BrandIcon name={link.icon} size={18} />
+              </button>
+            </li>
+          ) : (
+            <li>
+              <a
+                class="social-link pressable"
+                href={link.href}
+                aria-label={link.label}
+                target={link.href?.startsWith("http") ? "_blank" : undefined}
+                rel={link.href?.startsWith("http") ? "noopener noreferrer" : undefined}
+              >
+                <BrandIcon name={link.icon} size={18} />
+              </a>
+            </li>
+          )
+        )
+      }
+    </ul>
+    {/* Announces the copy to screen readers, which get no visual tooltip. */}
+    <p class="visually-hidden" role="status" aria-live="polite" id="copy-status" />
+  </div>
+  <p class="tagline">Mathematics, personal stories, puzzles.</p>
+  <p class="bio">
+    I'm Artemii, a maths student in Athens. I love maths because of its
+    logicality; it's almost like an addictive drug to me. In other leisure
+    activities like puzzles, storytelling, or gaming, I explore them using the
+    scientific method of hypotheses, trials, and building some logic.
+  </p>
+</header>
+
+<style>
+  /*
+    Body size set here rather than inherited, so the hero reads the same inside
+    the portfolio's CV column, which sizes its children for prose.
+  */
+  .hero {
+    font-size: var(--font-size-body-mobile);
+    margin-bottom: var(--space-section-mobile);
+  }
+
+  @media (min-width: 768px) {
+    .hero {
+      font-size: var(--font-size-body-desktop);
+      margin-bottom: var(--space-section-desktop);
+    }
+  }
+
+  .tagline {
+    font-family: var(--font-ui);
+    color: var(--color-text-secondary);
+    margin-top: var(--space-1);
+  }
+
+  .bio {
+    margin-top: var(--space-4);
+    max-width: 60ch;
+  }
+
+  /*
+    Name and icons share one line. Wraps on narrow screens, where the icons
+    drop below the name rather than squeezing it.
+  */
+  .hero-identity {
+    /*
+      A social link is a 44px tap target around an 18px glyph, so its box
+      overhangs the glyph by 13px on every side. Pulling the row left by that
+      overhang puts the first icon's glyph on the name's left edge instead of
+      13px inside it — which is what "aligned" means to the eye. The gap gets
+      the same amount back, so the spacing beside the name is unchanged.
+    */
+    --social-tap-inset: calc((var(--tap-target-min) - var(--social-icon-size)) / 2);
+
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: calc(var(--space-7) + var(--social-tap-inset));
+    row-gap: var(--space-2);
+  }
+
+  .social-row {
+    display: flex;
+    gap: var(--space-2);
+    margin-left: calc(-1 * var(--social-tap-inset));
+
+    /*
+      Centring on the flex line puts the icons on the name's cap-height centre,
+      but the name's visual mass sits lower, in the x-height band, so true
+      centring reads as riding high. This drops them onto the text's optical
+      centre.
+
+      A relative offset rather than the negative margins this used to carry:
+      margins shrink the box the icons sit in, which is invisible while the row
+      shares a line with the name but pulls the tagline up into it once the row
+      wraps onto its own line — the identity block lost 16px on a phone, and
+      the tagline ended up 8px inside the icons. A relative offset moves what
+      you see without moving what anything else is positioned against.
+    */
+    position: relative;
+    /*
+      Flexbox centres the margin box, so the margin-bottom below shifts the
+      icons up by half of it. The nudge carries that back, keeping the glyphs
+      the same 4px under the name's centre they were tuned to.
+    */
+    top: calc(var(--space-1) + var(--space-1) / 2);
+
+    /*
+      Breathing room before the tagline, which was the tightest gap in the hero
+      once the row wrapped onto its own line. Beside the name this costs
+      nothing: the row is 44px against the name's 48px line box, so 4px of
+      margin is absorbed by slack that is already there.
+    */
+    margin-bottom: var(--space-1);
+  }
+
+  /*
+    Below this width the icons take their own line — by flex-basis rather than
+    by waiting for the name to overflow, so the layout switches at a width we
+    choose instead of one that drifts with whatever font resolved.
+
+    Once the row is alone on a line there is no shared baseline to sit on, so
+    the optical nudge is dropped: it exists to drop the icons onto the name's
+    x-height band, and off that line it only pushes them at the tagline. That
+    single change tightens the gap above and opens the one below at once.
+  */
+  @media (max-width: 599px) {
+    .hero-identity {
+      row-gap: var(--space-1);
+    }
+
+    .social-row {
+      flex-basis: 100%;
+      top: 0;
+    }
+  }
+
+  .social-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: var(--tap-target-min);
+    height: var(--tap-target-min);
+    border-radius: 50%;
+    color: var(--color-text-secondary);
+  }
+
+  .social-link:hover {
+    color: var(--color-accent-solid);
+    text-decoration: none;
+  }
+
+  /*
+    The Discord icon is a button, not a link, so it has to be stripped back to
+    match the anchors beside it. Everything visual still comes from .social-link.
+  */
+  .social-copy {
+    padding: 0;
+    border: 0;
+    background: none;
+    font: inherit;
+    cursor: pointer;
+    position: relative;
+  }
+
+  /*
+    Confirmation bubble. Sits above the icon and is inert to pointer events so
+    it can never swallow a second click on the button underneath.
+  */
+  .social-copy::after {
+    content: attr(data-copied-label);
+    position: absolute;
+    bottom: calc(100% - var(--space-1));
+    left: 50%;
+    transform: translate(-50%, 4px);
+    padding: 0.15em 0.5em;
+    border-radius: var(--radius-sm);
+    background: var(--color-text);
+    color: var(--color-surface);
+    font-size: var(--font-size-caption);
+    white-space: nowrap;
+    opacity: 0;
+    pointer-events: none;
+    transition:
+      opacity var(--duration-fast) var(--ease-standard),
+      transform var(--duration-fast) var(--ease-standard);
+  }
+
+  .social-copy.is-copied::after {
+    opacity: 1;
+    transform: translate(-50%, 0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .social-copy::after {
+      transition: none;
+    }
+  }
+
+</style>
+
+<script>
+  /*
+    Discord has no profile URL to link to, so its icon copies the handle for
+    pasting into Add Friend. Feedback is a bubble on the button plus a live
+    region for screen readers, which never see the bubble.
+  */
+  const status = document.getElementById("copy-status");
+
+  /*
+    navigator.clipboard needs a secure context and can still be refused by
+    permissions policy. The textarea fallback is what keeps the button useful
+    when it is, rather than failing silently.
+  */
+  async function copyText(text: string) {
+    try {
+      await navigator.clipboard.writeText(text);
+      return true;
+    } catch {
+      const scratch = document.createElement("textarea");
+      scratch.value = text;
+      scratch.setAttribute("readonly", "");
+      // Kept out of view and out of the a11y tree while it is focused.
+      scratch.style.cssText = "position:fixed;top:-9999px;opacity:0";
+      scratch.setAttribute("aria-hidden", "true");
+      document.body.appendChild(scratch);
+      scratch.select();
+      let ok = false;
+      try {
+        ok = document.execCommand("copy");
+      } catch {
+        ok = false;
+      }
+      scratch.remove();
+      return ok;
+    }
+  }
+
+  for (const button of document.querySelectorAll<HTMLButtonElement>(".social-copy")) {
+    const handle = button.dataset.copy;
+    if (!handle) continue;
+
+    let clearTimer: ReturnType<typeof setTimeout> | undefined;
+
+    button.addEventListener("click", async () => {
+      const ok = await copyText(handle);
+
+      // On failure, say the handle instead — the visitor can still read it.
+      button.dataset.copiedLabel = ok ? "Copied" : handle;
+      button.classList.add("is-copied");
+      if (status) status.textContent = ok ? `${handle} copied to clipboard` : `Username: ${handle}`;
+
+      // Restart the countdown on every click, so rapid clicks do not cut it short.
+      clearTimeout(clearTimer);
+      clearTimer = setTimeout(() => {
+        button.classList.remove("is-copied");
+        if (status) status.textContent = "";
+      }, 1600);
+    });
+  }
+</script>

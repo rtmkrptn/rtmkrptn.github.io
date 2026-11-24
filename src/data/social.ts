@@ -30,3 +30,9 @@ export const socialLinks: SocialLink[] = [
   { href: "https://youtube.com/@rtmkrptn", label: "YouTube", icon: "youtube" },
   { copy: "wizared", label: "Discord", icon: "discord" },
 ];
+
+/* The portfolio swaps the social icons for the two ways to reach Artemii about work. */
+export const contactLinks: SocialLink[] = [
+  { href: "mailto:rtmkrptn@gmail.com", label: "Email", icon: "email" },
+  { href: "https://github.com/rtmkrptn", label: "GitHub", icon: "github" },
+];
