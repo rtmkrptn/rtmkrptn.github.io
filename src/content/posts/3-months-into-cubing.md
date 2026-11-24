@@ -25,4 +25,4 @@ For me, the most fun part of cubing is not doing it as fast as possible but unde
 
 After the 3x3 I got a 5x5. It felt more interesting: the complexity grows, and now you need to manage centers and pair edges to be able to solve it. This builds the habit of fixing what you broke while building a bar. This part is not present in the 3x3 at all. Also, the 3x3 is way too rigid: you don't really have space to experiment, and solving it means learning three algos. When it comes to the 5x5, spatial intuition and variability become a thing.
 
-Now my collection consists of three MoYu cubes (3x3, 5x5 and 9x9) and a no-name Pyraminx. For me, cubing is not about speed (even though I still care about it) but about being able to translate a complex puzzle into manageable constructs that solve it for you.
+Now my collection consists of three MoYu cubes (3x3, 5x5 and 7x7) and a no-name Pyraminx. For me, cubing is not about speed (even though I still care about it) but about being able to translate a complex puzzle into manageable constructs that solve it for you.
