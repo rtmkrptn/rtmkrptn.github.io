@@ -41,7 +41,7 @@ const startHere: { title: string; href: string; description?: string }[] = [
   <Hero links={socialLinks} />
 
   <section class="start-section" aria-labelledby="start-heading">
-    <h2 class="list-heading kicker" id="start-heading">Start here</h2>
+    <h2 class="list-heading" id="start-heading">Start here</h2>
     <div class="track-list">
       {
         startHere.map((item) => (
@@ -55,7 +55,7 @@ const startHere: { title: string; href: string; description?: string }[] = [
   </section>
 
   <section class="posts-section" aria-labelledby="writing-heading">
-    <h2 class="list-heading kicker" id="writing-heading">Writing</h2>
+    <h2 class="list-heading" id="writing-heading">Writing</h2>
     <div class="track-list">
       <div class="track-list-header" aria-hidden="true">
         <span class="track-col track-col-sorted">Date</span>
@@ -101,8 +101,11 @@ const startHere: { title: string; href: string; description?: string }[] = [
     }
   }
 
+  /* Same as the portfolio's section headings ("What I have built"). */
   .list-heading {
-    margin-bottom: var(--space-3);
+    margin-bottom: var(--space-6);
+    font-weight: var(--font-weight-light);
+    letter-spacing: var(--letter-spacing-display);
   }
 
   /* No date column here: title over its one-line description, at every width. */
