@@ -15,6 +15,11 @@ const posts = (await getCollection("posts", ({ data }) => !data.draft)).sort(
 */
 const startHere: { title: string; href: string; description?: string }[] = [
   {
+    title: "Make Your Fractal",
+    href: "https://rtmkrptn.github.io/make-your-fractal/",
+    description: "A fractal explorer you edit live.",
+  },
+  {
     title: "Layer Algebra",
     href: "https://rtmkrptn.github.io/discrete-layer-algebra/",
     description: "A small algebra of stacked transparent pictures.",
@@ -28,11 +33,6 @@ const startHere: { title: string; href: string; description?: string }[] = [
     title: "From the Gaussian Integral to the Gamma Function",
     href: withBase("/posts/from-the-gaussian-integral-to-the-gamma-function"),
     description: "The bell-curve trick, pushed until it gives Γ(1/2) = √π.",
-  },
-  {
-    title: "Make Your Fractal",
-    href: "https://rtmkrptn.github.io/make-your-fractal/",
-    description: "A fractal explorer you edit live.",
   },
 ];
 ---
