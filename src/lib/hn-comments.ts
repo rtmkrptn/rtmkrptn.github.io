@@ -4,13 +4,17 @@
   The page ships only a link to the thread; this fills in the comments from the
   HN Algolia API, which returns the whole tree in one request. It waits until
   the section is near the viewport, so readers who never scroll that far cost
-  HN nothing. Any failure leaves the bare link, which is still a way to discuss.
+  HN nothing. If loading fails, a known thread keeps its bare link; a discovered one stays hidden.
 
   A post without an `hn` id finds its thread among the stories submitted from
   the site author's own HN account, matching on the post's exact URL, so a
   submission shows up here without touching the post and someone else's
   submission of the same link never does. If the author submitted it more than
   once, the busiest thread wins.
+
+  HN archives a thread 14 days after submission: no new comments or votes. An
+  archived thread with no comments has nothing to read and nowhere to write, so
+  the section disappears rather than invite a comment that cannot be left.
 
   Algolia orders replies by time. HN's own ranking of the top-level comments
   comes from the official API's `kids`, fetched alongside; nested replies stay
@@ -22,6 +26,9 @@ const SEARCH = "https://hn.algolia.com/api/v1/search_by_date";
 const AUTHOR = "rtmkrptn"; // HN account the posts are submitted from
 const FIREBASE = "https://hacker-news.firebaseio.com/v0/item/";
 const HN = "https://news.ycombinator.com/";
+
+// HN closes threads to new comments after two weeks (checked 2026-11-24: open at 14 days, closed at 15).
+const ARCHIVE_AFTER_MS = 14 * 24 * 60 * 60 * 1000;
 
 // Past this depth replies stop indenting, so deep threads stay readable on a phone.
 const MAX_INDENT = 5;
@@ -148,11 +155,6 @@ async function discover(url: string): Promise<string | null> {
 async function load(section: HTMLElement) {
   const id = section.dataset.hnId ?? (section.dataset.hnUrl && (await discover(section.dataset.hnUrl)));
   if (!id) return;
-  if (section.hasAttribute("data-pending")) {
-    section.querySelector<HTMLAnchorElement>(".hn-title a")!.href = `${HN}item?id=${id}`;
-    section.querySelector<HTMLElement>(".hn-title")!.hidden = false;
-    section.removeAttribute("data-pending");
-  }
   const [tree, ranking] = await Promise.all([
     fetch(ALGOLIA + id).then((r) => (r.ok ? (r.json() as Promise<Item>) : null)),
     fetch(`${FIREBASE}${id}.json`)
@@ -167,7 +169,18 @@ async function load(section: HTMLElement) {
   );
 
   const n = count(top);
-  if (!n) return;
+  const archived = Date.now() - Date.parse(tree.created_at) > ARCHIVE_AFTER_MS;
+  if (!n && archived) {
+    section.hidden = true;
+    return;
+  }
+
+  if (section.hasAttribute("data-pending")) {
+    section.querySelector<HTMLAnchorElement>(".hn-title a")!.href = `${HN}item?id=${id}`;
+    section.querySelector<HTMLElement>(".hn-title")!.hidden = false;
+    section.removeAttribute("data-pending");
+  }
+  if (!n) return; // open thread, no comments yet: the heading invites the first one
   const title = section.querySelector(".hn-title a");
   if (title) title.textContent = `${n} ${n === 1 ? "comment" : "comments"} on Hacker News`;
   section.appendChild(renderThread(top, 0));
