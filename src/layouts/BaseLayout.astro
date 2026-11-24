@@ -78,6 +78,11 @@ const imageUrl = new URL(withBase(image), Astro.site).href;
 </html>
 
 <script>
+  import { markExternalLinks } from "../lib/external-links";
+  markExternalLinks();
+</script>
+
+<script>
   import { createRippleRunner } from "../lib/ripple";
 
   /*

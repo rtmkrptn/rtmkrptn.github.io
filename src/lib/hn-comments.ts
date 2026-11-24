@@ -21,6 +21,8 @@
   chronological, which reads fine at that depth.
 */
 
+import { markExternalLinks } from "./external-links";
+
 const ALGOLIA = "https://hn.algolia.com/api/v1/items/";
 const SEARCH = "https://hn.algolia.com/api/v1/search_by_date";
 const AUTHOR = "rtmkrptn"; // HN account the posts are submitted from
@@ -180,10 +182,13 @@ async function load(section: HTMLElement) {
     section.querySelector<HTMLElement>(".hn-title")!.hidden = false;
     section.removeAttribute("data-pending");
   }
-  if (!n) return; // open thread, no comments yet: the heading invites the first one
-  const title = section.querySelector(".hn-title a");
-  if (title) title.textContent = `${n} ${n === 1 ? "comment" : "comments"} on Hacker News`;
-  section.appendChild(renderThread(top, 0));
+  if (n) {
+    const title = section.querySelector(".hn-title a");
+    if (title) title.textContent = `${n} ${n === 1 ? "comment" : "comments"} on Hacker News`;
+    section.appendChild(renderThread(top, 0));
+  }
+  // These links were written after the page-wide pass ran, so they get their own.
+  markExternalLinks(section);
 }
 
 export function initHnComments() {
