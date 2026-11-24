@@ -138,6 +138,17 @@ function firstParagraph(body) {
   return text.length > 160 ? text.slice(0, 157).trimEnd() + "…" : text;
 }
 
+/*
+  `hn:` links a post to its Hacker News thread, whose comments then render under
+  the post. Accepts the item id or the thread URL as pasted from the browser;
+  anything else is dropped rather than failing the build.
+*/
+function hnId(v) {
+  const s = String(v ?? "").trim();
+  const id = /^\d+$/.test(s) ? s : s.match(/[?&]id=(\d+)/)?.[1];
+  return id ? Number(id) : null;
+}
+
 function pickDate(data, file) {
   for (const k of ["date", "published", "created", "digested"]) {
     const v = data[k];
@@ -292,6 +303,8 @@ for (const note of publishable) {
     vaultSource: path.relative(SOURCE, note.file),
   };
   if (Array.isArray(note.data.tags)) frontmatter.tags = note.data.tags;
+  const hn = hnId(note.data.hn);
+  if (hn) frontmatter.hn = hn;
 
   const out = `---\n${YAML.stringify(frontmatter).trim()}\n---\n\n${transformBody(note.body)}\n`;
   const dest = path.join(OUT_DIR, `${note.slug}.md`);

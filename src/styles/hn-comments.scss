@@ -1,0 +1,76 @@
+@use "tokens";
+@use "mixins" as *;
+
+/*
+  Hacker News thread under a post (see lib/hn-comments.ts). The nodes are built
+  in the browser, so these rules are global rather than component-scoped.
+*/
+
+.hn-comments {
+  margin-top: var(--space-9);
+  padding-top: var(--space-6);
+  border-top: var(--border-hairline-width) solid var(--color-hairline);
+}
+
+.hn-thread {
+  margin: var(--space-4) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* Replies hang off a hairline, like the thread lines in a mail client. */
+.hn-thread .hn-thread {
+  padding-left: var(--space-4);
+  border-left: var(--border-hairline-width) solid var(--color-hairline);
+}
+
+.hn-thread .hn-thread-flat {
+  padding-left: 0;
+  border-left: none;
+}
+
+.hn-comment + .hn-comment {
+  margin-top: var(--space-5);
+}
+
+.hn-meta {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: var(--font-size-small);
+  color: var(--color-text-tertiary);
+}
+
+.hn-meta a {
+  color: inherit;
+}
+
+.hn-meta a:hover {
+  color: var(--color-accent-solid);
+}
+
+.hn-text {
+  margin-top: var(--space-1);
+  font-size: var(--font-size-prose-mobile);
+  /* HN prints links as bare full URLs; `anywhere` (unlike break-word) also
+     shrinks the min-content width, so one long URL cannot widen the page. */
+  overflow-wrap: anywhere;
+}
+
+@media (min-width: 768px) {
+  .hn-text {
+    font-size: var(--font-size-prose-desktop);
+  }
+}
+
+.hn-text p {
+  margin: var(--space-3) 0 0;
+}
+
+.hn-text pre {
+  @include scroll-container;
+  margin: var(--space-3) 0 0;
+  padding: var(--space-3);
+  background: var(--platinum-100);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-small);
+}

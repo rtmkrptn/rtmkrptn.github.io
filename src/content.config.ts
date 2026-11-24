@@ -9,6 +9,8 @@ const posts = defineCollection({
     description: z.string(),
     date: z.coerce.date(),
     draft: z.boolean().default(false),
+    /** Hacker News item id; its comment thread renders under the post. */
+    hn: z.number().int().positive().optional(),
   }),
 });
 

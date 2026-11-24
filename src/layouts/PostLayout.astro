@@ -1,6 +1,7 @@
 ---
 import SiteLayout from "./SiteLayout.astro";
 import "../styles/prose.scss";
+import "../styles/hn-comments.scss";
 import Icon from "../components/Icon.astro";
 import { withBase } from "../lib/base";
 
@@ -10,9 +11,11 @@ interface Props {
   date: Date;
   /** Names the preview card generated at /og/<slug>.png. */
   slug: string;
+  /** Hacker News item id; its thread is loaded in as the comment section. */
+  hn?: number;
 }
 
-const { title, description, date, slug } = Astro.props;
+const { title, description, date, slug, hn } = Astro.props;
 
 const formattedDate = date.toLocaleDateString("en-US", {
   year: "numeric",
@@ -49,6 +52,13 @@ const formattedDate = date.toLocaleDateString("en-US", {
       <slot />
     </div>
   </article>
+  {hn && (
+    <section class="hn-comments" data-hn-id={hn} aria-labelledby="hn-title">
+      <h2 class="hn-title" id="hn-title">
+        <a href={`https://news.ycombinator.com/item?id=${hn}`}>Discuss on Hacker News</a>
+      </h2>
+    </section>
+  )}
 </SiteLayout>
 
 <style>
@@ -79,6 +89,9 @@ const formattedDate = date.toLocaleDateString("en-US", {
 <script>
   import { initDesmos } from "../lib/desmos";
   initDesmos();
+
+  import { initHnComments } from "../lib/hn-comments";
+  initHnComments();
 
   import { icons } from "../lib/icons";
 
