@@ -3,14 +3,23 @@
   One command from Obsidian to the live site:
 
     vault Articles/  ->  npm run sync  ->  commit  ->  pull --rebase  ->  push
+                     ->  Hacker News submit form for posts that are new
 
   GitHub Actions builds and deploys on every push to main, so the push is the
-  publish. Nothing here talks to the site directly.
+  publish.
+
+  HN has no API for submitting, so the last step does the next best thing: once
+  a new post is live, it opens HN's submit form in the browser with the link and
+  title filled in, leaving one click. A post counts as new when its file did not
+  exist in the repo before this run, so editing or re-syncing an already
+  published post never submits it again. The site finds the thread by URL on its
+  own, so nothing needs to come back from HN.
 
   Usage:
     npm run publish              # sync, commit, push
     npm run publish -- --prune   # also drop posts that lost `publish: true`
     npm run publish -- --dry-run # show what would happen, change nothing
+    npm run publish -- --no-hn   # skip the Hacker News step
 
   The one rule this script is built around: it stages ONLY files the sync
   generated (identified by the `vaultSource` key in their frontmatter). Whatever
@@ -29,6 +38,15 @@ const BRANCH = "main";
 
 const PRUNE = process.argv.includes("--prune");
 const DRY = process.argv.includes("--dry-run");
+const NO_HN = process.argv.includes("--no-hn");
+/* HN account posts are submitted from. Keep in step with AUTHOR in src/lib/hn-comments.ts. */
+const HN_AUTHOR = "rtmkrptn";
+
+/* The live origin, read from astro.config so the two cannot disagree. */
+const SITE = fs
+  .readFileSync(path.join(SITE_ROOT, "astro.config.mjs"), "utf8")
+  .match(/site:\s*["']([^"']+)["']/)?.[1]
+  ?.replace(/\/+$/, "");
 
 /* ---------- tiny helpers ---------- */
 
@@ -156,7 +174,14 @@ for (let i = 0; i < records.length; i++) {
     continue;
   }
 
-  changed.push({ file, deleted, title: data.title ?? path.basename(file, ".md"), data });
+  changed.push({
+    file,
+    deleted,
+    title: data.title ?? path.basename(file, ".md"),
+    data,
+    // Not in HEAD yet means this run is its first publish.
+    isNew: !deleted && !tryGit(["cat-file", "-e", `HEAD:${file}`]).ok,
+  });
 }
 
 if (!changed.length) {
@@ -196,7 +221,19 @@ if (embedded.length) {
   );
 }
 
+/* Drafts are synced but not built, so there is no page to submit. */
+const toSubmit =
+  NO_HN || !SITE
+    ? []
+    : changed
+        .filter((c) => c.isNew && c.data.draft !== true)
+        .map((c) => ({
+          title: c.title,
+          url: `${SITE}/posts/${path.basename(c.file).replace(/\.mdx?$/, "")}/`,
+        }));
+
 if (DRY) {
+  for (const s of toSubmit) console.log(`   ${dim("would open the HN submit form for")} ${s.url}`);
   console.log(dim("\n--dry-run: stopping here, nothing staged.\n"));
   process.exit(0);
 }
@@ -252,3 +289,84 @@ console.log(
   green("\nPublished. GitHub Actions is building now.") +
     dim(`\n  Progress: ${url}/actions\n  Live in a minute or two.\n`)
 );
+
+/* ---------- 5. Hacker News ---------- */
+
+if (toSubmit.length) await submitToHN(toSubmit);
+
+async function submitToHN(posts) {
+  console.log(bold("5. Hacker News"));
+  for (const post of posts) {
+    console.log(`   ${post.title}`);
+
+    const existing = await findOnHN(post.url);
+    if (existing) {
+      console.log(`   ${dim("already submitted:")} https://news.ycombinator.com/item?id=${existing}\n`);
+      continue;
+    }
+
+    /*
+      Submitting before the deploy lands would send the first readers to a 404.
+      The query string dodges the CDN's cached 404 from before the deploy.
+    */
+    process.stdout.write(dim("   waiting for the page to go live "));
+    const live = await waitForLive(post.url, 5 * 60_000);
+    process.stdout.write("\n");
+    if (!live) console.log(`   ${yellow("!")} still not live after 5 minutes; opening the form anyway`);
+
+    const form =
+      "https://news.ycombinator.com/submitlink?" +
+      new URLSearchParams({ u: post.url, t: post.title }).toString();
+    const opened = spawnSync("open", [form]).status === 0;
+    console.log(
+      opened
+        ? `   ${green("ok")} submit form opened in the browser, click submit\n`
+        : `   open this to submit:\n   ${form}\n`
+    );
+  }
+}
+
+/* Scheme, www, query, fragment and a trailing slash do not make a different page. */
+function normalizeUrl(u) {
+  return u
+    .replace(/^https?:\/\/(www\.)?/i, "")
+    .replace(/[?#].*$/, "")
+    .replace(/\/+$/, "")
+    .toLowerCase();
+}
+
+/*
+  Returns the thread id if this exact URL was already submitted from HN_AUTHOR,
+  the same account the site looks in for comments. A failed lookup counts as no.
+*/
+async function findOnHN(pageUrl) {
+  const q = new URLSearchParams({ tags: `story,author_${HN_AUTHOR}`, hitsPerPage: "1000" });
+  try {
+    const res = await fetch(`https://hn.algolia.com/api/v1/search_by_date?${q}`, {
+      signal: AbortSignal.timeout(10_000),
+    });
+    if (!res.ok) return null;
+    const { hits } = await res.json();
+    return hits.find((h) => h.url && normalizeUrl(h.url) === normalizeUrl(pageUrl))?.objectID ?? null;
+  } catch {
+    return null;
+  }
+}
+
+async function waitForLive(pageUrl, timeoutMs) {
+  const deadline = Date.now() + timeoutMs;
+  while (Date.now() < deadline) {
+    try {
+      const res = await fetch(`${pageUrl}?live=${Date.now()}`, {
+        method: "HEAD",
+        signal: AbortSignal.timeout(10_000),
+      });
+      if (res.ok) return true;
+    } catch {
+      // network hiccup, try again
+    }
+    process.stdout.write(dim("."));
+    await new Promise((r) => setTimeout(r, 10_000));
+  }
+  return false;
+}

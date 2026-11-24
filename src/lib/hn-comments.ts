@@ -6,12 +6,20 @@
   the section is near the viewport, so readers who never scroll that far cost
   HN nothing. Any failure leaves the bare link, which is still a way to discuss.
 
+  A post without an `hn` id finds its thread among the stories submitted from
+  the site author's own HN account, matching on the post's exact URL, so a
+  submission shows up here without touching the post and someone else's
+  submission of the same link never does. If the author submitted it more than
+  once, the busiest thread wins.
+
   Algolia orders replies by time. HN's own ranking of the top-level comments
   comes from the official API's `kids`, fetched alongside; nested replies stay
   chronological, which reads fine at that depth.
 */
 
 const ALGOLIA = "https://hn.algolia.com/api/v1/items/";
+const SEARCH = "https://hn.algolia.com/api/v1/search_by_date";
+const AUTHOR = "rtmkrptn"; // HN account the posts are submitted from
 const FIREBASE = "https://hacker-news.firebaseio.com/v0/item/";
 const HN = "https://news.ycombinator.com/";
 
@@ -115,8 +123,36 @@ function count(items: Item[]): number {
   return items.reduce((n, c) => n + (c.text && c.author ? 1 : 0) + count(c.children), 0);
 }
 
+/* Scheme, www, query, fragment and a trailing slash do not make a different page. */
+const normalize = (url: string) =>
+  url
+    .replace(/^https?:\/\/(www\.)?/i, "")
+    .replace(/[?#].*$/, "")
+    .replace(/\/+$/, "")
+    .toLowerCase();
+
+async function discover(url: string): Promise<string | null> {
+  const q = new URLSearchParams({ tags: `story,author_${AUTHOR}`, hitsPerPage: "1000" });
+  const res = await fetch(`${SEARCH}?${q}`);
+  if (!res.ok) return null;
+  const { hits } = (await res.json()) as {
+    hits: { objectID: string; url: string | null; num_comments: number | null }[];
+  };
+  const target = normalize(url);
+  const best = hits
+    .filter((h) => h.url && normalize(h.url) === target)
+    .sort((a, b) => (b.num_comments ?? 0) - (a.num_comments ?? 0))[0];
+  return best?.objectID ?? null;
+}
+
 async function load(section: HTMLElement) {
-  const id = section.dataset.hnId;
+  const id = section.dataset.hnId ?? (section.dataset.hnUrl && (await discover(section.dataset.hnUrl)));
+  if (!id) return;
+  if (section.hasAttribute("data-pending")) {
+    section.querySelector<HTMLAnchorElement>(".hn-title a")!.href = `${HN}item?id=${id}`;
+    section.querySelector<HTMLElement>(".hn-title")!.hidden = false;
+    section.removeAttribute("data-pending");
+  }
   const [tree, ranking] = await Promise.all([
     fetch(ALGOLIA + id).then((r) => (r.ok ? (r.json() as Promise<Item>) : null)),
     fetch(`${FIREBASE}${id}.json`)
@@ -138,7 +174,7 @@ async function load(section: HTMLElement) {
 }
 
 export function initHnComments() {
-  const section = document.querySelector<HTMLElement>(".hn-comments[data-hn-id]");
+  const section = document.querySelector<HTMLElement>(".hn-comments");
   if (!section) return;
   const start = () => load(section).catch(() => {});
   if (!("IntersectionObserver" in window)) return void start();

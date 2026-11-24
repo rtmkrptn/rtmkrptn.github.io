@@ -12,6 +12,14 @@
   border-top: var(--border-hairline-width) solid var(--color-hairline);
 }
 
+/* Still looking for the thread: present only so the loader can see it scroll
+   into range, so it takes no room. */
+.hn-comments[data-pending] {
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
 .hn-thread {
   margin: var(--space-4) 0 0;
   padding: 0;
