@@ -61,13 +61,13 @@ const formattedDate = date.toLocaleDateString("en-US", {
   {hn ? (
     <section class="hn-comments" data-hn-id={hn} aria-labelledby="hn-title">
       <h2 class="hn-title" id="hn-title">
-        <a href={`https://news.ycombinator.com/item?id=${hn}`}>Discuss on Hacker News</a>
+        <a href={`https://news.ycombinator.com/item?id=${hn}`}>Leave a comment on Hacker News</a>
       </h2>
     </section>
   ) : (
     <section class="hn-comments" data-hn-url={pageUrl} data-pending aria-labelledby="hn-title">
       <h2 class="hn-title" id="hn-title" hidden>
-        <a href="https://news.ycombinator.com/">Discuss on Hacker News</a>
+        <a href="https://news.ycombinator.com/">Leave a comment on Hacker News</a>
       </h2>
     </section>
   )}
