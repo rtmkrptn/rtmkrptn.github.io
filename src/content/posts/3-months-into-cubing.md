@@ -17,7 +17,7 @@ Thus, my approach differed from the previous one. I didn't care about speed, onl
 Solving a 3x3 comes down to juggling three commutators:
 1. Rotation of a selected corner
 2. Cycling corners
-3. Rotation of edges
+3. Cycling edges
 
 All the steps in between rely on visual intuition and appear with practice.
 
